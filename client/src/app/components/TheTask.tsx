@@ -1,15 +1,15 @@
 "use client";
 import styled from "styled-components";
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 const TaskBlock = styled.div`
-  border-radius: 10px;
-  background-color: #9333ea0f;
   font-family: "Roboto", sans-serif;
 `;
 const TaskContainer = styled.div`
   padding: 10px 10px;
+  border-radius: 10px;
   display: flex;
+  background-color: #9333ea0f;
   flex-direction: row;
   justify-content: space-between;
 `;
@@ -32,48 +32,68 @@ const TaskName = styled.span`
 const DataLine = styled.span`
   color: #6b7280;
 `;
-const EditBtn = styled.span`
+const OptionsBtn = styled.span`
   cursor: pointer;
 `;
 const Options = styled.div`
-  display: none;
   border: 1px #7d40ff solid;
+  border-radius: 13px;
+    width: 60px;
+    display: flex;
+    flex-direction: row;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    align-items: center;
+    justify-content: space-evenly;
+    float: right;
+    margin-top: 5px;
 `;
+const DeleteTask = styled(Image)`
+cursor: pointer;
+`
+const EditTask = styled(Image)`cursor: pointer;`
+
+// interface TheTaskProps {
+//   isOpen: boolean
+// };
+// const TheTask: <TheTaskProps> = ({ isOpen}) => {}
 
 const TheTask = () => {
-  const [isDone, setIsDone] = useState(false);
+  const [isDone, setIsDone] = useState<boolean>(false);
+  const [isOptionsBtnClicked, setOptionsBtnClicked] = useState<boolean>(false)
   const handleClickDoneBtn = (e: any) => {
     isDone ? setIsDone(false) : setIsDone(true);
   };
+  const handleClickEditBtn = (e: any) => {
+    isOptionsBtnClicked ? setOptionsBtnClicked(false) : setOptionsBtnClicked(true);
+  }
   return (
-    <>
-      <TaskBlock>
-        <TaskContainer>
-          <LeftContainer>
-            <DoneButton>
-              <Image
-                src={!isDone ? `not-done-task.svg` : `done-task.svg`}
-                alt=""
-                width={20}
-                height={20}
-                onClick={handleClickDoneBtn}
-              />
-            </DoneButton>
-            <TaskName>Task 1</TaskName>
-          </LeftContainer>
-          <RightContainer>
-            <DataLine>Today at 18.30</DataLine>
-            <EditBtn>
-              <Image src="edit-dots.svg" alt="" width={20} height={20} />
-            </EditBtn>
-          </RightContainer>
-        </TaskContainer>
-      </TaskBlock>
-      <Options>
-        <Image src="edit-icon.svg" alt="" width={20} height={20} />
-        <Image src="delete-icon.svg" alt="" width={20} height={20} />
-      </Options>
-    </>
+    <TaskBlock>
+      <TaskContainer>
+        <LeftContainer>
+          <DoneButton>
+            <Image
+              src={!isDone ? `not-done-task.svg` : `done-task.svg`}
+              alt=""
+              width={20}
+              height={20}
+              onClick={handleClickDoneBtn}
+            />
+          </DoneButton>
+          <TaskName>Task 1</TaskName>
+        </LeftContainer>
+        <RightContainer>
+          <DataLine>Today at 18.30</DataLine>
+          <OptionsBtn onClick={handleClickEditBtn}>
+            <Image src="edit-dots.svg" alt="" width={20} height={20} />
+          </OptionsBtn>
+        </RightContainer>
+      </TaskContainer>
+      {isOptionsBtnClicked ? <Options>
+        <EditTask src="edit-icon.svg" alt="" width={20} height={20} />
+        <DeleteTask src="delete-icon.svg" alt="" width={20} height={20} />
+      </Options> : null}
+    </TaskBlock>
   );
 };
 export { TheTask };
