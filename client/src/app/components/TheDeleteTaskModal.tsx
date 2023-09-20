@@ -24,7 +24,7 @@ const ModalContainer = styled.div`
 const ModalHeader = styled.div`
   color: #9333ea;
   border-radius: 10px;
-  background: linear-gradient(259.86deg, #F5EDFD 0%, #FEEFF5 85.32%);
+  background: linear-gradient(259.86deg, #f5edfd 0%, #feeff5 85.32%);
   padding: 10px 15px;
   font-weight: bold;
 `;
@@ -34,14 +34,10 @@ const ModalBody = styled.div`
   padding: 15px 25px;
   gap: 1rem;
 `;
-const ModalInputName = styled.input`
-  color: #6b7280;
-  border: none;
-  outline: none;
-  border-radius: 10px;
-  background-color: #f3f3f3;
-  text-indent: 0.5em;
-  padding: 5px 0px;
+const ModalText = styled.p`
+  color: #9333ea;
+  font-weight: bold;
+  margin: 0;
 `;
 const ModalButtons = styled.div`
   display: flex;
@@ -57,35 +53,41 @@ const Button = styled.button`
   width: 100%;
   border: none;
 `;
-const ModalSaveButton = styled(Button)`
-  background-image: url("./save-btn-icon.svg");
-  color: #67b8cb;
+const ModalDeleteButton = styled(Button)`
+  background: url("./delete-icon.svg"), #f564970f;
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: 30px;
+  background-size: 20px;
+  color: #f56497;
 `;
 const ModalCloseButton = styled(Button)`
   background-image: url("./close-btn-icon.svg");
   color: #6b7280;
 `;
 
-interface TheCreateTaskModalProps {
+interface TheDeleteTaskModalProps {
   show: boolean;
   onCloseButtonClick: () => void;
 }
 
-const TheCreateTaskModal = (props: TheCreateTaskModalProps) => {
+const TheDeleteTaskModal = (props: TheDeleteTaskModalProps) => {
   if (!props.show) {
     return null;
   }
-  const handleSaveClick = () => {
+  const handleDeleteClick = () => {
     props.onCloseButtonClick();
   };
   return ReactDOM.createPortal(
     <ModalBlock>
       <ModalContainer>
-        <ModalHeader>Create Task</ModalHeader>
+        <ModalHeader>Delete Task</ModalHeader>
         <ModalBody>
-          <ModalInputName placeholder="Enter text..."></ModalInputName>
+          <ModalText>Are you sure about deleting this task?</ModalText>
           <ModalButtons>
-            <ModalSaveButton onClick={handleSaveClick}>Save</ModalSaveButton>
+            <ModalDeleteButton onClick={handleDeleteClick}>
+              Delete
+            </ModalDeleteButton>
             <ModalCloseButton onClick={props.onCloseButtonClick}>
               Close
             </ModalCloseButton>
@@ -96,4 +98,4 @@ const TheCreateTaskModal = (props: TheCreateTaskModalProps) => {
     document.body
   );
 };
-export { TheCreateTaskModal };
+export { TheDeleteTaskModal };

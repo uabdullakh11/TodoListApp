@@ -1,7 +1,6 @@
 import "./css/globals.css";
 import type { Metadata } from "next";
 import { TheHeader } from "./components/TheHeader";
-import { TheCard } from "./components/TheCard";
 import { TheNavPanel } from "./components/TheNavPanel";
 
 export const metadata: Metadata = {
@@ -14,17 +13,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  
   return (
     <html lang="en">
       <body>
-        <TheHeader />
-        <main>
-          <TheNavPanel />
-          {/* <Th eCard /> */}
-          {children}
+        <div className="wrapper">
+      <TheHeader />
+          <main>
+            <TheNavPanel />
+            {children}
           </main>
-          
+        </div>
       </body>
     </html>
   );

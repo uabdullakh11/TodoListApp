@@ -1,7 +1,10 @@
 "use client";
 import styled from "styled-components";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import useModal from "../utils/hooks/useModal";
+import {TheDeleteTaskModal} from "./TheDeleteTaskModal";
+import { TheEditTaskModal } from "./TheEditTaskModal";
 const TaskBlock = styled.div`
   font-family: "Roboto", sans-serif;
 `;
@@ -38,20 +41,22 @@ const OptionsBtn = styled.span`
 const Options = styled.div`
   border: 1px #7d40ff solid;
   border-radius: 13px;
-    width: 60px;
-    display: flex;
-    flex-direction: row;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    align-items: center;
-    justify-content: space-evenly;
-    float: right;
-    margin-top: 5px;
+  width: 60px;
+  display: flex;
+  flex-direction: row;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  align-items: center;
+  justify-content: space-evenly;
+  float: right;
+  margin-top: 5px;
 `;
 const DeleteTask = styled(Image)`
-cursor: pointer;
-`
-const EditTask = styled(Image)`cursor: pointer;`
+  cursor: pointer;
+`;
+const EditTask = styled(Image)`
+  cursor: pointer;
+`;
 
 // interface TheTaskProps {
 //   isOpen: boolean
@@ -59,14 +64,27 @@ const EditTask = styled(Image)`cursor: pointer;`
 // const TheTask: <TheTaskProps> = ({ isOpen}) => {}
 
 const TheTask = () => {
+  const [isShowingModal, toggleModal] = useModal();
+
   const [isDone, setIsDone] = useState<boolean>(false);
-  const [isOptionsBtnClicked, setOptionsBtnClicked] = useState<boolean>(false)
+  const [isOptionsBtnClicked, setOptionsBtnClicked] = useState<boolean>(false);
+
   const handleClickDoneBtn = () => {
     isDone ? setIsDone(false) : setIsDone(true);
   };
   const handleClickEditBtn = () => {
-    isOptionsBtnClicked ? setOptionsBtnClicked(false) : setOptionsBtnClicked(true);
-  }
+    isOptionsBtnClicked
+      ? setOptionsBtnClicked(false)
+      : setOptionsBtnClicked(true);
+  };
+  const handleEditTask = () => {
+    setOptionsBtnClicked(false);
+    toggleModal();
+  };
+  const handleDeleteTask = () => {
+    setOptionsBtnClicked(false);
+    toggleModal();
+  };
   return (
     <TaskBlock>
       <TaskContainer>
@@ -89,10 +107,26 @@ const TheTask = () => {
           </OptionsBtn>
         </RightContainer>
       </TaskContainer>
-      {isOptionsBtnClicked ? <Options>
-        <EditTask src="edit-icon.svg" alt="" width={20} height={20} />
-        <DeleteTask src="delete-icon.svg" alt="" width={20} height={20} />
-      </Options> : null}
+      {isOptionsBtnClicked ? (
+        <Options>
+          <EditTask
+            onClick={handleEditTask}
+            src="edit-icon.svg"
+            alt=""
+            width={20}
+            height={20}
+          />
+          <DeleteTask
+            onClick={handleDeleteTask}
+            src="delete-icon.svg"
+            alt=""
+            width={20}
+            height={20}
+          />
+        </Options>
+      ) : null}
+      <TheDeleteTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}/>
+      <TheEditTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}/>
     </TaskBlock>
   );
 };

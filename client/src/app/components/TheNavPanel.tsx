@@ -5,6 +5,7 @@ import { useState } from "react";
 import useModal from "../utils/hooks/useModal";
 import { TheCountSortingButtons } from "./TheCountSortingButtons";
 import { TheDateSortingButtons } from "./TheDateSortingButtons";
+import { TheCreateTaskModal } from "./TheCreateTaskModal";
 const NavBlock = styled.div`
   font-family: Roboto, sans-serif;
   font-size: 16px;
@@ -74,6 +75,7 @@ const AddTaskBtn = styled.button`
 `;
 const TheNavPanel = () => {
   const [isShowingModal, toggleModal] = useModal();
+  
   const [isTodayClicked, setIsTodayClicked] = useState<boolean>(false);
   const [isAllClicked, setIsAllClicked] = useState<boolean>(false);
   const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
@@ -93,7 +95,9 @@ const TheNavPanel = () => {
     isAllClicked ? setIsAllClicked(false) : false;
     isTodayClicked ? setIsTodayClicked(false) : false;
   };
-  const handleAddTask = () => {};
+  const handleAddTask = () => {
+    toggleModal();
+  };
   return (
     <NavBlock>
       <NavContainer>
@@ -119,6 +123,7 @@ const TheNavPanel = () => {
           <span>Add task</span>
         </AddTaskBtn>
       </NavContainer>
+      <TheCreateTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}></TheCreateTaskModal>
     </NavBlock>
   );
 };

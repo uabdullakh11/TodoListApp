@@ -1,6 +1,5 @@
 "use client";
 import styled from "styled-components";
-import Image from "next/image";
 import ReactDOM from "react-dom";
 import React from "react";
 
@@ -24,7 +23,7 @@ const ModalContainer = styled.div`
 const ModalHeader = styled.div`
   color: #9333ea;
   border-radius: 10px;
-  background: linear-gradient(259.86deg, #F5EDFD 0%, #FEEFF5 85.32%);
+  background: linear-gradient(259.86deg, #f5edfd 0%, #feeff5 85.32%);
   padding: 10px 15px;
   font-weight: bold;
 `;
@@ -66,12 +65,12 @@ const ModalCloseButton = styled(Button)`
   color: #6b7280;
 `;
 
-interface TheCreateTaskModalProps {
+interface TheEditTaskModalProps {
   show: boolean;
   onCloseButtonClick: () => void;
 }
 
-const TheCreateTaskModal = (props: TheCreateTaskModalProps) => {
+const TheEditTaskModal = (props: TheEditTaskModalProps) => {
   if (!props.show) {
     return null;
   }
@@ -81,7 +80,7 @@ const TheCreateTaskModal = (props: TheCreateTaskModalProps) => {
   return ReactDOM.createPortal(
     <ModalBlock>
       <ModalContainer>
-        <ModalHeader>Create Task</ModalHeader>
+        <ModalHeader>Edit Task</ModalHeader>
         <ModalBody>
           <ModalInputName placeholder="Enter text..."></ModalInputName>
           <ModalButtons>
@@ -96,4 +95,4 @@ const TheCreateTaskModal = (props: TheCreateTaskModalProps) => {
     document.body
   );
 };
-export { TheCreateTaskModal };
+export { TheEditTaskModal };

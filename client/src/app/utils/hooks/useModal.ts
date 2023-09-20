@@ -5,12 +5,12 @@ const useModal = () => {
     const [isShowing, setIsShowing] = useState<boolean>(false);
 
     function toggle(): void {
-        setIsShowing(!isShowing);
+        setIsShowing(!isShowing)
     }
     return [
         isShowing,
         toggle
-    ];
+    ] as const;
 }
 
 export default useModal;
