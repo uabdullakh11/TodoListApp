@@ -1,11 +1,11 @@
 "use client";
 import styled from "styled-components";
 import Image from "next/image";
-import React,{ useState, FC } from "react";
+import React, { useState, FC } from "react";
 import useModal from "../utils/hooks/useModal";
-import { CountSortingButtons } from "./CountSortingButtons";
+import { StatusSortingButtons } from "./StatusSortingButtons";
 import { DateSortingButtons } from "./DateSortingButtons";
-import { CreateTaskModal } from "./CreateTaskModal";
+import { Modal } from "./Modal";
 const NavBlock = styled.div`
   font-family: Roboto, sans-serif;
   font-size: 16px;
@@ -73,9 +73,12 @@ const AddTaskBtn = styled.button`
   align-items: center;
   gap: 0.5em;
 `;
-const NavPanel:FC = () => {
+
+
+
+const NavPanel: FC = () => {
   const [isShowingModal, toggleModal] = useModal();
-  
+
   const [isTodayClicked, setIsTodayClicked] = useState<boolean>(false);
   const [isAllClicked, setIsAllClicked] = useState<boolean>(false);
   const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
@@ -108,7 +111,7 @@ const NavPanel:FC = () => {
             <TodayBtn onClick={handleTodayClick}>Today</TodayBtn>
           )}
           {isAllClicked ? (
-            <CountSortingButtons />
+            <StatusSortingButtons />
           ) : (
             <AllBtn onClick={handleAllClick}>All</AllBtn>
           )}
@@ -123,7 +126,8 @@ const NavPanel:FC = () => {
           <span>Add task</span>
         </AddTaskBtn>
       </NavContainer>
-      <CreateTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}></CreateTaskModal>
+      {/* <CreateTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}></CreateTaskModal> */}
+      <Modal show={isShowingModal} onCloseButtonClick={toggleModal} type="createModal"></Modal>
     </NavBlock>
   );
 };

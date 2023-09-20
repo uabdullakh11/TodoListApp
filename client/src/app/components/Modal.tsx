@@ -1,7 +1,7 @@
 "use client";
 import styled from "styled-components";
 import ReactDOM from "react-dom";
-import React from "react";
+import React,{useRef} from "react";
 
 const ModalBlock = styled.div`
   z-index: 9999;
@@ -20,6 +20,7 @@ const ModalContainer = styled.div`
   background: #fff;
   font-family: "Roboto", sans-serif;
 `;
+
 const ModalHeader = styled.div`
   color: #9333ea;
   border-radius: 10px;
@@ -52,38 +53,115 @@ const Button = styled.button`
   width: 100%;
   border: none;
 `;
+const ModalDeleteButton = styled(Button)`
+  background: url("./delete-icon.svg"), #f564970f;
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: 30px;
+  background-size: 20px;
+  color: #f56497;
+`;
+const ModalSaveButton = styled(Button)`
+  background-image: url("./save-btn-icon.svg");
+  color: #67b8cb;
+`;
 const ModalCloseButton = styled(Button)`
   background-image: url("./close-btn-icon.svg");
   color: #6b7280;
 `;
+const ModalInputName = styled.input`
+  color: #6b7280;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  background-color: #f3f3f3;
+  text-indent: 0.5em;
+  padding: 5px 0px;
+`;
+
+enum ModalTypes {
+  createModal = "createModal",
+  deleteModal = "deleteModal",
+  editModal = "editModal",
+}
 
 interface ModalProps {
   show: boolean;
   onCloseButtonClick: () => void;
-  children: React.ReactNode;
+  type: string;
+  //children: React.ReactNode;
 }
 
 const Modal = (props: ModalProps) => {
   if (!props.show) {
     return null;
   }
-  const handleClick = () => {
-    
+  const nameInputRef = useRef<HTMLInputElement>(null)
+  const changeNameRef = useRef<HTMLInputElement>(null)
+  
+  const handleSaveClick = () => {
+    if (nameInputRef.current) {
+      const obj = {
+        name: nameInputRef.current.value,
+        isCompleted: false,
+        date:"Today, 18:30"
+      }
+      // localStorage.setItem("tasks", JSON.stringify(obj));
+      localStorage.setItem("tasks", nameInputRef.current.value);
+    }
+    props.onCloseButtonClick();
   };
+  const handleDeleteClick = () => {
+    localStorage.removeItem("task");
+    props.onCloseButtonClick();
+  };
+  const handleChangeClick = () => {
+    props.onCloseButtonClick();
+  }
   return ReactDOM.createPortal(
     <ModalBlock>
-      <ModalContainer>
-        <ModalHeader>Delete Task</ModalHeader>
+      {props.type === "createModal" && <ModalContainer>
+        <ModalHeader>Create task</ModalHeader>
         <ModalBody>
-          <ModalText>Are you sure about deleting this task?</ModalText>
+        <ModalInputName placeholder="Enter text..." name="enter-name-input" id="enter-name-input" ref={nameInputRef} />
           <ModalButtons>
-            {props.children}
+          <ModalSaveButton onClick={handleSaveClick}>Save</ModalSaveButton>
             <ModalCloseButton onClick={props.onCloseButtonClick}>
               Close
             </ModalCloseButton>
           </ModalButtons>
         </ModalBody>
-      </ModalContainer>
+      </ModalContainer>}
+      {props.type==="deleteModal" && <ModalContainer>
+        <ModalHeader>Delete Task</ModalHeader>
+        <ModalBody>
+          <ModalText>Are you sure about deleting this task?</ModalText>
+          <ModalButtons>
+            <ModalDeleteButton onClick={handleDeleteClick}>
+              Delete
+            </ModalDeleteButton>
+            <ModalCloseButton onClick={props.onCloseButtonClick}>
+              Close
+            </ModalCloseButton>
+          </ModalButtons>
+        </ModalBody>
+      </ModalContainer>}
+      {props.type === "editModal"  &&   <ModalContainer>
+        <ModalHeader>Edit Task</ModalHeader>
+        <ModalBody>
+          <ModalInputName placeholder="Enter text..." name="change-name-input" id="change-name-input" ref={changeNameRef}></ModalInputName>
+          <ModalButtons>
+            <ModalSaveButton onClick={handleChangeClick}>Change</ModalSaveButton>
+            <ModalCloseButton onClick={props.onCloseButtonClick}>
+              Close
+            </ModalCloseButton>
+          </ModalButtons>
+        </ModalBody>
+      </ModalContainer>}
+      {/* <ModalContainer>
+       {props.children}
+       
+      </ModalContainer> */}
     </ModalBlock>,
     document.body
   );

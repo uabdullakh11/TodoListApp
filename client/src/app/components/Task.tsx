@@ -3,8 +3,7 @@ import styled from "styled-components";
 import Image from "next/image";
 import React,{ useState, FC } from "react";
 import useModal from "../utils/hooks/useModal";
-import {DeleteTaskModal} from "./DeleteTaskModal";
-import { EditTaskModal } from "./EditTaskModal";
+import { Modal } from "./Modal";
 const TaskBlock = styled.div`
   font-family: "Roboto", sans-serif;
 `;
@@ -71,6 +70,7 @@ const Task: FC<TaskProps> = ({isCompleted,id,name,date}) => {
 
   const [isDone, setIsDone] = useState<boolean>(false);
   const [isOptionsBtnClicked, setOptionsBtnClicked] = useState<boolean>(false);
+  const [typeModal, setTypeModal] = useState<string>("");
 
   const handleClickDoneBtn = () => {
     // isDone ? setIsDone(false) : setIsDone(true);
@@ -100,10 +100,12 @@ const Task: FC<TaskProps> = ({isCompleted,id,name,date}) => {
   };
   const handleEditTask = () => {
     setOptionsBtnClicked(false);
+    setTypeModal("editModal")
     toggleModal();
   };
   const handleDeleteTask = () => {
     setOptionsBtnClicked(false);
+    setTypeModal("deleteModal")
     toggleModal();
   };
   return (
@@ -148,7 +150,8 @@ const Task: FC<TaskProps> = ({isCompleted,id,name,date}) => {
       ) : null}
       {/* <DeleteTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}/> */}
       {/* <EditTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}/> */}
-      {/* {<Modal show={isShowingModal}  onCloseButtonClick={toggleModal} />} */}
+      <Modal show={isShowingModal}  onCloseButtonClick={toggleModal} type={typeModal} />
+      
     </TaskBlock>
   );
 };

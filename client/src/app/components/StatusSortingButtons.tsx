@@ -30,7 +30,7 @@ const UndoneBtnClicked = styled(Button)`
   background-color: #9333ea0f;
 `;
 
-const CountSortingButtons:FC = () => {
+const StatusSortingButtons:FC = () => {
   const [isChoosed, setIsChoosed] = useState<boolean>(false);
   const [isAllClicked, setIsAllClicked] = useState<boolean>(false);
   const [isDoneClicked, setIsDoneClicked] = useState<boolean>(false);
@@ -75,4 +75,4 @@ const CountSortingButtons:FC = () => {
     </>
   );
 };
-export { CountSortingButtons };
+export { StatusSortingButtons };

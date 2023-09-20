@@ -42,9 +42,10 @@ export default function Home(params: Array<Todo>) {
   // };
 
   useEffect(() => {
-    if (localStorage.getItem("task")) {
-      const task = localStorage.getItem("task") || "";
+    if (localStorage.getItem("tasks")) {
+      const task = localStorage.getItem("tasks") || "";
       //const tasks = JSON.parse(localStorage.getItem("task")) || "";
+      console.log(task);
       setTasks(<Task id={1} isCompleted={true} name={task} date={"Today, 18:30"}></Task>)
     }
   }, []);
