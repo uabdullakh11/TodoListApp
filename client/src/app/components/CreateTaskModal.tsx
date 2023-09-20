@@ -1,8 +1,7 @@
 "use client";
 import styled from "styled-components";
-import Image from "next/image";
 import ReactDOM from "react-dom";
-import React from "react";
+import React,{useRef} from "react";
 
 const ModalBlock = styled.div`
   z-index: 9999;
@@ -66,16 +65,26 @@ const ModalCloseButton = styled(Button)`
   color: #6b7280;
 `;
 
-interface TheCreateTaskModalProps {
+interface CreateTaskModalProps {
   show: boolean;
   onCloseButtonClick: () => void;
 }
 
-const TheCreateTaskModal = (props: TheCreateTaskModalProps) => {
+const CreateTaskModal = (props: CreateTaskModalProps) => {
   if (!props.show) {
     return null;
   }
+  const nameInputRef = useRef<HTMLInputElement>(null)
   const handleSaveClick = () => {
+    if (nameInputRef.current) {
+      const obj = {
+        name: nameInputRef.current.value,
+        isCompleted: false,
+        date:"Today, 18:30"
+      }
+      // localStorage.setItem("tasks", JSON.stringify(obj));
+      localStorage.setItem("tasks", nameInputRef.current.value);
+    }
     props.onCloseButtonClick();
   };
   return ReactDOM.createPortal(
@@ -83,7 +92,7 @@ const TheCreateTaskModal = (props: TheCreateTaskModalProps) => {
       <ModalContainer>
         <ModalHeader>Create Task</ModalHeader>
         <ModalBody>
-          <ModalInputName placeholder="Enter text..."></ModalInputName>
+          <ModalInputName placeholder="Enter text..." name="enter-name-input" id="enter-name-input" ref={nameInputRef}></ModalInputName>
           <ModalButtons>
             <ModalSaveButton onClick={handleSaveClick}>Save</ModalSaveButton>
             <ModalCloseButton onClick={props.onCloseButtonClick}>
@@ -96,4 +105,4 @@ const TheCreateTaskModal = (props: TheCreateTaskModalProps) => {
     document.body
   );
 };
-export { TheCreateTaskModal };
+export { CreateTaskModal };

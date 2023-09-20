@@ -1,11 +1,12 @@
 "use client";
 import styled from "styled-components";
 import Image from "next/image";
+import React,{ FC } from "react";
 const Text = styled.div`
   font-family: Roboto, sans-serif;
   color: #9333ea;
 `;
-const Header = styled.header`
+const HeaderBlock = styled.header`
   background-color: #ffffff;
   border-radius: 10px;
   padding: 5px 15px;
@@ -28,9 +29,9 @@ const Username = styled(Text)`
   text-align: left;
 `;
 const ProfileLogo = styled.div`cursor: pointer;`;
-const TheHeader = () => {
+const Header:FC = () => {
   return (
-    <Header>
+    <HeaderBlock>
       <HeaderContainer>
         <LogoTitle>To-Do</LogoTitle>
         <Username>UserName</Username>
@@ -38,7 +39,7 @@ const TheHeader = () => {
           <Image src="person-logo.svg" alt="" height={40} width={40}></Image>
         </ProfileLogo>
       </HeaderContainer>
-    </Header>
+    </HeaderBlock>
   );
 };
-export { TheHeader };
+export { Header };

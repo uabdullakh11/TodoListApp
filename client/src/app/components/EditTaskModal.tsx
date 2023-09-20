@@ -65,12 +65,12 @@ const ModalCloseButton = styled(Button)`
   color: #6b7280;
 `;
 
-interface TheEditTaskModalProps {
+interface EditTaskModalProps {
   show: boolean;
   onCloseButtonClick: () => void;
 }
 
-const TheEditTaskModal = (props: TheEditTaskModalProps) => {
+const EditTaskModal = (props: EditTaskModalProps) => {
   if (!props.show) {
     return null;
   }
@@ -82,7 +82,7 @@ const TheEditTaskModal = (props: TheEditTaskModalProps) => {
       <ModalContainer>
         <ModalHeader>Edit Task</ModalHeader>
         <ModalBody>
-          <ModalInputName placeholder="Enter text..."></ModalInputName>
+          <ModalInputName placeholder="Enter text..." name="change-name-input" id="change-name-input"></ModalInputName>
           <ModalButtons>
             <ModalSaveButton onClick={handleSaveClick}>Save</ModalSaveButton>
             <ModalCloseButton onClick={props.onCloseButtonClick}>
@@ -95,4 +95,4 @@ const TheEditTaskModal = (props: TheEditTaskModalProps) => {
     document.body
   );
 };
-export { TheEditTaskModal };
+export { EditTaskModal };

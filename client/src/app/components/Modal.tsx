@@ -1,6 +1,5 @@
 "use client";
 import styled from "styled-components";
-import Image from "next/image";
 import ReactDOM from "react-dom";
 import React from "react";
 
@@ -53,30 +52,23 @@ const Button = styled.button`
   width: 100%;
   border: none;
 `;
-const ModalDeleteButton = styled(Button)`
-  background: url("./delete-icon.svg"), #f564970f;
-  background-repeat: no-repeat;
-  background-position-y: center;
-  background-position-x: 30px;
-  background-size: 20px;
-  color: #f56497;
-`;
 const ModalCloseButton = styled(Button)`
   background-image: url("./close-btn-icon.svg");
   color: #6b7280;
 `;
 
-interface TheDeleteTaskModalProps {
+interface ModalProps {
   show: boolean;
   onCloseButtonClick: () => void;
+  children: React.ReactNode;
 }
 
-const TheDeleteTaskModal = (props: TheDeleteTaskModalProps) => {
+const Modal = (props: ModalProps) => {
   if (!props.show) {
     return null;
   }
-  const handleDeleteClick = () => {
-    props.onCloseButtonClick();
+  const handleClick = () => {
+    
   };
   return ReactDOM.createPortal(
     <ModalBlock>
@@ -85,9 +77,7 @@ const TheDeleteTaskModal = (props: TheDeleteTaskModalProps) => {
         <ModalBody>
           <ModalText>Are you sure about deleting this task?</ModalText>
           <ModalButtons>
-            <ModalDeleteButton onClick={handleDeleteClick}>
-              Delete
-            </ModalDeleteButton>
+            {props.children}
             <ModalCloseButton onClick={props.onCloseButtonClick}>
               Close
             </ModalCloseButton>
@@ -98,4 +88,4 @@ const TheDeleteTaskModal = (props: TheDeleteTaskModalProps) => {
     document.body
   );
 };
-export { TheDeleteTaskModal };
+export { Modal };

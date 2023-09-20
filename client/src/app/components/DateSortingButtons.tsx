@@ -1,7 +1,6 @@
 "use client";
 import styled from "styled-components";
-import Image from "next/image";
-import { useState } from "react";
+import React,{ useState, FC } from "react";
 const SortingButtonsContainer = styled.div`
   background-color: #9333ea0f;
   border-radius: 10px;
@@ -27,7 +26,7 @@ const PastBtnClicked = styled(Button)`
   background-color: #9333ea0f;
 `;
 
-const TheDateSortingButtons = () => {
+const DateSortingButtons:FC = () => {
   const [isChoosed, setIsChoosed] = useState<boolean>(false);
   const [isNewClicked, setIsNewClicked] = useState<boolean>(false);
   const [isPastClicked, setIsPastClicked] = useState<boolean>(false);
@@ -59,4 +58,4 @@ const TheDateSortingButtons = () => {
     </>
   );
 };
-export { TheDateSortingButtons };
+export { DateSortingButtons };

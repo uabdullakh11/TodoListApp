@@ -1,10 +1,10 @@
 "use client";
 import styled from "styled-components";
 import Image from "next/image";
-import { useState } from "react";
+import React,{ useState, FC } from "react";
 import useModal from "../utils/hooks/useModal";
-import {TheDeleteTaskModal} from "./TheDeleteTaskModal";
-import { TheEditTaskModal } from "./TheEditTaskModal";
+import {DeleteTaskModal} from "./DeleteTaskModal";
+import { EditTaskModal } from "./EditTaskModal";
 const TaskBlock = styled.div`
   font-family: "Roboto", sans-serif;
 `;
@@ -58,19 +58,40 @@ const EditTask = styled(Image)`
   cursor: pointer;
 `;
 
-// interface TheTaskProps {
-//   isOpen: boolean
-// };
-// const TheTask: <TheTaskProps> = ({ isOpen}) => {}
+interface TaskProps {
+  isCompleted: boolean;
+  id: number;
+  name: string;
+  date: string;
+};
+// const TheTask:FC<TheTaskProps> = ({isDone,id,name,date}: TheTaskProps) => {}
 
-const TheTask = () => {
+const Task: FC<TaskProps> = ({isCompleted,id,name,date}) => {
   const [isShowingModal, toggleModal] = useModal();
 
   const [isDone, setIsDone] = useState<boolean>(false);
   const [isOptionsBtnClicked, setOptionsBtnClicked] = useState<boolean>(false);
 
   const handleClickDoneBtn = () => {
-    isDone ? setIsDone(false) : setIsDone(true);
+    // isDone ? setIsDone(false) : setIsDone(true);
+    if (isDone){
+      setIsDone(false)
+      const obj = {
+        name: name,
+        isCompleted: false,
+        date:"Today, 18:30"
+      }
+      //localStorage.setItem('task', JSON.stringify(obj));
+    }
+    else {
+      setIsDone(true)
+      const obj = {
+        name: name,
+        isCompleted: true,
+        date:"Today, 18:30"
+      }
+      //localStorage.setItem('task', JSON.stringify(obj));
+    }
   };
   const handleClickEditBtn = () => {
     isOptionsBtnClicked
@@ -98,10 +119,10 @@ const TheTask = () => {
               onClick={handleClickDoneBtn}
             />
           </DoneButton>
-          <TaskName>Task 1</TaskName>
+          <TaskName>{name}</TaskName>
         </LeftContainer>
         <RightContainer>
-          <DataLine>Today at 18.30</DataLine>
+          <DataLine>{date}</DataLine>
           <OptionsBtn onClick={handleClickEditBtn}>
             <Image src="edit-dots.svg" alt="" width={20} height={20} />
           </OptionsBtn>
@@ -125,9 +146,10 @@ const TheTask = () => {
           />
         </Options>
       ) : null}
-      <TheDeleteTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}/>
-      <TheEditTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}/>
+      {/* <DeleteTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}/> */}
+      {/* <EditTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}/> */}
+      {/* {<Modal show={isShowingModal}  onCloseButtonClick={toggleModal} />} */}
     </TaskBlock>
   );
 };
-export { TheTask };
+export { Task };

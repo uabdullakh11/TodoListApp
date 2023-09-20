@@ -1,7 +1,7 @@
 import "./css/globals.css";
 import type { Metadata } from "next";
-import { TheHeader } from "./components/TheHeader";
-import { TheNavPanel } from "./components/TheNavPanel";
+import { Header } from "./components/Header";
+import { NavPanel } from "./components/NavPanel";
 
 export const metadata: Metadata = {
   title: "Todo List",
@@ -17,9 +17,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="wrapper">
-      <TheHeader />
+      <Header />
           <main>
-            <TheNavPanel />
+            <NavPanel />
             {children}
           </main>
         </div>

@@ -1,7 +1,6 @@
 "use client";
 import styled from "styled-components";
-import Image from "next/image";
-import { useState } from "react";
+import React,{ useState, FC } from "react";
 const SortingButtonsContainer = styled.div`
   background-color: #9333ea0f;
   border-radius: 10px;
@@ -31,7 +30,7 @@ const UndoneBtnClicked = styled(Button)`
   background-color: #9333ea0f;
 `;
 
-const TheCountSortingButtons= () => {
+const CountSortingButtons:FC = () => {
   const [isChoosed, setIsChoosed] = useState<boolean>(false);
   const [isAllClicked, setIsAllClicked] = useState<boolean>(false);
   const [isDoneClicked, setIsDoneClicked] = useState<boolean>(false);
@@ -76,4 +75,4 @@ const TheCountSortingButtons= () => {
     </>
   );
 };
-export { TheCountSortingButtons };
+export { CountSortingButtons };
