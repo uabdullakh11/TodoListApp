@@ -61,10 +61,10 @@ const EditTask = styled(Image)`cursor: pointer;`
 const TheTask = () => {
   const [isDone, setIsDone] = useState<boolean>(false);
   const [isOptionsBtnClicked, setOptionsBtnClicked] = useState<boolean>(false)
-  const handleClickDoneBtn = (e: any) => {
+  const handleClickDoneBtn = () => {
     isDone ? setIsDone(false) : setIsDone(true);
   };
-  const handleClickEditBtn = (e: any) => {
+  const handleClickEditBtn = () => {
     isOptionsBtnClicked ? setOptionsBtnClicked(false) : setOptionsBtnClicked(true);
   }
   return (

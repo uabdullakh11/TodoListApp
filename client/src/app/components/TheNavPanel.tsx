@@ -1,7 +1,10 @@
 "use client";
 import styled from "styled-components";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import useModal from "../utils/hooks/useModal";
+import { TheCountSortingButtons } from "./TheCountSortingButtons";
+import { TheDateSortingButtons } from "./TheDateSortingButtons";
 const NavBlock = styled.div`
   font-family: Roboto, sans-serif;
   font-size: 16px;
@@ -32,30 +35,30 @@ const TodayBtn = styled(Button)`
   background-image: url("./today-logo.svg");
 `;
 const TodayBtnClicked = styled(Button)`
-background: url("./today-clicked-icon.svg"), #9333EA0F;
-background-repeat: no-repeat;
-background-position-y: center;
-background-position-x: 10px;
-color: #9333EA;
-border-radius: 10px;
-`
+  background: url("./today-clicked-icon.svg"), #9333ea0f;
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: 10px;
+  color: #9333ea;
+  border-radius: 10px;
+`;
 const AllBtn = styled(Button)`
   background-image: url("./not-clicked-done-circle.svg");
 `;
 const AllBtnClicked = styled(Button)`
-background: url("./clicked-done-circle.svg"), #9333EA0F;
-background-repeat: no-repeat;
-background-position-y: center;
-background-position-x: 10px;
-color: #9333EA;
-border-radius: 10px;
-`
+  background: url("./clicked-done-circle.svg"), #9333ea0f;
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: 10px;
+  color: #9333ea;
+  border-radius: 10px;
+`;
 const DateBtn = styled(Button)`
   background-image: url("./arrows 1.svg");
 `;
 const DateBtnClicked = styled(Button)`
-background-image: url("./clicked-arrows.svg");
-`
+  background-image: url("./clicked-arrows.svg");
+`;
 const AddTaskBtn = styled.button`
   background: #9333ea0f;
   border-radius: 10px;
@@ -70,39 +73,46 @@ const AddTaskBtn = styled.button`
   gap: 0.5em;
 `;
 const TheNavPanel = () => {
-  const [isTodayClicked, setIsTodayClicked] = useState<boolean>(false)
-  const [isAllClicked, setIsAllClicked] = useState<boolean>(false)
-  const handleTodayClick = (e: any) => {
-    isAllClicked ? setIsAllClicked(false) :false;
+  const [isShowingModal, toggleModal] = useModal();
+  const [isTodayClicked, setIsTodayClicked] = useState<boolean>(false);
+  const [isAllClicked, setIsAllClicked] = useState<boolean>(false);
+  const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
+
+  const handleTodayClick = () => {
     isTodayClicked ? setIsTodayClicked(false) : setIsTodayClicked(true);
-  }
-  const handleAllClick = (e: any) => {
-    isTodayClicked ? setIsTodayClicked(false) : false;
+    isAllClicked ? setIsAllClicked(false) : false;
+    isDateClicked ? setIsDateClicked(false) : false;
+  };
+  const handleAllClick = () => {
     isAllClicked ? setIsAllClicked(false) : setIsAllClicked(true);
-  }
-  const handleAddTask = (e: any)=>{
-    
-  }
+    isTodayClicked ? setIsTodayClicked(false) : false;
+    isDateClicked ? setIsDateClicked(false) : false;
+  };
+  const handleDateClick = () => {
+    isDateClicked ? setIsDateClicked(false) : setIsDateClicked(true);
+    isAllClicked ? setIsAllClicked(false) : false;
+    isTodayClicked ? setIsTodayClicked(false) : false;
+  };
+  const handleAddTask = () => {};
   return (
     <NavBlock>
       <NavContainer>
         <SortingContainer>
-          {isTodayClicked ? <TodayBtnClicked onClick={handleTodayClick}>
-            Today
-          </TodayBtnClicked>
-            : <TodayBtn onClick={handleTodayClick}>
-              Today
-            </TodayBtn>
-          }
-          {isAllClicked ? <AllBtnClicked onClick={handleAllClick}>
-            All
-          </AllBtnClicked>
-            : <AllBtn onClick={handleAllClick}>
-              All
-            </AllBtn>
-          }
-          {/* <AllBtn>All</AllBtn> */}
-          <DateBtn>Date</DateBtn>
+          {isTodayClicked ? (
+            <TodayBtnClicked onClick={handleTodayClick}>Today</TodayBtnClicked>
+          ) : (
+            <TodayBtn onClick={handleTodayClick}>Today</TodayBtn>
+          )}
+          {isAllClicked ? (
+            <TheCountSortingButtons />
+          ) : (
+            <AllBtn onClick={handleAllClick}>All</AllBtn>
+          )}
+          {isDateClicked ? (
+            <TheDateSortingButtons />
+          ) : (
+            <DateBtn onClick={handleDateClick}>Date</DateBtn>
+          )}
         </SortingContainer>
         <AddTaskBtn onClick={handleAddTask}>
           <Image src="plus-btn.svg" alt="" width={20} height={20} />

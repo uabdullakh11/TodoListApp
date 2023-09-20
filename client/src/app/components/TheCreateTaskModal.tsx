@@ -1,6 +1,8 @@
 "use client";
 import styled from "styled-components";
 import Image from "next/image";
+import ReactDOM from 'react-dom';
+import React from "react";
 
 const ModalBlock = styled.div`
   padding: 48px, 16px, 17px, 16px;
@@ -40,18 +42,30 @@ const ModalCloseButton = styled.button`
   background-position-y: center;
 `;
 
-const TheTask = () => {
-  return (
+interface TheCreateTaskModalProps {
+  show: boolean;
+  toggleModal: () => void;
+};
+
+const TheCreateTaskModal = (props: TheCreateTaskModalProps) => {
+  if (!props.show) {
+    return null;
+  }
+  const handleSaveClick = () => {
+    props.toggleModal()
+  }
+  return ReactDOM.createPortal(
     <ModalBlock>
       <ModalHeader>Create Task</ModalHeader>
       <ModalBody>
         <ModalInputName placeholder="Enter text..."></ModalInputName>
         <ModalButtons>
-          <ModalSaveButton>Save</ModalSaveButton>
-          <ModalCloseButton>Close</ModalCloseButton>
+          <ModalSaveButton onClick={handleSaveClick}>Save</ModalSaveButton>
+          <ModalCloseButton onClick={props.toggleModal}>Close</ModalCloseButton>
         </ModalButtons>
       </ModalBody>
     </ModalBlock>
+    , document.body
   );
 };
-export { TheTask };
+export { TheCreateTaskModal };

@@ -1,9 +1,10 @@
+"use client"
 import { useState } from 'react';
 
 const useModal = () => {
     const [isShowing, setIsShowing] = useState<boolean>(false);
 
-    function toggle() {
+    function toggle(): void {
         setIsShowing(!isShowing);
     }
     return [
