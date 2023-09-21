@@ -1,97 +1,55 @@
 "use client";
-import styled from "styled-components";
-import Image from "next/image";
-import React,{ useState, FC } from "react";
+import React, { useState, FC, useEffect } from "react";
 import useModal from "../utils/hooks/useModal";
+import Image from "next/image";
 import { Modal } from "./Modal";
-const TaskBlock = styled.div`
-  font-family: "Roboto", sans-serif;
-`;
-const TaskContainer = styled.div`
-  padding: 10px 10px;
-  border-radius: 10px;
-  display: flex;
-  background-color: #9333ea0f;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-const RightContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-`;
-const LeftContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1em;
-`;
-const DoneButton = styled.span`
-  cursor: pointer;
-`;
-const TaskName = styled.span`
-  color: #000000;
-`;
-const DataLine = styled.span`
-  color: #6b7280;
-`;
-const OptionsBtn = styled.span`
-  cursor: pointer;
-`;
-const Options = styled.div`
-  border: 1px #7d40ff solid;
-  border-radius: 13px;
-  width: 60px;
-  display: flex;
-  flex-direction: row;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  align-items: center;
-  justify-content: space-evenly;
-  float: right;
-  margin-top: 5px;
-`;
-const DeleteTask = styled(Image)`
-  cursor: pointer;
-`;
-const EditTask = styled(Image)`
-  cursor: pointer;
-`;
+import {
+  DeleteTask,
+  DoneButton,
+  EditTask,
+  LeftContainer,
+  Options,
+  OptionsBtn,
+  RightContainer,
+  TaskBlock,
+} from "../css/task";
+import { DataLine, TaskName } from "../css/text";
+import { TaskContainer } from "../css/containers";
+import useDate from "../utils/hooks/useDate";
 
 interface TaskProps {
   isCompleted: boolean;
   id: number;
   name: string;
   date: string;
-};
+}
+interface TaskInterface {
+  id: number;
+  name: string;
+  isCompleted: boolean;
+  date: string;
+}
 // const TheTask:FC<TheTaskProps> = ({isDone,id,name,date}: TheTaskProps) => {}
 
-const Task: FC<TaskProps> = ({isCompleted,id,name,date}) => {
+const Task: FC<TaskProps> = ({ isCompleted, id, name, date }) => {
+  const [, currrentDate, ] = useDate();
   const [isShowingModal, toggleModal] = useModal();
 
   const [isDone, setIsDone] = useState<boolean>(false);
+  const [taskdate, setTaskDate] = useState<string>("");
   const [isOptionsBtnClicked, setOptionsBtnClicked] = useState<boolean>(false);
   const [typeModal, setTypeModal] = useState<string>("");
 
   const handleClickDoneBtn = () => {
-    // isDone ? setIsDone(false) : setIsDone(true);
-    if (isDone){
-      setIsDone(false)
-      const obj = {
-        name: name,
-        isCompleted: false,
-        date:"Today, 18:30"
+    //isDone ? setIsDone(false) : setIsDone(true);
+    const oldTasks = JSON.parse(localStorage.getItem("tasks"));
+    const newTasks = oldTasks.map((item:TaskInterface) => {
+      if (item.name === name) {
+        item.isCompleted = !isCompleted;
       }
-      //localStorage.setItem('task', JSON.stringify(obj));
-    }
-    else {
-      setIsDone(true)
-      const obj = {
-        name: name,
-        isCompleted: true,
-        date:"Today, 18:30"
-      }
-      //localStorage.setItem('task', JSON.stringify(obj));
-    }
+      return item;
+    });
+    localStorage.setItem("tasks", JSON.stringify(newTasks));
   };
   const handleClickEditBtn = () => {
     isOptionsBtnClicked
@@ -100,14 +58,33 @@ const Task: FC<TaskProps> = ({isCompleted,id,name,date}) => {
   };
   const handleEditTask = () => {
     setOptionsBtnClicked(false);
-    setTypeModal("editModal")
+    setTypeModal("editModal");
     toggleModal();
   };
   const handleDeleteTask = () => {
     setOptionsBtnClicked(false);
-    setTypeModal("deleteModal")
+    setTypeModal("deleteModal");
     toggleModal();
   };
+  useEffect(() => {
+    if (isCompleted) {
+      setIsDone(true);
+    } else {
+      setIsDone(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (date.slice(0, 9) === currrentDate) {
+      setTaskDate(`Today at ${date.slice(11,16)}`)
+    }
+    else if (Number(date.slice(2, 4))===Number(currrentDate.slice(2,4))-1) {
+      setTaskDate(`Yesterday at ${date.slice(11,16)}`)
+    }
+    else {
+      setTaskDate(`${date.slice(0, 9)} at ${date.slice(11,16)}`)
+    }
+  }, []);
   return (
     <TaskBlock>
       <TaskContainer>
@@ -124,7 +101,7 @@ const Task: FC<TaskProps> = ({isCompleted,id,name,date}) => {
           <TaskName>{name}</TaskName>
         </LeftContainer>
         <RightContainer>
-          <DataLine>{date}</DataLine>
+          <DataLine>{taskdate}</DataLine>
           <OptionsBtn onClick={handleClickEditBtn}>
             <Image src="edit-dots.svg" alt="" width={20} height={20} />
           </OptionsBtn>
@@ -148,10 +125,12 @@ const Task: FC<TaskProps> = ({isCompleted,id,name,date}) => {
           />
         </Options>
       ) : null}
-      {/* <DeleteTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}/> */}
-      {/* <EditTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}/> */}
-      <Modal show={isShowingModal}  onCloseButtonClick={toggleModal} type={typeModal} />
-      
+      <Modal
+        show={isShowingModal}
+        onCloseButtonClick={toggleModal}
+        type={typeModal}
+        taskname={name}
+      />
     </TaskBlock>
   );
 };

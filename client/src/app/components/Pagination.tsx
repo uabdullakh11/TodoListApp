@@ -1,30 +1,43 @@
 import { FC } from "react";
+import styled from "styled-components";
 
 interface PaginationProps {
-    items: number;
-    pageSize: number;
-    currentPage:any;
-    onPageChange:any;
+  items: number;
+  pageSize: number;
+  currentPage: any;
+  onPageChange: any;
 }
-const Pagination: FC<PaginationProps>= ({ items, pageSize, currentPage, onPageChange }) => {
-    const pagesCount = Math.ceil(items / pageSize); // 100/10
+const PaginationList = styled.ul`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  gap: 1em;
+`;
+const PaginationItem = styled.li`cursor: pointer;`;
+const Pagination: FC<PaginationProps> = ({
+  items,
+  pageSize,
+  currentPage,
+  onPageChange,
+}) => {
+  const pagesCount = Math.ceil(items / pageSize); // 100/10
 
-    if (pagesCount === 1) return null;
-    const pages = Array.from({ length: pagesCount }, (_, i) => i + 1);
-    return (
-        <div>
-        <ul>
-          {pages.map((page) => (
-            <li
-              key={page}
-            >
-              <a onClick={() => onPageChange(page)}>
-                {page}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )
-   }
-   export default Pagination
+  if (pagesCount === 1) return null;
+  const pages = Array.from({ length: pagesCount }, (_, i) => i + 1);
+  return (
+    <>
+      <PaginationList>
+        {pages.map((page) => (
+          <PaginationItem key={page}>
+            <a onClick={() => onPageChange(page)}>{page}</a>
+          </PaginationItem>
+        ))}
+      </PaginationList>
+    </>
+  );
+};
+export default Pagination;

@@ -1,30 +1,8 @@
-"use client";
-import styled from "styled-components";
+"use client";;
 import React,{ useState, FC } from "react";
-const SortingButtonsContainer = styled.div`
-  background-color: #9333ea0f;
-  border-radius: 10px;
-`;
-const Button = styled.div`
-  padding: 10px 30px;
-  color: #9333ea;
-  cursor: pointer;
-  background: url("./clicked-arrows.svg");
-  background-repeat: no-repeat;
-  background-position-y: center;
-  background-position-x: 10px;
-  border-radius: 10px;
-  padding-right: 70px;
-  padding-left: 35px;
-`;
-const NewBtn = styled(Button)``;
-const PastBtn = styled(Button)``;
-const NewBtnClicked = styled(Button)`
-  background-color: #9333ea0f;
-`;
-const PastBtnClicked = styled(Button)`
-  background-color: #9333ea0f;
-`;
+import { NewBtn, PastBtn } from "../css/buttons";
+import { SortingButtonsContainer } from "../css/containers";
+
 
 const DateSortingButtons:FC = () => {
   const [isChoosed, setIsChoosed] = useState<boolean>(false);

@@ -1,10 +1,9 @@
 "use client";
 import styled from "styled-components";
 import React,{ useState, FC } from "react";
-const SortingButtonsContainer = styled.div`
-  background-color: #9333ea0f;
-  border-radius: 10px;
-`;
+import { SortingButtonsContainer } from "../css/containers";
+import { AllBtn } from "../css/buttons";
+
 const Button = styled.div`
   padding: 10px 30px;
   color: #9333ea;
@@ -17,18 +16,9 @@ const Button = styled.div`
   padding-right: 70px;
   padding-left: 35px;
 `;
-const AllBtn = styled(Button)``;
+const AllBtnClicked = styled(Button)``;
 const DoneBtn = styled(Button)``;
 const UndoneBtn = styled(Button)``;
-const AllBtnClicked = styled(Button)`
-  background-color: #9333ea0f;
-`;
-const DoneBtnClicked = styled(Button)`
-  background-color: #9333ea0f;
-`;
-const UndoneBtnClicked = styled(Button)`
-  background-color: #9333ea0f;
-`;
 
 const StatusSortingButtons:FC = () => {
   const [isChoosed, setIsChoosed] = useState<boolean>(false);
@@ -58,7 +48,7 @@ const StatusSortingButtons:FC = () => {
   };
   return (
     <>
-      {isAllClicked ? <AllBtn onClick={handleChoosedClick}>All</AllBtn> : null}
+      {isAllClicked ? <AllBtn active={true} onClick={handleChoosedClick}>All</AllBtn> : null}
       {isDoneClicked ? (
         <DoneBtn onClick={handleChoosedClick}>Done</DoneBtn>
       ) : null}
@@ -67,7 +57,7 @@ const StatusSortingButtons:FC = () => {
       ) : null}
       {!isChoosed ? (
         <SortingButtonsContainer>
-          <AllBtn onClick={handleAllClick}>All</AllBtn>
+          <AllBtn active={true} onClick={handleAllClick}>All</AllBtn>
           <DoneBtn onClick={handleDoneClick}>Done</DoneBtn>
           <UndoneBtn onClick={handleUndoneClick}>Undone</UndoneBtn>
         </SortingButtonsContainer>

@@ -1,85 +1,19 @@
 "use client";
-import styled from "styled-components";
 import Image from "next/image";
 import React, { useState, FC } from "react";
 import useModal from "../utils/hooks/useModal";
 import { StatusSortingButtons } from "./StatusSortingButtons";
 import { DateSortingButtons } from "./DateSortingButtons";
 import { Modal } from "./Modal";
-const NavBlock = styled.div`
-  font-family: Roboto, sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-`;
-const NavContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8rem;
-`;
-const SortingContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-`;
-const Button = styled.div`
-  padding: 10px 30px;
-  color: #6b7280;
-  cursor: pointer;
-  background-repeat: no-repeat;
-  background-position-y: center;
-  background-position-x: 10px;
-  padding-right: 70px;
-  padding-left: 35px;
-`;
-const TodayBtn = styled(Button)`
-  background-image: url("./today-logo.svg");
-`;
-const TodayBtnClicked = styled(Button)`
-  background: url("./today-clicked-icon.svg"), #9333ea0f;
-  background-repeat: no-repeat;
-  background-position-y: center;
-  background-position-x: 10px;
-  color: #9333ea;
-  border-radius: 10px;
-`;
-const AllBtn = styled(Button)`
-  background-image: url("./not-clicked-done-circle.svg");
-`;
-const AllBtnClicked = styled(Button)`
-  background: url("./clicked-done-circle.svg"), #9333ea0f;
-  background-repeat: no-repeat;
-  background-position-y: center;
-  background-position-x: 10px;
-  color: #9333ea;
-  border-radius: 10px;
-`;
-const DateBtn = styled(Button)`
-  background-image: url("./arrows 1.svg");
-`;
-const DateBtnClicked = styled(Button)`
-  background-image: url("./clicked-arrows.svg");
-`;
-const AddTaskBtn = styled.button`
-  background: #9333ea0f;
-  border-radius: 10px;
-  outline: none;
-  border: none;
-  color: #9333ea;
-  padding: 10px 30px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5em;
-`;
-
+import { NavBlock } from "../css/nav-panel";
+import { NavContainer, SortingContainer } from "../css/containers";
+import { AddTaskBtn, AllBtn, DateBtn, TodayBtn} from "../css/buttons";
 
 
 const NavPanel: FC = () => {
   const [isShowingModal, toggleModal] = useModal();
 
-  const [isTodayClicked, setIsTodayClicked] = useState<boolean>(false);
+  const [isTodayClicked, setIsTodayClicked] = useState<boolean>(true);
   const [isAllClicked, setIsAllClicked] = useState<boolean>(false);
   const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
 
@@ -105,11 +39,7 @@ const NavPanel: FC = () => {
     <NavBlock>
       <NavContainer>
         <SortingContainer>
-          {isTodayClicked ? (
-            <TodayBtnClicked onClick={handleTodayClick}>Today</TodayBtnClicked>
-          ) : (
-            <TodayBtn onClick={handleTodayClick}>Today</TodayBtn>
-          )}
+          <TodayBtn active={isTodayClicked} onClick={handleTodayClick}>Today</TodayBtn>
           {isAllClicked ? (
             <StatusSortingButtons />
           ) : (
@@ -126,7 +56,6 @@ const NavPanel: FC = () => {
           <span>Add task</span>
         </AddTaskBtn>
       </NavContainer>
-      {/* <CreateTaskModal show={isShowingModal}  onCloseButtonClick={toggleModal}></CreateTaskModal> */}
       <Modal show={isShowingModal} onCloseButtonClick={toggleModal} type="createModal"></Modal>
     </NavBlock>
   );
