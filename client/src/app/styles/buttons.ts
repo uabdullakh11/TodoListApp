@@ -48,9 +48,9 @@ const StatusButton = styled.div`
   padding-right: 70px;
   padding-left: 35px;
 `;
-export const TodayBtn = styled(StatusButton)<{ active: boolean }>`
+export const TodayBtn = styled(StatusButton)<{ $active: boolean }>`
   ${(props) =>
-    props.active
+    props.$active
       ? css`
           background: url("./today-clicked-icon.svg"), #9333ea0f;
           background-repeat: no-repeat;
@@ -63,9 +63,9 @@ export const TodayBtn = styled(StatusButton)<{ active: boolean }>`
           background-image: url("./today-logo.svg");
         `}
 `;
-export const AllBtn = styled(StatusButton)<{ active: boolean }>`
+export const AllBtn = styled(StatusButton)<{ $active: boolean }>`
   ${(props) =>
-    props.active
+    props.$active
       ? css`
           background: url("./clicked-done-circle.svg");
           background-repeat: no-repeat;

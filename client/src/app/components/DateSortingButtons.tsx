@@ -1,7 +1,7 @@
 "use client";;
 import React,{ useState, FC } from "react";
-import { NewBtn, PastBtn } from "../css/buttons";
-import { SortingButtonsContainer } from "../css/containers";
+import { NewBtn, PastBtn } from "../styles/buttons";
+import { SortingButtonsContainer } from "../styles/containers";
 
 
 const DateSortingButtons:FC = () => {

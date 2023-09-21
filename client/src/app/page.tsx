@@ -1,10 +1,10 @@
 "use client";
 import styled from "styled-components"
-import GlobalStyles from "./css/global";;
+import GlobalStyles from "./styles/global";;
 import { Task } from "./components/Task";
 import React, { useEffect, useState } from "react";
 import Pagination from "./components/Pagination";
-import { Container, EmptyContainer } from "./css/containers";
+import { Container, EmptyContainer } from "./styles/containers";
 import { paginate } from "./helpers/paginate";
 const CardBlock = styled.div`
   background-color: #f4f4f4;
@@ -21,7 +21,7 @@ interface TaskInterface {
 
 export default function Home() {
   const [tasks, setTasks] = useState<React.ReactNode>();
-  const [tasksCount, setTasksCount] = useState<Number>(10);
+  const [tasksCount, setTasksCount] = useState<number>(10);
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
@@ -34,9 +34,9 @@ export default function Home() {
     if (localStorage.getItem('tasks') === null) {
       localStorage.setItem('tasks', JSON.stringify([]))
     }
-    if (JSON.parse(localStorage.getItem("tasks")).length !== 0) {
-      const tasks = localStorage.getItem("tasks")
-      const arr = JSON.parse(tasks).map((item: TaskInterface, index: number) => {
+    if (JSON.parse(localStorage.getItem("tasks") || "").length !== 0) {
+      const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+      const arr = tasks.map((item: TaskInterface, index: number) => {
         return <Task id={1} key={index} name={item?.name} isCompleted={item.isCompleted} date={item.date} />;
       })
       setTasksCount(arr.length)

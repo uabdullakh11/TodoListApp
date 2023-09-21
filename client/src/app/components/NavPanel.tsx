@@ -5,9 +5,9 @@ import useModal from "../utils/hooks/useModal";
 import { StatusSortingButtons } from "./StatusSortingButtons";
 import { DateSortingButtons } from "./DateSortingButtons";
 import { Modal } from "./Modal";
-import { NavBlock } from "../css/nav-panel";
-import { NavContainer, SortingContainer } from "../css/containers";
-import { AddTaskBtn, AllBtn, DateBtn, TodayBtn} from "../css/buttons";
+import { NavBlock } from "../styles/nav-panel";
+import { NavContainer, SortingContainer } from "../styles/containers";
+import { AddTaskBtn, AllBtn, DateBtn, TodayBtn} from "../styles/buttons";
 
 
 const NavPanel: FC = () => {
@@ -39,7 +39,7 @@ const NavPanel: FC = () => {
     <NavBlock>
       <NavContainer>
         <SortingContainer>
-          <TodayBtn active={isTodayClicked} onClick={handleTodayClick}>Today</TodayBtn>
+          <TodayBtn $active={isTodayClicked} onClick={handleTodayClick}>Today</TodayBtn>
           {isAllClicked ? (
             <StatusSortingButtons />
           ) : (

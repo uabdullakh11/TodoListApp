@@ -12,9 +12,9 @@ import {
   OptionsBtn,
   RightContainer,
   TaskBlock,
-} from "../css/task";
-import { DataLine, TaskName } from "../css/text";
-import { TaskContainer } from "../css/containers";
+} from "../styles/task";
+import { DataLine, TaskName } from "../styles/text";
+import { TaskContainer } from "../styles/containers";
 import useDate from "../utils/hooks/useDate";
 
 interface TaskProps {
@@ -42,7 +42,7 @@ const Task: FC<TaskProps> = ({ isCompleted, id, name, date }) => {
 
   const handleClickDoneBtn = () => {
     //isDone ? setIsDone(false) : setIsDone(true);
-    const oldTasks = JSON.parse(localStorage.getItem("tasks"));
+    const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
     const newTasks = oldTasks.map((item:TaskInterface) => {
       if (item.name === name) {
         item.isCompleted = !isCompleted;

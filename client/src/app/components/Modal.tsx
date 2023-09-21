@@ -1,15 +1,15 @@
 "use client";
 import ReactDOM from "react-dom";
 import React, { useRef, useState } from "react";
-import { ModalBlock, ModalBody, ModalButtons, ModalHeader } from "../css/modal";
-import { ModalContainer } from "../css/containers";
-import { ModalInputName } from "../css/inputs";
+import { ModalBlock, ModalBody, ModalButtons, ModalHeader } from "../styles/modal";
+import { ModalContainer } from "../styles/containers";
+import { ModalInputName } from "../styles/inputs";
 import {
   ModalCloseButton,
   ModalDeleteButton,
   ModalSaveButton,
-} from "../css/buttons";
-import { ErrorCaption, ModalText } from "../css/text";
+} from "../styles/buttons";
+import { ErrorCaption, ModalText } from "../styles/text";
 import useDate from "../utils/hooks/useDate";
 
 interface ModalProps {
@@ -39,7 +39,7 @@ const Modal = (props: ModalProps) => {
 
   const handleSaveClick = () => {
     if (nameInputRef.current && nameInputRef.current.value !== "") {
-      const oldTasks = JSON.parse(localStorage.getItem("tasks"));
+      const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
       const todo = {
         name: nameInputRef.current.value,
         isCompleted: false,
@@ -53,7 +53,7 @@ const Modal = (props: ModalProps) => {
     }
   };
   const handleDeleteClick = () => {
-    const oldTasks = JSON.parse(localStorage.getItem("tasks"));
+    const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
     const newTasks = oldTasks.filter((item:TaskInterface) => {
       return item.name!==props.taskname;
     });
@@ -62,10 +62,10 @@ const Modal = (props: ModalProps) => {
   };
   const handleChangeClick = () => {
     if (changeNameRef.current && changeNameRef.current.value !== "") {
-      const oldTasks = JSON.parse(localStorage.getItem("tasks"));
+      const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
       const newTasks = oldTasks.map((item:TaskInterface) => {
         if (item.name === props.taskname) {
-          item.name = changeNameRef.current.value;
+          item.name = changeNameRef.current!.value;
         }
         return item;
       });

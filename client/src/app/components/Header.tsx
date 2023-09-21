@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
 import React,{ FC } from "react";
-import {HeaderBlock, ProfileLogo} from "../css/header";
-import { HeaderContainer } from "../css/containers";
-import { LogoTitle, Username } from "../css/text";
+import {HeaderBlock, ProfileLogo} from "../styles/header";
+import { HeaderContainer } from "../styles/containers";
+import { LogoTitle, Username } from "../styles/text";
 
 const Header:FC = () => {
   return (

@@ -1,8 +1,8 @@
 "use client";
 import styled from "styled-components";
 import React,{ useState, FC } from "react";
-import { SortingButtonsContainer } from "../css/containers";
-import { AllBtn } from "../css/buttons";
+import { SortingButtonsContainer } from "../styles/containers";
+import { AllBtn } from "../styles/buttons";
 
 const Button = styled.div`
   padding: 10px 30px;
@@ -48,7 +48,7 @@ const StatusSortingButtons:FC = () => {
   };
   return (
     <>
-      {isAllClicked ? <AllBtn active={true} onClick={handleChoosedClick}>All</AllBtn> : null}
+      {isAllClicked ? <AllBtn $active={true} onClick={handleChoosedClick}>All</AllBtn> : null}
       {isDoneClicked ? (
         <DoneBtn onClick={handleChoosedClick}>Done</DoneBtn>
       ) : null}
@@ -57,7 +57,7 @@ const StatusSortingButtons:FC = () => {
       ) : null}
       {!isChoosed ? (
         <SortingButtonsContainer>
-          <AllBtn active={true} onClick={handleAllClick}>All</AllBtn>
+          <AllBtn $active={true} onClick={handleAllClick}>All</AllBtn>
           <DoneBtn onClick={handleDoneClick}>Done</DoneBtn>
           <UndoneBtn onClick={handleUndoneClick}>Undone</UndoneBtn>
         </SortingButtonsContainer>

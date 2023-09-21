@@ -3,7 +3,6 @@ export const ModalContainer = styled.div`
   padding-botttom: 10px;
   border-radius: 10px;
   background: #fff;
-  font-family: "Roboto", sans-serif;
 `;
 export const HeaderContainer = styled.div`
   display: flex;
@@ -43,5 +42,4 @@ export const Container = styled.div`
 `;
 export const EmptyContainer = styled.h2`
   text-align: center;
-  font-family: "Roboto", sans-serif;
 `;
