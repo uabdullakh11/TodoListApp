@@ -1,8 +1,7 @@
 "use client";
 import styled from "styled-components"
-import GlobalStyles from  "./css/global";;
+import GlobalStyles from "./css/global";;
 import { Task } from "./components/Task";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Pagination from "./components/Pagination";
 import { Container, EmptyContainer } from "./css/containers";
@@ -13,12 +12,6 @@ const CardBlock = styled.div`
   width: 466px;
   // width:35vw;
 `;
-
-// export const generateStaticParams = async () => {
-//   const res = await axios.get("https://jsonplaceholder.typicode.com/todos");
-//   return res.data;
-// };
-
 interface TaskInterface {
   id: number;
   name: string;
@@ -27,41 +20,42 @@ interface TaskInterface {
 }
 
 export default function Home() {
-
   const [tasks, setTasks] = useState<React.ReactNode>();
+  const [tasksCount, setTasksCount] = useState<Number>(10);
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
-  const onPageChange = (page:number) => {
-    console.log(page)
+  const onPageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  // const paginatedTasks = paginate(tasks, currentPage, pageSize);
-
   useEffect(() => {
-    if (localStorage.getItem('tasks') === null){
-      localStorage.setItem('tasks',JSON.stringify([]))
+    if (localStorage.getItem('tasks') === null) {
+      localStorage.setItem('tasks', JSON.stringify([]))
     }
     if (JSON.parse(localStorage.getItem("tasks")).length !== 0) {
       const tasks = localStorage.getItem("tasks")
-      const arr = JSON.parse(tasks).map((item:TaskInterface, index:number)=>{
-        return <Task id={1} key={index} name={item?.name} isCompleted={item.isCompleted} date={item.date}/>;
+      const arr = JSON.parse(tasks).map((item: TaskInterface, index: number) => {
+        return <Task id={1} key={index} name={item?.name} isCompleted={item.isCompleted} date={item.date} />;
       })
-      setTasks(arr);
+      setTasksCount(arr.length)
+      const paginatedTasks = paginate(arr, currentPage, pageSize);
+      setTasks(paginatedTasks)
     }
-  }, []);
+  }, [currentPage]);
   return (
     <CardBlock>
       <Container>
-        {tasks ? tasks : <EmptyContainer>No tasks yet...</EmptyContainer>}
+        {tasks ? <>
+        {tasks}
         <Pagination
-       items={100} // 100
-       currentPage={currentPage} // 1
-       pageSize={pageSize} // 10
-       onPageChange={onPageChange}
+          items={tasksCount} // 100
+          currentPage={currentPage} // 1
+          pageSize={pageSize} // 10
+          onPageChange={onPageChange}
         />
+        </> : <EmptyContainer>No tasks yet...</EmptyContainer>}
       </Container>
       <GlobalStyles />
     </CardBlock>

@@ -27,7 +27,7 @@ const Pagination: FC<PaginationProps> = ({
   const pagesCount = Math.ceil(items / pageSize); // 100/10
 
   if (pagesCount === 1) return null;
-  const pages = Array.from({ length: pagesCount }, (_, i) => i + 1);
+  const pages = Array.from({ length: pagesCount }, (_, i) => i + 1);//1,2,3,4,5...
   return (
     <>
       <PaginationList>
