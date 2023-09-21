@@ -2,18 +2,26 @@
 import Image from "next/image";
 import React, { useState, FC } from "react";
 import useModal from "../utils/hooks/useModal";
+import useDate from "../utils/hooks/useDate";
 import { StatusSortingButtons } from "./StatusSortingButtons";
 import { DateSortingButtons } from "./DateSortingButtons";
 import { Modal } from "./Modal";
 import { NavBlock } from "../styles/nav-panel";
 import { NavContainer, SortingContainer } from "../styles/containers";
-import { AddTaskBtn, AllBtn, DateBtn, TodayBtn} from "../styles/buttons";
+import { AddTaskBtn, AllBtn, DateBtn, TodayBtn } from "../styles/buttons";
 
+interface TaskInterface {
+  id: number;
+  name: string;
+  isCompleted: boolean;
+  date: string;
+}
 
 const NavPanel: FC = () => {
   const [isShowingModal, toggleModal] = useModal();
+  const [, currrentDate,] = useDate();
 
-  const [isTodayClicked, setIsTodayClicked] = useState<boolean>(true);
+  const [isTodayClicked, setIsTodayClicked] = useState<boolean>(false);
   const [isAllClicked, setIsAllClicked] = useState<boolean>(false);
   const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
 
@@ -21,6 +29,18 @@ const NavPanel: FC = () => {
     isTodayClicked ? setIsTodayClicked(false) : setIsTodayClicked(true);
     isAllClicked ? setIsAllClicked(false) : false;
     isDateClicked ? setIsDateClicked(false) : false;
+
+    const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    oldTasks.sort((a:TaskInterface, b:TaskInterface) =>{
+      if (a.date>b.date) return 1
+      else return -1
+    })
+    const newTasks = oldTasks.map((item: TaskInterface) => {
+      if (item.date.slice(0, 9) === currrentDate) {
+        return item
+      }
+    });
+    localStorage.setItem("tasks", JSON.stringify(newTasks));
   };
   const handleAllClick = () => {
     isAllClicked ? setIsAllClicked(false) : setIsAllClicked(true);

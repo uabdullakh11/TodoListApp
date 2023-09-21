@@ -27,15 +27,15 @@ interface TaskInterface {
 
 
 const Modal = (props: ModalProps) => {
-  if (!props.show) {
-    return null;
-  }
-
-  const [fullDate] = useDate();
+  const [fullDate,,] = useDate();
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const changeNameRef = useRef<HTMLInputElement>(null);
   const [errorCaption, setErrorCaption] = useState("");
+  
+  if (!props.show) {
+    return null;
+  }
 
   const handleSaveClick = () => {
     if (nameInputRef.current && nameInputRef.current.value !== "") {
@@ -77,8 +77,9 @@ const Modal = (props: ModalProps) => {
   };
   return ReactDOM.createPortal(
     <ModalBlock>
+       <ModalContainer>
       {props.type === "createModal" && (
-        <ModalContainer>
+        <>
           <ModalHeader>Create task</ModalHeader>
           <ModalBody>
             <ModalInputName
@@ -95,10 +96,10 @@ const Modal = (props: ModalProps) => {
               </ModalCloseButton>
             </ModalButtons>
           </ModalBody>
-        </ModalContainer>
+        </>
       )}
       {props.type === "deleteModal" && (
-        <ModalContainer>
+        <>
           <ModalHeader>Delete Task</ModalHeader>
           <ModalBody>
             <ModalText>Are you sure about deleting this task?</ModalText>
@@ -111,10 +112,10 @@ const Modal = (props: ModalProps) => {
               </ModalCloseButton>
             </ModalButtons>
           </ModalBody>
-        </ModalContainer>
+        </>
       )}
       {props.type === "editModal" && (
-        <ModalContainer>
+        <>
           <ModalHeader>Edit Task</ModalHeader>
           <ModalBody>
             <ModalInputName
@@ -133,8 +134,9 @@ const Modal = (props: ModalProps) => {
               </ModalCloseButton>
             </ModalButtons>
           </ModalBody>
-        </ModalContainer>
+        </>
       )}
+      </ModalContainer>
     </ModalBlock>,
     document.body
   );

@@ -1,5 +1,6 @@
-import { FC } from "react";
-import styled from "styled-components";
+import { FC, useState } from "react";
+import { PaginationList } from "../styles/containers";
+import { PaginationItem, PaginationLink } from "../styles/text";
 
 interface PaginationProps {
   items: number;
@@ -7,33 +8,31 @@ interface PaginationProps {
   currentPage: any;
   onPageChange: any;
 }
-const PaginationList = styled.ul`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-  gap: 1em;
-`;
-const PaginationItem = styled.li`cursor: pointer;`;
+
 const Pagination: FC<PaginationProps> = ({
   items,
   pageSize,
   currentPage,
   onPageChange,
 }) => {
+  const [isClicked, setIsClicked] = useState(false)
+
   const pagesCount = Math.ceil(items / pageSize); // 100/10
 
   if (pagesCount === 1) return null;
   const pages = Array.from({ length: pagesCount }, (_, i) => i + 1);//1,2,3,4,5...
+
+  const handleClick = (page:number) =>{
+   onPageChange(page)
+   setIsClicked(true)
+  }
   return (
     <>
       <PaginationList>
         {pages.map((page) => (
           <PaginationItem key={page}>
-            <a onClick={() => onPageChange(page)}>{page}</a>
+            <PaginationLink onClick={() => onPageChange(page)}>{page}</PaginationLink>
+            {/* <PaginationLink onClick={() => handleClick(page)} $active={isClicked}>{page}</PaginationLink> */}
           </PaginationItem>
         ))}
       </PaginationList>

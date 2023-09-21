@@ -29,7 +29,6 @@ interface TaskInterface {
   isCompleted: boolean;
   date: string;
 }
-// const TheTask:FC<TheTaskProps> = ({isDone,id,name,date}: TheTaskProps) => {}
 
 const Task: FC<TaskProps> = ({ isCompleted, id, name, date }) => {
   const [, currrentDate, ] = useDate();

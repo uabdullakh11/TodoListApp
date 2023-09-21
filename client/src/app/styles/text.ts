@@ -25,4 +25,11 @@ export const DataLine = styled.span`
 export const ErrorCaption = styled.span`
 color:#F56497;
 background-color: #F564970F;
-`
+`;
+export const PaginationItem = styled.li`cursor: pointer;`;
+// export const PaginationLink = styled.a<{$active: boolean}>`
+// ${(props) =>
+//   props.$active ?`font-weight: 700;` : ``}
+// `;
+export const PaginationLink = styled.a`
+`;
