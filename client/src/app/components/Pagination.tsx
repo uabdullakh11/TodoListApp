@@ -22,17 +22,14 @@ const Pagination: FC<PaginationProps> = ({
   if (pagesCount === 1) return null;
   const pages = Array.from({ length: pagesCount }, (_, i) => i + 1);//1,2,3,4,5...
 
-  const handleClick = (page:number) =>{
-   onPageChange(page)
-   setIsClicked(true)
-  }
   return (
     <>
       <PaginationList>
         {pages.map((page) => (
           <PaginationItem key={page}>
-            <PaginationLink onClick={() => onPageChange(page)}>{page}</PaginationLink>
-            {/* <PaginationLink onClick={() => handleClick(page)} $active={isClicked}>{page}</PaginationLink> */}
+            <PaginationLink onClick={() => onPageChange(page)} $active={
+             page === currentPage ? true : false
+           }>{page}</PaginationLink>
           </PaginationItem>
         ))}
       </PaginationList>

@@ -1,11 +1,14 @@
 "use client";
 import styled from "styled-components"
+import { InferGetStaticPropsType } from 'next'
 import GlobalStyles from "./styles/global";;
 import { Task } from "./components/Task";
 import React, { useEffect, useState } from "react";
 import Pagination from "./components/Pagination";
 import { Container, EmptyContainer } from "./styles/containers";
 import { paginate } from "./helpers/paginate";
+import { GetStaticProps } from "next";
+import axios from "axios";
 const CardBlock = styled.div`
   background-color: #f4f4f4;
   border-radius: 10px;
@@ -18,7 +21,7 @@ interface TaskInterface {
   isCompleted: boolean;
   date: string;
 }
-
+// export default function Home({data}:InferGetStaticPropsType<typeof getStaticProps>) {
 export default function Home() {
   const [tasks, setTasks] = useState<React.ReactNode>();
   const [tasksCount, setTasksCount] = useState<number>(10);
@@ -44,6 +47,10 @@ export default function Home() {
       setTasks(paginatedTasks)
     }
   }, [currentPage]);
+
+  useEffect(() => {
+    console.log()
+  },[]);
   return (
     <CardBlock>
       <Container>
@@ -61,3 +68,10 @@ export default function Home() {
     </CardBlock>
   );
 }
+
+// 'use server';
+// export const getStaticProps: GetStaticProps = async ()=>{
+//   const res = await axios("https://jsonplaceholder.typicode.com/todos?_limit=100")
+//   const data = res.data
+//   return {props:{data}}
+// }

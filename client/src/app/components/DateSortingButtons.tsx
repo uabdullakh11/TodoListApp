@@ -1,8 +1,9 @@
-"use client";;
+"use client";
 import React,{ useState, FC } from "react";
 import { NewBtn, PastBtn } from "../styles/buttons";
 import { SortingButtonsContainer } from "../styles/containers";
 import useDate from "../utils/hooks/useDate";
+
 
 interface TaskInterface {
   id: number;
@@ -25,7 +26,7 @@ const DateSortingButtons:FC = () => {
 
     const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
     oldTasks.sort((a:TaskInterface, b:TaskInterface) =>{
-      if (a.date>b.date) return 1
+      if (a.date<b.date) return 1
       else return -1
     })
     localStorage.setItem("tasks", JSON.stringify(oldTasks));
@@ -37,7 +38,7 @@ const DateSortingButtons:FC = () => {
 
     const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
     oldTasks.sort((a:TaskInterface, b:TaskInterface) =>{
-      if (a.date<b.date) return 1
+      if (a.date>b.date) return 1
       else return -1
     })
     localStorage.setItem("tasks", JSON.stringify(oldTasks));
