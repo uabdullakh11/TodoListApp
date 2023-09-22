@@ -3,6 +3,7 @@ import styled from "styled-components";
 import React,{ useState, FC } from "react";
 import { SortingButtonsContainer } from "../styles/containers";
 import { AllBtn } from "../styles/buttons";
+import { ITask } from "../types/types";
 
 const Button = styled.div`
   padding: 10px 30px;
@@ -18,13 +19,6 @@ const Button = styled.div`
 `;
 const DoneBtn = styled(Button)``;
 const UndoneBtn = styled(Button)``;
-
-interface TaskInterface {
-  id: number;
-  name: string;
-  isCompleted: boolean;
-  date: string;
-}
 
 const StatusSortingButtons:FC = () => {
   const [isChoosed, setIsChoosed] = useState<boolean>(false);
@@ -50,7 +44,7 @@ const StatusSortingButtons:FC = () => {
 
 
     const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    const newTasks = oldTasks.filter((item:TaskInterface) => {
+    const newTasks = oldTasks.filter((item:ITask) => {
       if (item.isCompleted) {
         return item;
       }
@@ -65,7 +59,7 @@ const StatusSortingButtons:FC = () => {
 
 
     const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    const newTasks = oldTasks.filter((item:TaskInterface) => {
+    const newTasks = oldTasks.filter((item:ITask) => {
       if (item.isCompleted===false) {
         return item;
       }

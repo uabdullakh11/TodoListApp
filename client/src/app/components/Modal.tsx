@@ -11,18 +11,13 @@ import {
 } from "../styles/buttons";
 import { ErrorCaption, ModalText } from "../styles/text";
 import useDate from "../utils/hooks/useDate";
+import { ITask } from "../types/types";
 
 interface ModalProps {
   show: boolean;
-  onCloseButtonClick: () => void;
   type: string;
   taskname?: string;
-}
-interface TaskInterface {
-  id: number;
-  name: string;
-  isCompleted: boolean;
-  date: string;
+  onCloseButtonClick: () => void;
 }
 
 
@@ -54,7 +49,7 @@ const Modal = (props: ModalProps) => {
   };
   const handleDeleteClick = () => {
     const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    const newTasks = oldTasks.filter((item:TaskInterface) => {
+    const newTasks = oldTasks.filter((item:ITask) => {
       return item.name!==props.taskname;
     });
     localStorage.setItem("tasks", JSON.stringify(newTasks));
@@ -63,7 +58,7 @@ const Modal = (props: ModalProps) => {
   const handleChangeClick = () => {
     if (changeNameRef.current && changeNameRef.current.value !== "") {
       const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-      const newTasks = oldTasks.map((item:TaskInterface) => {
+      const newTasks = oldTasks.map((item:ITask) => {
         if (item.name === props.taskname) {
           item.name = changeNameRef.current!.value;
         }

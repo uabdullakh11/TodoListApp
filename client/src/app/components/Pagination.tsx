@@ -15,7 +15,6 @@ const Pagination: FC<PaginationProps> = ({
   currentPage,
   onPageChange,
 }) => {
-  const [isClicked, setIsClicked] = useState(false)
 
   const pagesCount = Math.ceil(items / pageSize); // 100/10
 

@@ -16,17 +16,12 @@ import {
 import { DataLine, TaskName } from "../styles/text";
 import { TaskContainer } from "../styles/containers";
 import useDate from "../utils/hooks/useDate";
+import { ITask } from "../types/types";
 
 interface TaskProps {
   isCompleted: boolean;
   id: number;
   name: string;
-  date: string;
-}
-interface TaskInterface {
-  id: number;
-  name: string;
-  isCompleted: boolean;
   date: string;
 }
 
@@ -42,7 +37,7 @@ const Task: FC<TaskProps> = ({ isCompleted, id, name, date }) => {
   const handleClickDoneBtn = () => {
     //isDone ? setIsDone(false) : setIsDone(true);
     const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    const newTasks = oldTasks.map((item:TaskInterface) => {
+    const newTasks = oldTasks.map((item:ITask) => {
       if (item.name === name) {
         item.isCompleted = !isCompleted;
       }

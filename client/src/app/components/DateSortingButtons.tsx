@@ -3,14 +3,8 @@ import React,{ useState, FC } from "react";
 import { NewBtn, PastBtn } from "../styles/buttons";
 import { SortingButtonsContainer } from "../styles/containers";
 import useDate from "../utils/hooks/useDate";
+import { ITask } from "../types/types";
 
-
-interface TaskInterface {
-  id: number;
-  name: string;
-  isCompleted: boolean;
-  date: string;
-}
 
 const DateSortingButtons:FC = () => {
   const [,currentDate,] = useDate()
@@ -25,7 +19,7 @@ const DateSortingButtons:FC = () => {
     isPastClicked ? setIsPastClicked(false) : false;
 
     const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    oldTasks.sort((a:TaskInterface, b:TaskInterface) =>{
+    oldTasks.sort((a:ITask, b:ITask) =>{
       if (a.date<b.date) return 1
       else return -1
     })
@@ -37,7 +31,7 @@ const DateSortingButtons:FC = () => {
     isNewClicked ? setIsNewClicked(false) : false;
 
     const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    oldTasks.sort((a:TaskInterface, b:TaskInterface) =>{
+    oldTasks.sort((a:ITask, b:ITask) =>{
       if (a.date>b.date) return 1
       else return -1
     })

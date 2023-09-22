@@ -1,26 +1,19 @@
 "use client";
 import styled from "styled-components"
-import { InferGetStaticPropsType } from 'next'
 import GlobalStyles from "./styles/global";;
 import { Task } from "./components/Task";
 import React, { useEffect, useState } from "react";
 import Pagination from "./components/Pagination";
 import { Container, EmptyContainer } from "./styles/containers";
 import { paginate } from "./helpers/paginate";
-import { GetStaticProps } from "next";
-import axios from "axios";
+import { ITask } from "./types/types";
 const CardBlock = styled.div`
   background-color: #f4f4f4;
   border-radius: 10px;
   width: 466px;
   // width:35vw;
 `;
-interface TaskInterface {
-  id: number;
-  name: string;
-  isCompleted: boolean;
-  date: string;
-}
+
 // export default function Home({data}:InferGetStaticPropsType<typeof getStaticProps>) {
 export default function Home() {
   const [tasks, setTasks] = useState<React.ReactNode>();
@@ -39,7 +32,7 @@ export default function Home() {
     }
     if (JSON.parse(localStorage.getItem("tasks") || "").length !== 0) {
       const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-      const arr = tasks.map((item: TaskInterface, index: number) => {
+      const arr = tasks.map((item: ITask, index: number) => {
         return <Task id={1} key={index} name={item?.name} isCompleted={item.isCompleted} date={item.date} />;
       })
       setTasksCount(arr.length)
@@ -47,10 +40,6 @@ export default function Home() {
       setTasks(paginatedTasks)
     }
   }, [currentPage]);
-
-  useEffect(() => {
-    console.log()
-  },[]);
   return (
     <CardBlock>
       <Container>

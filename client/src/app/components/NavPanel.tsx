@@ -9,13 +9,8 @@ import { Modal } from "./Modal";
 import { NavBlock } from "../styles/nav-panel";
 import { NavContainer, SortingContainer } from "../styles/containers";
 import { AddTaskBtn, AllBtn, DateBtn, TodayBtn } from "../styles/buttons";
+import { ITask } from "../types/types";
 
-interface TaskInterface {
-  id: number;
-  name: string;
-  isCompleted: boolean;
-  date: string;
-}
 
 const NavPanel: FC = () => {
   const [isShowingModal, toggleModal] = useModal();
@@ -31,11 +26,11 @@ const NavPanel: FC = () => {
     isDateClicked ? setIsDateClicked(false) : false;
 
     const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    oldTasks.sort((a:TaskInterface, b:TaskInterface) =>{
+    oldTasks.sort((a:ITask, b:ITask) =>{
       if (a.date>b.date) return 1
       else return -1
     })
-    const newTasks = oldTasks.map((item: TaskInterface) => {
+    const newTasks = oldTasks.map((item: ITask) => {
       if (item.date.slice(0, 9) === currrentDate) {
         return item
       }
