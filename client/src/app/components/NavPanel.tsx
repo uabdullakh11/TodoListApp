@@ -9,10 +9,13 @@ import { Modal } from "./Modal";
 import { NavBlock } from "../styles/nav-panel";
 import { NavContainer, SortingContainer } from "../styles/containers";
 import { AddTaskBtn, AllBtn, DateBtn, TodayBtn } from "../styles/buttons";
-import { ITask } from "../types/types";
+import { TasksArray, ITask } from "../types/types";
 
+interface INavPanelProps {
+  handleSetTasks: (value: TasksArray)=> void;
+}
 
-const NavPanel: FC = () => {
+const NavPanel: FC = (props: INavPanelProps) => {
   const [isShowingModal, toggleModal] = useModal();
   const [, currrentDate,] = useDate();
 

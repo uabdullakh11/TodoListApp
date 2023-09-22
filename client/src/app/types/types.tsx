@@ -9,6 +9,6 @@ export interface IUser {
     name: string;
     email: string;
 }
-export type TasksContextType = {
+export type TasksArray = {
   todos: ITask[];
 }

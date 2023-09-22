@@ -24,6 +24,7 @@ const DateSortingButtons:FC = () => {
       else return -1
     })
     localStorage.setItem("tasks", JSON.stringify(oldTasks));
+    window.location.reload();
   };
   const handlePastClick = () => {
     setIsChoosed(true);
@@ -36,6 +37,7 @@ const DateSortingButtons:FC = () => {
       else return -1
     })
     localStorage.setItem("tasks", JSON.stringify(oldTasks));
+    window.location.reload();
   };
   const handleChoosedClick = () => {
     setIsChoosed(false);

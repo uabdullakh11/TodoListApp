@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import './styles/global.css';
 import { Header } from "./components/Header";
 import { NavPanel } from "./components/NavPanel";
-import { createContext } from "react";
-import {  TasksContextType } from "./types/types";
+// import { createContext } from "react";
+// import {  TasksContextType } from "./types/types";
 
 export const metadata: Metadata = {
   title: "Todo List",
@@ -21,12 +22,12 @@ export default function RootLayout({
           <Header />
           {/* <TasksContext.Provider value={null}> */}
             <main>
-              <NavPanel />
               {children}
             </main>
           {/* </TasksContext.Provider> */}
         </div>
       </body>
+      {/* <GlobalStyles /> */}
     </html>
   );
 }

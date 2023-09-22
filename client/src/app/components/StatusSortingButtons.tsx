@@ -58,7 +58,7 @@ const StatusSortingButtons:FC = () => {
     isAllClicked ? setIsAllClicked(false) : false;
     isDoneClicked ? setIsDoneClicked(false) : false;
 
-
+    
     const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
     const newTasks = oldTasks.filter((item:ITask) => {
       if (item.isCompleted===false) {
