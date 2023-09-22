@@ -12,10 +12,10 @@ import { AddTaskBtn, AllBtn, DateBtn, TodayBtn } from "../styles/buttons";
 import { TasksArray, ITask } from "../types/types";
 
 interface INavPanelProps {
-  handleSetTasks: (value: TasksArray)=> void;
+  handleSetTasks: (value: TasksArray) => void;
 }
 
-const NavPanel: FC = (props: INavPanelProps) => {
+const NavPanel: FC <INavPanelProps> = (props) => {
   const [isShowingModal, toggleModal] = useModal();
   const [, currrentDate,] = useDate();
 
@@ -33,13 +33,14 @@ const NavPanel: FC = (props: INavPanelProps) => {
       if (a.date>b.date) return 1
       else return -1
     })
-    const newTasks = oldTasks.map((item: ITask) => {
+    const newTasks = oldTasks.filter((item: ITask) => {
       if (item.date.slice(0, 9) === currrentDate) {
         return item
       }
     });
+    props.handleSetTasks(newTasks);
     localStorage.setItem("tasks", JSON.stringify(newTasks));
-    window.location.reload();
+    //window.location.reload();
   };
   const handleAllClick = () => {
     isAllClicked ? setIsAllClicked(false) : setIsAllClicked(true);
