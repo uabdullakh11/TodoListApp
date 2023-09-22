@@ -7,6 +7,7 @@ import Pagination from "./components/Pagination";
 import { Container, EmptyContainer } from "./styles/containers";
 import { paginate } from "./helpers/paginate";
 import { ITask } from "./types/types";
+import Card from "./components/Card";
 const CardBlock = styled.div`
   background-color: #f4f4f4;
   border-radius: 10px;
@@ -64,3 +65,4 @@ export default function Home() {
 //   const data = res.data
 //   return {props:{data}}
 // }
+

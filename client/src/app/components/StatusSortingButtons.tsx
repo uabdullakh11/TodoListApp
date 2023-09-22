@@ -34,7 +34,7 @@ const StatusSortingButtons:FC = () => {
     
     const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
     localStorage.setItem("tasks", JSON.stringify(oldTasks));
-    
+    window.location.reload();
   };
   const handleDoneClick = () => {
     setIsChoosed(true);
@@ -50,6 +50,7 @@ const StatusSortingButtons:FC = () => {
       }
     });
     localStorage.setItem("tasks", JSON.stringify(newTasks));
+    window.location.reload();
   };
   const handleUndoneClick = () => {
     setIsChoosed(true);
@@ -65,6 +66,7 @@ const StatusSortingButtons:FC = () => {
       }
     });
     localStorage.setItem("tasks", JSON.stringify(newTasks));
+    window.location.reload();
   };
   const handleChoosedClick = () => {
     setIsChoosed(false);

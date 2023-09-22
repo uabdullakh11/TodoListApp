@@ -1,5 +1,4 @@
 "use client";
-import ReactDOM from "react-dom";
 import React, { useRef, useState } from "react";
 import { ModalBlock, ModalBody, ModalButtons, ModalHeader } from "../styles/modal";
 import { ModalContainer } from "../styles/containers";
@@ -26,6 +25,7 @@ const Modal = (props: ModalProps) => {
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const changeNameRef = useRef<HTMLInputElement>(null);
+
   const [errorCaption, setErrorCaption] = useState("");
   
   if (!props.show) {
@@ -43,6 +43,7 @@ const Modal = (props: ModalProps) => {
       oldTasks.push(todo);
       localStorage.setItem("tasks", JSON.stringify(oldTasks));
       props.onCloseButtonClick();
+      window.location.reload();
     } else {
       setErrorCaption("Please enter name of task!");
     }
@@ -54,23 +55,26 @@ const Modal = (props: ModalProps) => {
     });
     localStorage.setItem("tasks", JSON.stringify(newTasks));
     props.onCloseButtonClick();
+    window.location.reload();
   };
   const handleChangeClick = () => {
     if (changeNameRef.current && changeNameRef.current.value !== "") {
       const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
       const newTasks = oldTasks.map((item:ITask) => {
         if (item.name === props.taskname) {
-          item.name = changeNameRef.current!.value;
+          [item.name, item.date] = [changeNameRef.current!.value, fullDate]
         }
         return item;
       });
       localStorage.setItem("tasks", JSON.stringify(newTasks));
       props.onCloseButtonClick();
+      window.location.reload();
     } else {
       setErrorCaption("Please enter name of task!");
     }
   };
-  return ReactDOM.createPortal(
+
+  return (
     <ModalBlock>
        <ModalContainer>
       {props.type === "createModal" && (
@@ -132,8 +136,9 @@ const Modal = (props: ModalProps) => {
         </>
       )}
       </ModalContainer>
-    </ModalBlock>,
-    document.body
+    </ModalBlock>
+    //,
+    //document.body
   );
 };
 export { Modal };

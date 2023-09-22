@@ -36,6 +36,7 @@ const NavPanel: FC = () => {
       }
     });
     localStorage.setItem("tasks", JSON.stringify(newTasks));
+    window.location.reload();
   };
   const handleAllClick = () => {
     isAllClicked ? setIsAllClicked(false) : setIsAllClicked(true);

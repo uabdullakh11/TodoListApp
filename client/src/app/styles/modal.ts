@@ -5,6 +5,7 @@ export const ModalBlock = styled.div`
   height: 100vh;
   position: absolute;
   top: 0;
+  left: 0;
   background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
