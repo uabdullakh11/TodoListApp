@@ -9,19 +9,22 @@ import {
   ModalSaveButton,
 } from "../styles/buttons";
 import { ErrorCaption, ModalText } from "../styles/text";
-import useDate from "../utils/hooks/useDate";
-import { ITask } from "../types/types";
+import getDate from "../helpers/getDate";
+import { TasksContextType } from "../types/types";
+import { TasksContext } from "../context/TasksContext";
 
 interface ModalProps {
   show: boolean;
   type: string;
-  taskname?: string;
+  taskId?: number;
   onCloseButtonClick: () => void;
 }
 
 
 const Modal = (props: ModalProps) => {
-  const [fullDate,,] = useDate();
+  const {saveTodo, deleteTodo, editTodo} = React.useContext(TasksContext) as TasksContextType;
+
+  const {fullDate} = getDate();
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const changeNameRef = useRef<HTMLInputElement>(null);
@@ -33,42 +36,29 @@ const Modal = (props: ModalProps) => {
   }
 
   const handleSaveClick = () => {
-    if (nameInputRef.current && nameInputRef.current.value !== "") {
-      const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    if (nameInputRef.current) {
       const todo = {
+        id: Math.floor(Math.random()*1000),
         name: nameInputRef.current.value,
         isCompleted: false,
         date: fullDate,
       };
-      oldTasks.push(todo);
-      localStorage.setItem("tasks", JSON.stringify(oldTasks));
+      saveTodo(todo);
       props.onCloseButtonClick();
-      window.location.reload();
     } else {
       setErrorCaption("Please enter name of task!");
     }
   };
   const handleDeleteClick = () => {
-    const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    const newTasks = oldTasks.filter((item:ITask) => {
-      return item.name!==props.taskname;
-    });
-    localStorage.setItem("tasks", JSON.stringify(newTasks));
-    props.onCloseButtonClick();
-    window.location.reload();
+    if (props.taskId){
+      deleteTodo(props.taskId)
+      props.onCloseButtonClick();
+    }
   };
   const handleChangeClick = () => {
-    if (changeNameRef.current && changeNameRef.current.value !== "") {
-      const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-      const newTasks = oldTasks.map((item:ITask) => {
-        if (item.name === props.taskname) {
-          [item.name, item.date] = [changeNameRef.current!.value, fullDate]
-        }
-        return item;
-      });
-      localStorage.setItem("tasks", JSON.stringify(newTasks));
+    if (changeNameRef.current && props.taskId) {
+      editTodo(props.taskId, changeNameRef.current.value, fullDate)
       props.onCloseButtonClick();
-      window.location.reload();
     } else {
       setErrorCaption("Please enter name of task!");
     }
@@ -137,8 +127,6 @@ const Modal = (props: ModalProps) => {
       )}
       </ModalContainer>
     </ModalBlock>
-    //,
-    //document.body
   );
 };
 export { Modal };

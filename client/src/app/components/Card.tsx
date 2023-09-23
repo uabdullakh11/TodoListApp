@@ -2,10 +2,11 @@
 import styled from "styled-components";
 import { Task } from "../components/Task";
 import React, { FC, useEffect, useState } from "react";
-import { ITask, TasksArray } from "../types/types";
+import { ITask, TasksContextType } from "../types/types";
 import { paginate } from "../helpers/paginate";
 import Pagination from "./Pagination";
 import { Container, EmptyContainer } from "../styles/containers";
+import { TasksContext } from "../context/TasksContext";
 const CardBlock = styled.div`
   background-color: #f4f4f4;
   border-radius: 10px;
@@ -13,11 +14,9 @@ const CardBlock = styled.div`
   // width:35vw;
 `;
 
-interface ICardProps {
-  tasks: TasksArray | null;
-}
+const Card: FC = () => {
+  const { todos, updateTodo } = React.useContext(TasksContext) as TasksContextType;
 
-const Card: FC<ICardProps> = (props) => {
   const [tasks, setTasks] = useState<React.ReactNode>();
   const [tasksCount, setTasksCount] = useState<number>(10);
 
@@ -28,45 +27,31 @@ const Card: FC<ICardProps> = (props) => {
     setCurrentPage(page);
   };
 
-  // useEffect(() => {
-  //   if (localStorage.getItem('tasks') === null) {
-  //     localStorage.setItem('tasks', JSON.stringify([]))
-  //   }
-  //   if (JSON.parse(localStorage.getItem("tasks") || "").length !== 0) {
-  //     const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-  //     const arr = tasks.map((item: ITask, index: number) => {
-  //       return <Task id={1} key={index} name={item?.name} isCompleted={item.isCompleted} date={item.date} />;
-  //     })
-  //     setTasksCount(arr.length)
-  //     const paginatedTasks = paginate(arr, currentPage, pageSize);
-  //     setTasks(paginatedTasks)
-  //   }
-  // }, [currentPage]);
-  
   useEffect(() => {
-    if (props.tasks!==null && Array.isArray(props.tasks)) {
-    const arr = props.tasks.map((item: ITask, index: number) => {
-      return (
-        <Task
-          id={1}
-          key={index}
-          name={item?.name}
-          isCompleted={item.isCompleted}
-          date={item.date}
-        />
-      );
-    });
-    setTasksCount(arr.length);
-    const paginatedTasks = paginate(arr, currentPage, pageSize);
-    setTasks(paginatedTasks);
-  }
-  }, [props.tasks, currentPage]);
+    if (todos !== null && Array.isArray(todos)) {
+      const arr = todos.map((item: ITask) => {
+        return (
+          <Task
+            id={item.id}
+            key={item.id}
+            name={item.name}
+            isCompleted={item.isCompleted}
+            date={item.date}
+            updateTodo={updateTodo}
+          />
+        );
+      });
+      setTasksCount(arr.length);
+      const paginatedTasks = paginate(arr, currentPage, pageSize);
+      setTasks(paginatedTasks);
+    }
+  }, [todos,currentPage, updateTodo]);
+
   return (
     <div>
       <CardBlock>
-        {/* {props.tasks} */}
         <Container>
-          {tasks ? (
+          {tasksCount ? (
             <>
               {tasks}
               <Pagination

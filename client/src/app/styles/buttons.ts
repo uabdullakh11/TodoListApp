@@ -94,3 +94,18 @@ export const AddTaskBtn = styled.button`
   align-items: center;
   gap: 0.5em;
 `;
+
+const Button = styled.div`
+  padding: 10px 30px;
+  color: #9333ea;
+  cursor: pointer;
+  background: url("./clicked-done-circle.svg");
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: 10px;
+  border-radius: 10px;
+  padding-right: 70px;
+  padding-left: 35px;
+`;
+export const DoneBtn = styled(Button)``;
+export const UndoneBtn = styled(Button)``;

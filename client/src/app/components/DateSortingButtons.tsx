@@ -2,12 +2,11 @@
 import React,{ useState, FC } from "react";
 import { NewBtn, PastBtn } from "../styles/buttons";
 import { SortingButtonsContainer } from "../styles/containers";
-import useDate from "../utils/hooks/useDate";
-import { ITask } from "../types/types";
-
+import { TasksContextType } from "../types/types";
+import { TasksContext } from "../context/TasksContext";
 
 const DateSortingButtons:FC = () => {
-  const [,currentDate,] = useDate()
+  const {filterPast, filterNew } = React.useContext(TasksContext) as TasksContextType;
 
   const [isChoosed, setIsChoosed] = useState<boolean>(false);
   const [isNewClicked, setIsNewClicked] = useState<boolean>(false);
@@ -18,26 +17,14 @@ const DateSortingButtons:FC = () => {
     !isNewClicked ? setIsNewClicked(true) : false;
     isPastClicked ? setIsPastClicked(false) : false;
 
-    const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    oldTasks.sort((a:ITask, b:ITask) =>{
-      if (a.date<b.date) return 1
-      else return -1
-    })
-    localStorage.setItem("tasks", JSON.stringify(oldTasks));
-    window.location.reload();
+    filterNew()
   };
   const handlePastClick = () => {
     setIsChoosed(true);
     !isPastClicked ? setIsPastClicked(true) : false;
     isNewClicked ? setIsNewClicked(false) : false;
 
-    const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    oldTasks.sort((a:ITask, b:ITask) =>{
-      if (a.date>b.date) return 1
-      else return -1
-    })
-    localStorage.setItem("tasks", JSON.stringify(oldTasks));
-    window.location.reload();
+    filterPast()
   };
   const handleChoosedClick = () => {
     setIsChoosed(false);

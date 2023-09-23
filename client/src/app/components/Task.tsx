@@ -15,18 +15,18 @@ import {
 } from "../styles/task";
 import { DataLine, TaskName } from "../styles/text";
 import { TaskContainer } from "../styles/containers";
-import useDate from "../utils/hooks/useDate";
+import getDate from "../helpers/getDate";
 import { ITask } from "../types/types";
 
-interface TaskProps {
-  isCompleted: boolean;
+interface TasksProps {
   id: number;
   name: string;
+  isCompleted: boolean;
   date: string;
+ updateTodo: (id: number) => void;
 }
-
-const Task: FC<TaskProps> = ({ isCompleted, id, name, date }) => {
-  const [, currrentDate, ] = useDate();
+const Task: FC<TasksProps> = ({ isCompleted, id, name, date, updateTodo }) => {
+  const {currentDate} = getDate();
   const [isShowingModal, toggleModal] = useModal();
 
   const [isDone, setIsDone] = useState<boolean>(false);
@@ -35,15 +35,7 @@ const Task: FC<TaskProps> = ({ isCompleted, id, name, date }) => {
   const [typeModal, setTypeModal] = useState<string>("");
 
   const handleClickDoneBtn = () => {
-    //isDone ? setIsDone(false) : setIsDone(true);
-    const oldTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    const newTasks = oldTasks.map((item:ITask) => {
-      if (item.name === name) {
-        item.isCompleted = !isCompleted;
-      }
-      return item;
-    });
-    localStorage.setItem("tasks", JSON.stringify(newTasks));
+    updateTodo(id)
   };
   const handleClickEditBtn = () => {
     isOptionsBtnClicked
@@ -66,19 +58,19 @@ const Task: FC<TaskProps> = ({ isCompleted, id, name, date }) => {
     } else {
       setIsDone(false);
     }
-  }, []);
+  }, [isCompleted]);  
 
   useEffect(() => {
-    if (date.slice(0, 9) === currrentDate) {
+    if (date.slice(0, 9) === currentDate) {
       setTaskDate(`Today at ${date.slice(11,16)}`)
     }
-    else if (Number(date.slice(2, 4))===Number(currrentDate.slice(2,4))-1) {
+    else if (Number(date.slice(2, 4))===Number(currentDate.slice(2,4))-1) {
       setTaskDate(`Yesterday at ${date.slice(11,16)}`)
     }
     else {
       setTaskDate(`${date.slice(0, 9)} at ${date.slice(11,16)}`)
     }
-  }, []);
+  }, [date,currentDate]);
   return (
     <TaskBlock>
       <TaskContainer>
@@ -123,7 +115,7 @@ const Task: FC<TaskProps> = ({ isCompleted, id, name, date }) => {
         show={isShowingModal}
         onCloseButtonClick={toggleModal}
         type={typeModal}
-        taskname={name}
+        taskId={id}
       />
     </TaskBlock>
   );
