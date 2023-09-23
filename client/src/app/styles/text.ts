@@ -18,9 +18,16 @@ export const Username = styled.div`
 `;
 export const TaskName = styled.span`
   color: #000000;
+  word-break: break-all;
+  max-width: 205px;
+  display: inline-block;
+  @media (max-width: 475px) {
+    max-width: 150px;
+  }
 `;
 export const DataLine = styled.span`
   color: #6b7280;
+  word-break: break-all;
 `;
 export const ErrorCaption = styled.span`
 color:#F56497;

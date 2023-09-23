@@ -11,7 +11,9 @@ const CardBlock = styled.div`
   background-color: #f4f4f4;
   border-radius: 10px;
   width: 466px;
-  // width:35vw;
+  @media (max-width: 689px) {
+    width: 100%;
+  }
 `;
 
 const Card: FC = () => {
@@ -48,7 +50,6 @@ const Card: FC = () => {
   }, [todos,currentPage, updateTodo]);
 
   return (
-    <div>
       <CardBlock>
         <Container>
           {tasksCount ? (
@@ -66,7 +67,6 @@ const Card: FC = () => {
           )}
         </Container>
       </CardBlock>
-    </div>
   );
 };
 export default Card;

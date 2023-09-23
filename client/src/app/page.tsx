@@ -5,12 +5,10 @@ import TasksProvider from "./context/TasksContext";
 import React from "react";
 export default function Home() {
   return (
-    <>
     <TasksProvider>
-    <NavPanel />
+      <NavPanel />
       <Card />
     </TasksProvider>
-    </>
   );
 }
 

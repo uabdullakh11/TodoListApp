@@ -7,6 +7,10 @@ const ModalButton = styled.button`
   background-position-x: 30px;
   width: 100%;
   border: none;
+  @media (max-width: 400px) {
+    padding: 10px 40px;
+    background-position-x: 10px;
+  }
 `;
 export const ModalDeleteButton = styled(ModalButton)`
   background: url("./delete-icon.svg"), #f564970f;
@@ -33,7 +37,6 @@ const DateButton = styled.div`
   background-position-y: center;
   background-position-x: 10px;
   border-radius: 10px;
-  padding-right: 70px;
   padding-left: 35px;
 `;
 export const NewBtn = styled(DateButton)``;
@@ -47,6 +50,9 @@ const StatusButton = styled.div`
   background-position-x: 10px;
   padding-right: 70px;
   padding-left: 35px;
+  @media (max-width: 689px) {
+    padding-right: 35px;
+  }
 `;
 export const TodayBtn = styled(StatusButton)<{ $active: boolean }>`
   ${(props) =>
@@ -106,6 +112,9 @@ const Button = styled.div`
   border-radius: 10px;
   padding-right: 70px;
   padding-left: 35px;
+  @media (max-width: 689px) {
+    padding-right: 35px;
+  }
 `;
 export const DoneBtn = styled(Button)``;
 export const UndoneBtn = styled(Button)``;

@@ -5,11 +5,15 @@ import useModal from "../utils/hooks/useModal";
 import { StatusSortingButtons } from "./StatusSortingButtons";
 import { DateSortingButtons } from "./DateSortingButtons";
 import { Modal } from "./Modal";
-import { NavBlock } from "../styles/nav-panel";
+import styled from "styled-components";
 import { NavContainer, SortingContainer } from "../styles/containers";
 import { AddTaskBtn, AllBtn, DateBtn, TodayBtn } from "../styles/buttons";
 import { TasksContextType } from "../types/types";
 import { TasksContext } from "../context/TasksContext";
+const NavBlock = styled.div`
+  font-size: 16px;
+  font-weight: 400;
+`;
 
 const NavPanel: FC = () => {
   const { filterToday} = React.useContext(TasksContext) as TasksContextType;
