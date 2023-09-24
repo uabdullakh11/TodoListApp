@@ -19,8 +19,8 @@ const CardBlock = styled.div`
 const Card: FC = () => {
   const { todos, updateTodo } = React.useContext(TasksContext) as TasksContextType;
 
-  // const [tasks, setTasks] = useState<React.ReactNode>();
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [tasks, setTasks] = useState<React.ReactNode>();
+  // const [tasks, setTasks] = useState<ITask[]>([]);
   const [tasksCount, setTasksCount] = useState<number>(10);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -32,21 +32,23 @@ const Card: FC = () => {
 
   useEffect(() => {
     if (todos !== null && Array.isArray(todos)) {
-      // const arr = todos.map((item: ITask) => {
-      //   return (
-      //     <Task
-      //       id={item.id}
-      //       key={item.id}
-      //       name={item.name}
-      //       isCompleted={item.isCompleted}
-      //       date={item.date}
-      //       updateTodo={updateTodo}
-      //     />
-      //   );
-      // });
       setTasksCount(todos.length);
+      todos.length<11 ? setCurrentPage(1) : null;
       const paginatedTasks = paginate(todos, currentPage, pageSize);
-      setTasks(paginatedTasks);
+       const arr = paginatedTasks.map((item: ITask) => {
+        return (
+          <Task
+            id={item.id}
+            key={item.id}
+            name={item.name}
+            isCompleted={item.isCompleted}
+            date={item.date}
+            updateTodo={updateTodo}
+          />
+        );
+      });
+      console.log(arr, todos, currentPage)
+      setTasks(arr);
     }
   }, [todos, currentPage, updateTodo]);
 
@@ -55,16 +57,7 @@ const Card: FC = () => {
       <Container>
         {tasksCount ? (
           <>
-            {tasks.map((item: ITask) => {
-              return <Task
-                id={item.id}
-                key={item.id}
-                name={item.name}
-                isCompleted={item.isCompleted}
-                date={item.date}
-                updateTodo={updateTodo}
-              />
-            })}
+            {tasks}
             <Pagination
               items={tasksCount} // 100
               currentPage={currentPage} // 1

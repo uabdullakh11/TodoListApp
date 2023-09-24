@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import type { ReactElement} from 'react'
+import type { ReactElement } from 'react'
 import styled from "styled-components";
 import { Header } from "../components/Header";
+import { LogoTitle, PageName } from "../styles/text";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -23,12 +24,17 @@ export default function AuthLayout({
 }) {
   return (
     <>
-    <Header type="auth" />
-    <main>
-      <CardBlock>
-      {children}  
-      </CardBlock>
-    </main> 
+      <Header>
+        <>
+          <LogoTitle $auth={true}>To-Do</LogoTitle>
+          <PageName>Authentication</PageName>
+        </>
+      </Header>
+      <main>
+        <CardBlock>
+          {children}
+        </CardBlock>
+      </main>
     </>
   );
 }

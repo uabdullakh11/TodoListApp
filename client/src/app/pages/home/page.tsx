@@ -1,21 +1,18 @@
 "use client";
 import React from "react";
 import Card from "../../components/Card";
-import { Header } from "../../components/Header";
 import { NavPanel } from "../../components/NavPanel";
 import TasksProvider from "../../context/TasksContext";
+import HomeLayout from "@/app/layouts/HomeLayout";
 
 export default function Home() {
   return (
-    <>
-      <Header type="main" />
-      <main>
-        <TasksProvider>
-          <NavPanel />
-          <Card />
-        </TasksProvider>
-      </main>
-    </>
+    <HomeLayout>
+      <TasksProvider>
+        <NavPanel />
+        <Card />
+      </TasksProvider>
+    </HomeLayout>
   );
 }
 

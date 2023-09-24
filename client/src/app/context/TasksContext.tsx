@@ -52,16 +52,16 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
   }
 
   const filterToday = () => {
-    todos.sort((a: ITask, b: ITask) => {
+    allTodos.sort((a: ITask, b: ITask) => {
       if (a.date < b.date) return 1
       else return -1
     })
-    todos.filter((item: ITask) => {
+    allTodos.filter((item: ITask) => {
       if (item.date.slice(0, 9) === currentDate) {
         return item
       }
     });
-    setTodos([...todos]);
+    setTodos([...allTodos]);
   }
 
   const filterNew = () => {
