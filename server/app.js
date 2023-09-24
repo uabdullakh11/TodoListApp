@@ -1,11 +1,10 @@
 const express = require("express");
-// создаем объект приложения
+require('dotenv').config()
+
 const app = express();
-// определяем обработчик для маршрута "/"
-app.get("/", function(request, response){
-     
-    // отправляем ответ
-    response.send("<h2>Привет Express!</h2>");
+app.use ('/', (req, res)=>{
+    res.send(process.env.SECRET_KEY)
+})
+app.listen(5654, () => {
+  console.log("Server running on localhost:5000...");
 });
-// начинаем прослушивать подключения на 3000 порту
-app.listen(5000);
