@@ -2,7 +2,7 @@
 import React, { useRef, useState } from "react";
 import { ModalBlock, ModalBody, ModalButtons, ModalHeader } from "../styles/modal";
 import { ModalContainer } from "../styles/containers";
-import { ModalInputName } from "../styles/inputs";
+import { Input } from "../styles/inputs";
 import {
   ModalCloseButton,
   ModalDeleteButton,
@@ -12,6 +12,7 @@ import { ErrorCaption, ModalText } from "../styles/text";
 import getDate from "../helpers/getDate";
 import { TasksContextType } from "../types/types";
 import { TasksContext } from "../context/TasksContext";
+// import { useClickAway } from "@uidotdev/usehooks";
 
 interface ModalProps {
   show: boolean;
@@ -28,6 +29,9 @@ const Modal = (props: ModalProps) => {
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const changeNameRef = useRef<HTMLInputElement>(null);
+  // const containerRef = useClickAway(() => {
+  //   props.onCloseButtonClick()
+  // });
 
   const [errorCaption, setErrorCaption] = useState("");
   
@@ -71,7 +75,7 @@ const Modal = (props: ModalProps) => {
         <>
           <ModalHeader>Create task</ModalHeader>
           <ModalBody>
-            <ModalInputName
+            <Input
               placeholder="Enter text..."
               name="enter-name-input"
               id="enter-name-input"
@@ -107,12 +111,12 @@ const Modal = (props: ModalProps) => {
         <>
           <ModalHeader>Edit Task</ModalHeader>
           <ModalBody>
-            <ModalInputName
+            <Input
               placeholder="Change name of task..."
               name="change-name-input"
               id="change-name-input"
               ref={changeNameRef}
-            ></ModalInputName>
+            />
             <ErrorCaption>{errorCaption}</ErrorCaption>
             <ModalButtons>
               <ModalSaveButton onClick={handleChangeClick}>

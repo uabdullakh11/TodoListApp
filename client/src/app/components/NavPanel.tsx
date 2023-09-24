@@ -10,6 +10,7 @@ import { NavContainer, SortingContainer } from "../styles/containers";
 import { AddTaskBtn, AllBtn, DateBtn, TodayBtn } from "../styles/buttons";
 import { TasksContextType } from "../types/types";
 import { TasksContext } from "../context/TasksContext";
+// import { useClickAway } from "@uidotdev/usehooks";
 const NavBlock = styled.div`
   font-size: 16px;
   font-weight: 400;
@@ -25,19 +26,22 @@ const NavPanel: FC = () => {
   const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
 
   const handleTodayClick = () => {
-    isTodayClicked ? setIsTodayClicked(false) : setIsTodayClicked(true);
+    // isTodayClicked ? setIsTodayClicked(false) : setIsTodayClicked(true);
+    setIsTodayClicked(!isTodayClicked);
     isAllClicked ? setIsAllClicked(false) : false;
     isDateClicked ? setIsDateClicked(false) : false;
   
     filterToday()
   };
   const handleAllClick = () => {
-    isAllClicked ? setIsAllClicked(false) : setIsAllClicked(true);
+    // isAllClicked ? setIsAllClicked(false) : setIsAllClicked(true);
+    setIsAllClicked(!isAllClicked)
     isTodayClicked ? setIsTodayClicked(false) : false;
     isDateClicked ? setIsDateClicked(false) : false;
   };
   const handleDateClick = () => {
-    isDateClicked ? setIsDateClicked(false) : setIsDateClicked(true);
+    // isDateClicked ? setIsDateClicked(false) : setIsDateClicked(true);
+    setIsDateClicked(!isDateClicked)
     isAllClicked ? setIsAllClicked(false) : false;
     isTodayClicked ? setIsTodayClicked(false) : false;
   };
@@ -54,6 +58,7 @@ const NavPanel: FC = () => {
           ) : (
             <AllBtn onClick={handleAllClick}>All</AllBtn>
           )}
+
           {isDateClicked ? (
             <DateSortingButtons />
           ) : (
@@ -61,7 +66,7 @@ const NavPanel: FC = () => {
           )}
         </SortingContainer>
         <AddTaskBtn onClick={handleAddTask}>
-          <Image src="plus-btn.svg" alt="" width={20} height={20} />
+          <Image src="../plus-btn.svg" alt="" width={20} height={20} />
           <span>Add task</span>
         </AddTaskBtn>
       </NavContainer>

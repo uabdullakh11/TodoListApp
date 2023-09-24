@@ -77,7 +77,7 @@ const Task: FC<TasksProps> = ({ isCompleted, id, name, date, updateTodo }) => {
         <LeftContainer>
           <DoneButton>
             <Image
-              src={!isDone ? `not-done-task.svg` : `done-task.svg`}
+              src={!isDone ? `../not-done-task.svg` : `../done-task.svg`}
               alt=""
               width={20}
               height={20}
@@ -89,7 +89,7 @@ const Task: FC<TasksProps> = ({ isCompleted, id, name, date, updateTodo }) => {
         <RightContainer>
           <DataLine>{taskdate}</DataLine>
           <OptionsBtn onClick={handleClickEditBtn}>
-            <Image src="edit-dots.svg" alt="" width={20} height={20} />
+            <Image src="../edit-dots.svg" alt="" width={20} height={20} />
           </OptionsBtn>
         </RightContainer>
       </TaskContainer>
@@ -97,14 +97,14 @@ const Task: FC<TasksProps> = ({ isCompleted, id, name, date, updateTodo }) => {
         <Options>
           <EditTask
             onClick={handleEditTask}
-            src="edit-icon.svg"
+            src="../edit-icon.svg"
             alt=""
             width={20}
             height={20}
           />
           <DeleteTask
             onClick={handleDeleteTask}
-            src="delete-icon.svg"
+            src="../delete-icon.svg"
             alt=""
             width={20}
             height={20}

@@ -19,7 +19,8 @@ const CardBlock = styled.div`
 const Card: FC = () => {
   const { todos, updateTodo } = React.useContext(TasksContext) as TasksContextType;
 
-  const [tasks, setTasks] = useState<React.ReactNode>();
+  // const [tasks, setTasks] = useState<React.ReactNode>();
+  const [tasks, setTasks] = useState<ITask[]>([]);
   const [tasksCount, setTasksCount] = useState<number>(10);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,42 +32,51 @@ const Card: FC = () => {
 
   useEffect(() => {
     if (todos !== null && Array.isArray(todos)) {
-      const arr = todos.map((item: ITask) => {
-        return (
-          <Task
-            id={item.id}
-            key={item.id}
-            name={item.name}
-            isCompleted={item.isCompleted}
-            date={item.date}
-            updateTodo={updateTodo}
-          />
-        );
-      });
-      setTasksCount(arr.length);
-      const paginatedTasks = paginate(arr, currentPage, pageSize);
+      // const arr = todos.map((item: ITask) => {
+      //   return (
+      //     <Task
+      //       id={item.id}
+      //       key={item.id}
+      //       name={item.name}
+      //       isCompleted={item.isCompleted}
+      //       date={item.date}
+      //       updateTodo={updateTodo}
+      //     />
+      //   );
+      // });
+      setTasksCount(todos.length);
+      const paginatedTasks = paginate(todos, currentPage, pageSize);
       setTasks(paginatedTasks);
     }
-  }, [todos,currentPage, updateTodo]);
+  }, [todos, currentPage, updateTodo]);
 
   return (
-      <CardBlock>
-        <Container>
-          {tasksCount ? (
-            <>
-              {tasks}
-              <Pagination
-                items={tasksCount} // 100
-                currentPage={currentPage} // 1
-                pageSize={pageSize} // 10
-                onPageChange={onPageChange}
+    <CardBlock>
+      <Container>
+        {tasksCount ? (
+          <>
+            {tasks.map((item: ITask) => {
+              return <Task
+                id={item.id}
+                key={item.id}
+                name={item.name}
+                isCompleted={item.isCompleted}
+                date={item.date}
+                updateTodo={updateTodo}
               />
-            </>
-          ) : (
-            <EmptyContainer>No tasks yet...</EmptyContainer>
-          )}
-        </Container>
-      </CardBlock>
+            })}
+            <Pagination
+              items={tasksCount} // 100
+              currentPage={currentPage} // 1
+              pageSize={pageSize} // 10
+              onPageChange={onPageChange}
+            />
+          </>
+        ) : (
+          <EmptyContainer>No tasks yet...</EmptyContainer>
+        )}
+      </Container>
+    </CardBlock>
   );
 };
 export default Card;

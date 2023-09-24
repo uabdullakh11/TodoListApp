@@ -1,4 +1,4 @@
-import styled from'styled-components';
+import styled from "styled-components";
 export const ModalContainer = styled.div`
   padding-botttom: 10px;
   border-radius: 10px;
@@ -41,7 +41,7 @@ export const SortingContainer = styled.div`
   }
   @media (max-width: 360px) {
     gap: 0;
-   }
+  }
 `;
 export const TaskContainer = styled.div`
   padding: 10px 10px;
@@ -50,11 +50,7 @@ export const TaskContainer = styled.div`
   background-color: #9333ea0f;
   flex-direction: row;
   justify-content: space-between;
-  // gap: 4em;
-  @media (max-width: 420px){
-    font-size: 14px;
-  }
-`; 
+`;
 export const Container = styled.div`
   padding: 30px 20px;
   display: flex;
@@ -74,3 +70,27 @@ export const PaginationList = styled.ul`
   align-items: center;
   gap: 1em;
 `;
+export const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 20px;
+`;
+
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 0px 20px 20px;
+  max-width: 400px;
+  gap: 0.5rem;
+`;
+
+export const InputContainer = styled.div`
+display: flex;
+flex-direction: column;
+gap: 1.5rem;
+width: 100%;
+`

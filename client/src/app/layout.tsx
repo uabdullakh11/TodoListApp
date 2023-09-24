@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import './styles/global.css';
-import { Header } from "./components/Header";
 
 export const metadata: Metadata = {
   title: "Todo List",
@@ -15,10 +14,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="wrapper">
-          <Header />
-            <main>
-              {children}
-            </main>
+          {children}
         </div>
       </body>
     </html>
