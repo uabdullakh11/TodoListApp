@@ -1,14 +1,11 @@
-const http = require('http');
- 
-const hostname = '127.0.0.1';
-const port = 5000;
- 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
+const express = require("express");
+// создаем объект приложения
+const app = express();
+// определяем обработчик для маршрута "/"
+app.get("/", function(request, response){
+     
+    // отправляем ответ
+    response.send("<h2>Привет Express!</h2>");
 });
- 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+// начинаем прослушивать подключения на 3000 порту
+app.listen(5000);
