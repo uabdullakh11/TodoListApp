@@ -1,14 +1,59 @@
-const fs = require("fs");
+import getDate from "../config/getDate.js";
+import fs from "fs";
+
 const filePath = "public/todos.json";
 
-exports.getTodos = (req, res) => {
+const {currentDate} = getDate();
+const getTodos = (req, res) => {
   const id = req.params.id;
   const content = fs.readFileSync(filePath, "utf8");
   const todos = JSON.parse(content);
   const myTodos = todos.filter((todo) => todo.userId == id);
   res.send(myTodos);
 };
-exports.addTodo = (req, res) => {
+
+const getTodayTodos = (req, res) => {
+  const id = req.params.id;
+  const content = fs.readFileSync(filePath, "utf8");
+  const todos = JSON.parse(content);
+  const myTodos = todos.filter((todo) => todo.userId == id);
+  myTodos.sort((a, b) => {
+    if (a.date < b.date) return 1
+    else return -1
+  })
+  console.log(myTodos[2].date.slice(0, 9)===currentDate)
+  const todayTodos = myTodos.filter((item) => {item.date.slice(0, 9) === currentDate})
+  res.send(todayTodos);
+};
+const getNewTodos = (req, res) => {
+  const id = req.params.id;
+  const content = fs.readFileSync(filePath, "utf8");
+  const todos = JSON.parse(content);
+  const myTodos = todos.filter((todo) => todo.userId == id);
+  res.send(myTodos);
+};
+const getPastTodos = (req, res) => {
+  const id = req.params.id;
+  const content = fs.readFileSync(filePath, "utf8");
+  const todos = JSON.parse(content);
+  const myTodos = todos.filter((todo) => todo.userId == id);
+  res.send(myTodos);
+};
+const getDoneTodos = (req, res) => {
+  const id = req.params.id;
+  const content = fs.readFileSync(filePath, "utf8");
+  const todos = JSON.parse(content);
+  const myTodos = todos.filter((todo) => todo.userId == id);
+  res.send(myTodos);
+};
+const getUndoneTodos = (req, res) => {
+  const id = req.params.id;
+  const content = fs.readFileSync(filePath, "utf8");
+  const todos = JSON.parse(content);
+  const myTodos = todos.filter((todo) => todo.userId == id);
+  res.send(myTodos);
+};
+const addTodo = (req, res) => {
   if (!req.body) return res.sendStatus(400);
   const [title, completed, userId, date] = [
     req.body.title,
@@ -34,7 +79,7 @@ exports.addTodo = (req, res) => {
   fs.writeFileSync("public/todos.json", data);
   res.send(todos);
 };
-exports.deleteTodo = (req, res) => {
+const deleteTodo = (req, res) => {
   const id = req.params.id;
   let data = fs.readFileSync(filePath, "utf8");
   let todos = JSON.parse(data);
@@ -55,7 +100,7 @@ exports.deleteTodo = (req, res) => {
     res.status(404).send("404");
   }
 };
-exports.updateTodo = (req, res) => {
+const updateTodo = (req, res) => {
   if (!req.body) return res.sendStatus(400);
 
   const [id, title, completed, date] = [
@@ -85,3 +130,5 @@ exports.updateTodo = (req, res) => {
     res.status(404).send(todo);
   }
 };
+
+export {getTodos, getTodayTodos, getNewTodos, getPastTodos, getDoneTodos, getUndoneTodos, addTodo, deleteTodo, updateTodo};

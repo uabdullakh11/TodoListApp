@@ -1,11 +1,18 @@
-const express = require("express");
+import express from "express";
+import {getTodos, getTodayTodos, getNewTodos, getPastTodos, getDoneTodos, getUndoneTodos, addTodo, deleteTodo, updateTodo} from "../controllers/todoController.js";
 const jsonParser = express.json();
-const todoController = require("../controllers/todoController.js");
 const todoRouter = express.Router();
 
-todoRouter.get("/:id", todoController.getTodos);
-todoRouter.post("/", jsonParser, todoController.addTodo);
-todoRouter.delete("/:id", todoController.deleteTodo);
-todoRouter.put("/", jsonParser, todoController.updateTodo);
+todoRouter.get("/:id", getTodos);
+todoRouter.get("/:id/today", getTodayTodos);
+todoRouter.get("/:id/new", getNewTodos);
+todoRouter.get("/:id/past", getPastTodos);
+todoRouter.get("/:id/done", getDoneTodos);
+todoRouter.get("/:id/undone", getUndoneTodos);
+todoRouter.post("/", jsonParser, addTodo);
+todoRouter.delete("/:id", deleteTodo);
+todoRouter.put("/", jsonParser, updateTodo);
 
-module.exports = todoRouter;
+// module.exports = todoRouter;
+
+export {todoRouter};
