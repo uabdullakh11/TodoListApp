@@ -4,6 +4,7 @@ import fs from "fs";
 const filePath = "public/todos.json";
 
 const {currentDate} = getDate();
+
 const getTodos = (req, res) => {
   const id = req.params.id;
   const content = fs.readFileSync(filePath, "utf8");
@@ -11,7 +12,6 @@ const getTodos = (req, res) => {
   const myTodos = todos.filter((todo) => todo.userId == id);
   res.send(myTodos);
 };
-
 const getTodayTodos = (req, res) => {
   const id = req.params.id;
   const content = fs.readFileSync(filePath, "utf8");
@@ -21,8 +21,7 @@ const getTodayTodos = (req, res) => {
     if (a.date < b.date) return 1
     else return -1
   })
-  console.log(myTodos[2].date.slice(0, 9)===currentDate)
-  const todayTodos = myTodos.filter((item) => {item.date.slice(0, 9) === currentDate})
+  const todayTodos = myTodos.filter((item) => item.date.slice(0, 9) === currentDate)
   res.send(todayTodos);
 };
 const getNewTodos = (req, res) => {
@@ -30,6 +29,10 @@ const getNewTodos = (req, res) => {
   const content = fs.readFileSync(filePath, "utf8");
   const todos = JSON.parse(content);
   const myTodos = todos.filter((todo) => todo.userId == id);
+  myTodos.sort((a, b) => {
+    if (a.date < b.date) return 1
+    else return -1
+  })
   res.send(myTodos);
 };
 const getPastTodos = (req, res) => {
@@ -37,6 +40,10 @@ const getPastTodos = (req, res) => {
   const content = fs.readFileSync(filePath, "utf8");
   const todos = JSON.parse(content);
   const myTodos = todos.filter((todo) => todo.userId == id);
+  myTodos.sort((a, b) => {
+    if (a.date > b.date) return 1
+    else return -1
+  })
   res.send(myTodos);
 };
 const getDoneTodos = (req, res) => {
@@ -44,14 +51,16 @@ const getDoneTodos = (req, res) => {
   const content = fs.readFileSync(filePath, "utf8");
   const todos = JSON.parse(content);
   const myTodos = todos.filter((todo) => todo.userId == id);
-  res.send(myTodos);
+  const doneTodos = myTodos.filter((item) => item.completed) 
+  res.send(doneTodos);
 };
 const getUndoneTodos = (req, res) => {
   const id = req.params.id;
   const content = fs.readFileSync(filePath, "utf8");
   const todos = JSON.parse(content);
   const myTodos = todos.filter((todo) => todo.userId == id);
-  res.send(myTodos);
+  const undoneTodos = myTodos.filter((item) => !item.completed) 
+  res.send(undoneTodos);
 };
 const addTodo = (req, res) => {
   if (!req.body) return res.sendStatus(400);
@@ -120,7 +129,6 @@ const updateTodo = (req, res) => {
       break;
     }
   }
-  console.log(id);
   if (todo) {
     [todo.title, todo.completed, todo.date] = [title, completed, date];
     data = JSON.stringify(todos);
