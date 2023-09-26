@@ -1,11 +1,15 @@
 import getDate from "../config/getDate.js";
 import fs from "fs";
+import Todo from "../models/Todo.js";
 
 const filePath = "public/todos.json";
 
-const {currentDate} = getDate();
+const { currentDate } = getDate();
 
-const getTodos = (req, res) => {
+const getTodos = async (req, res) => {
+  const jane = await Todo.create({title:'', date: "2222", userId: 1, completed: false});
+  console.log(jane.toJSON());
+
   const id = req.params.id;
   const content = fs.readFileSync(filePath, "utf8");
   const todos = JSON.parse(content);
@@ -18,10 +22,12 @@ const getTodayTodos = (req, res) => {
   const todos = JSON.parse(content);
   const myTodos = todos.filter((todo) => todo.userId == id);
   myTodos.sort((a, b) => {
-    if (a.date < b.date) return 1
-    else return -1
-  })
-  const todayTodos = myTodos.filter((item) => item.date.slice(0, 9) === currentDate)
+    if (a.date < b.date) return 1;
+    else return -1;
+  });
+  const todayTodos = myTodos.filter(
+    (item) => item.date.slice(0, 9) === currentDate
+  );
   res.send(todayTodos);
 };
 const getNewTodos = (req, res) => {
@@ -30,9 +36,9 @@ const getNewTodos = (req, res) => {
   const todos = JSON.parse(content);
   const myTodos = todos.filter((todo) => todo.userId == id);
   myTodos.sort((a, b) => {
-    if (a.date < b.date) return 1
-    else return -1
-  })
+    if (a.date < b.date) return 1;
+    else return -1;
+  });
   res.send(myTodos);
 };
 const getPastTodos = (req, res) => {
@@ -41,9 +47,9 @@ const getPastTodos = (req, res) => {
   const todos = JSON.parse(content);
   const myTodos = todos.filter((todo) => todo.userId == id);
   myTodos.sort((a, b) => {
-    if (a.date > b.date) return 1
-    else return -1
-  })
+    if (a.date > b.date) return 1;
+    else return -1;
+  });
   res.send(myTodos);
 };
 const getDoneTodos = (req, res) => {
@@ -51,7 +57,7 @@ const getDoneTodos = (req, res) => {
   const content = fs.readFileSync(filePath, "utf8");
   const todos = JSON.parse(content);
   const myTodos = todos.filter((todo) => todo.userId == id);
-  const doneTodos = myTodos.filter((item) => item.completed) 
+  const doneTodos = myTodos.filter((item) => item.completed);
   res.send(doneTodos);
 };
 const getUndoneTodos = (req, res) => {
@@ -59,7 +65,7 @@ const getUndoneTodos = (req, res) => {
   const content = fs.readFileSync(filePath, "utf8");
   const todos = JSON.parse(content);
   const myTodos = todos.filter((todo) => todo.userId == id);
-  const undoneTodos = myTodos.filter((item) => !item.completed) 
+  const undoneTodos = myTodos.filter((item) => !item.completed);
   res.send(undoneTodos);
 };
 const addTodo = (req, res) => {
@@ -139,4 +145,14 @@ const updateTodo = (req, res) => {
   }
 };
 
-export {getTodos, getTodayTodos, getNewTodos, getPastTodos, getDoneTodos, getUndoneTodos, addTodo, deleteTodo, updateTodo};
+export {
+  getTodos,
+  getTodayTodos,
+  getNewTodos,
+  getPastTodos,
+  getDoneTodos,
+  getUndoneTodos,
+  addTodo,
+  deleteTodo,
+  updateTodo,
+};

@@ -22,29 +22,32 @@
 
 // }
 // const Todo = model('Todo', Todo)
-import { Sequelize } from "sequelize";
+// import { Sequelize, DataType } from "sequelize";
 import { sequelize } from "./index.js";
-const Todo = sequelize.define("todo", {
+import { DataTypes } from "sequelize";
+const Todo = sequelize.define("tasks", {
   title: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   date: {
-    type: Sequelize.DATEONLY,
-    defaultValue: Date.now,
+    type: DataTypes.STRING,
+    // defaultValue: Date.now,
     allowNull: false,
   },
   completed: {
-    type: Sequelize.BOOLEAN,
+    type: DataTypes.BOOLEAN,
     defaultValue: false,
     allowNull: false,
   },
   userId: {
-    type: Sequelize.INTEGER,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
 sequelize
-  .sync()
-  .then((result) => console.log(result))
+  .sync({force: true})
+  .then((result) => console.log('correct'))
   .catch((err) => console.log(err));
+
+export default Todo;
