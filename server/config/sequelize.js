@@ -3,7 +3,7 @@ export const dbConfig = {
   password: process.env.PGPASSWORD || "user",
   database: process.env.PGDATABASE || "test",
   host: process.env.PGHOST || "localhost",
-  port: parseInt(process.env.PGPORT || 5642, 10),
+  port: parseInt(process.env.PGPORT || 5432, 10),
   dialect: "postgres",
   logging: false,
 };
