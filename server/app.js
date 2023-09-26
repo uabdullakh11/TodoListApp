@@ -1,5 +1,6 @@
 import express from "express";
 import { todoRouter } from "./routes/todoRouter.js";
+import {userRouter } from "./routes/userRouter.js";
 import cors from "cors";
 import { sequelize } from "./models/index.js";
 import { config } from "./config/index.js";
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(morgan("tiny"));
 
 app.use("/api/todos", todoRouter);
+app.use("/api/users", userRouter)
 app.use((req, res) => {
   res.status(404).send("Not Found");
 });

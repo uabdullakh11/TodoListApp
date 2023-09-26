@@ -1,7 +1,7 @@
 export const dbConfig = {
   username: process.env.PGUSER || "postgres",
   password: process.env.PGPASSWORD || "user",
-  database: process.env.PGDATABASE || "test",
+  database: process.env.PGDATABASE || "dev_db",
   host: process.env.PGHOST || "localhost",
   port: parseInt(process.env.PGPORT || 5432, 10),
   dialect: "postgres",
