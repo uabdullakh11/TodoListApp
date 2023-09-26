@@ -26,6 +26,12 @@
 import { sequelize } from "./index.js";
 import { DataTypes } from "sequelize";
 const Todo = sequelize.define("tasks", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false,
+  },
   title: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -46,7 +52,7 @@ const Todo = sequelize.define("tasks", {
   },
 });
 sequelize
-  .sync({force: true})
+  .sync({force: false})
   .then((result) => console.log('correct'))
   .catch((err) => console.log(err));
 

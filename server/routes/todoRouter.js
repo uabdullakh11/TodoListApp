@@ -1,5 +1,4 @@
 import express from "express";
-// import {getTodos, getTodayTodos, getNewTodos, getPastTodos, getDoneTodos, getUndoneTodos, addTodo, deleteTodo, updateTodo} from "../controllers/todoController.js";
 import { todoController } from "../controllers/index.js";
 const jsonParser = express.json();
 const todoRouter = express.Router();

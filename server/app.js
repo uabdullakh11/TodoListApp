@@ -10,7 +10,7 @@ const app = express();
 const port = config.PORT;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true, }));
+app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use(morgan("tiny"));
 
