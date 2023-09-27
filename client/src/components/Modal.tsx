@@ -1,6 +1,11 @@
 // "use client";
 import React, { useRef, useState } from "react";
-import { ModalBlock, ModalBody, ModalButtons, ModalHeader } from "@/styles/modal";
+import {
+  ModalBlock,
+  ModalBody,
+  ModalButtons,
+  ModalHeader,
+} from "@/styles/modal";
 import { ModalContainer } from "@/styles/containers";
 import { Input } from "@/styles/inputs";
 import {
@@ -12,6 +17,7 @@ import { ErrorCaption, ModalText } from "../styles/text";
 import getDate from "../helpers/getDate";
 import { TasksContextType } from "../types/types";
 import { TasksContext } from "../context/TasksContext";
+import { api } from "@/utils/axios/axios";
 // import { useClickAway } from "@uidotdev/usehooks";
 
 interface ModalProps {
@@ -21,11 +27,12 @@ interface ModalProps {
   onCloseButtonClick: () => void;
 }
 
-
 const Modal = (props: ModalProps) => {
-  const {saveTodo, deleteTodo, editTodo} = React.useContext(TasksContext) as TasksContextType;
+  const { saveTodo, deleteTodo, editTodo } = React.useContext(
+    TasksContext
+  ) as TasksContextType;
 
-  const {fullDate} = getDate();
+  const { fullDate } = getDate();
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const changeNameRef = useRef<HTMLInputElement>(null);
@@ -34,34 +41,49 @@ const Modal = (props: ModalProps) => {
   // });
 
   const [errorCaption, setErrorCaption] = useState("");
-  
+
   if (!props.show) {
     return null;
   }
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     if (nameInputRef.current) {
       const todo = {
-        id: Math.floor(Math.random()*1000),
-        name: nameInputRef.current.value,
-        isCompleted: false,
+        title: nameInputRef.current.value,
+        completed: false,
         date: fullDate,
+        userId: 1,
       };
-      saveTodo(todo);
+      const newTodo = await api.post("api/todos/", todo);
+      console.log(newTodo.data);
       props.onCloseButtonClick();
     } else {
       setErrorCaption("Please enter name of task!");
     }
   };
-  const handleDeleteClick = () => {
-    if (props.taskId){
-      deleteTodo(props.taskId)
+  const handleDeleteClick = async () => {
+    if (props.taskId) {
+      // deleteTodo(props.taskId)
+      const id = {
+        id: props.taskId,
+      };
+      const deleteTodo = await api.delete("api/todos/1", {
+        data: id,
+      });
+      console.log(deleteTodo);
       props.onCloseButtonClick();
     }
   };
-  const handleChangeClick = () => {
+  const handleChangeClick = async () => {
     if (changeNameRef.current && props.taskId) {
-      editTodo(props.taskId, changeNameRef.current.value, fullDate)
+      // editTodo(props.taskId, changeNameRef.current.value, fullDate);
+      const todo = {
+        id:props.taskId,
+        title: changeNameRef.current.value,
+        date: fullDate,
+      }
+      const editTodo = await api.put("api/todos/1", todo);
+      console.log(editTodo);
       props.onCloseButtonClick();
     } else {
       setErrorCaption("Please enter name of task!");
@@ -70,65 +92,67 @@ const Modal = (props: ModalProps) => {
 
   return (
     <ModalBlock>
-       <ModalContainer>
-      {props.type === "createModal" && (
-        <>
-          <ModalHeader>Create task</ModalHeader>
-          <ModalBody>
-            <Input
-              placeholder="Enter text..."
-              name="enter-name-input"
-              id="enter-name-input"
-              ref={nameInputRef}
-            />
-            <ErrorCaption>{errorCaption}</ErrorCaption>
-            <ModalButtons>
-              <ModalSaveButton onClick={handleSaveClick}>Save</ModalSaveButton>
-              <ModalCloseButton onClick={props.onCloseButtonClick}>
-                Close
-              </ModalCloseButton>
-            </ModalButtons>
-          </ModalBody>
-        </>
-      )}
-      {props.type === "deleteModal" && (
-        <>
-          <ModalHeader>Delete Task</ModalHeader>
-          <ModalBody>
-            <ModalText>Are you sure about deleting this task?</ModalText>
-            <ModalButtons>
-              <ModalDeleteButton onClick={handleDeleteClick}>
-                Delete
-              </ModalDeleteButton>
-              <ModalCloseButton onClick={props.onCloseButtonClick}>
-                Close
-              </ModalCloseButton>
-            </ModalButtons>
-          </ModalBody>
-        </>
-      )}
-      {props.type === "editModal" && (
-        <>
-          <ModalHeader>Edit Task</ModalHeader>
-          <ModalBody>
-            <Input
-              placeholder="Change name of task..."
-              name="change-name-input"
-              id="change-name-input"
-              ref={changeNameRef}
-            />
-            <ErrorCaption>{errorCaption}</ErrorCaption>
-            <ModalButtons>
-              <ModalSaveButton onClick={handleChangeClick}>
-                Change
-              </ModalSaveButton>
-              <ModalCloseButton onClick={props.onCloseButtonClick}>
-                Close
-              </ModalCloseButton>
-            </ModalButtons>
-          </ModalBody>
-        </>
-      )}
+      <ModalContainer>
+        {props.type === "createModal" && (
+          <>
+            <ModalHeader>Create task</ModalHeader>
+            <ModalBody>
+              <Input
+                placeholder="Enter text..."
+                name="enter-name-input"
+                id="enter-name-input"
+                ref={nameInputRef}
+              />
+              <ErrorCaption>{errorCaption}</ErrorCaption>
+              <ModalButtons>
+                <ModalSaveButton onClick={handleSaveClick}>
+                  Save
+                </ModalSaveButton>
+                <ModalCloseButton onClick={props.onCloseButtonClick}>
+                  Close
+                </ModalCloseButton>
+              </ModalButtons>
+            </ModalBody>
+          </>
+        )}
+        {props.type === "deleteModal" && (
+          <>
+            <ModalHeader>Delete Task</ModalHeader>
+            <ModalBody>
+              <ModalText>Are you sure about deleting this task?</ModalText>
+              <ModalButtons>
+                <ModalDeleteButton onClick={handleDeleteClick}>
+                  Delete
+                </ModalDeleteButton>
+                <ModalCloseButton onClick={props.onCloseButtonClick}>
+                  Close
+                </ModalCloseButton>
+              </ModalButtons>
+            </ModalBody>
+          </>
+        )}
+        {props.type === "editModal" && (
+          <>
+            <ModalHeader>Edit Task</ModalHeader>
+            <ModalBody>
+              <Input
+                placeholder="Change name of task..."
+                name="change-name-input"
+                id="change-name-input"
+                ref={changeNameRef}
+              />
+              <ErrorCaption>{errorCaption}</ErrorCaption>
+              <ModalButtons>
+                <ModalSaveButton onClick={handleChangeClick}>
+                  Change
+                </ModalSaveButton>
+                <ModalCloseButton onClick={props.onCloseButtonClick}>
+                  Close
+                </ModalCloseButton>
+              </ModalButtons>
+            </ModalBody>
+          </>
+        )}
       </ModalContainer>
     </ModalBlock>
   );

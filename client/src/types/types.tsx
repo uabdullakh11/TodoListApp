@@ -14,6 +14,7 @@ export type TasksArray = {
 }
 export type TasksContextType = {
   todos: ITask[];
+  allTodos: ITask[];
   saveTodo: (todo: ITask) => void;
   updateTodo: (id: number) => void;
   editTodo:(id: number, newName: string, newDate: string) => void;
@@ -24,4 +25,5 @@ export type TasksContextType = {
   filterAll: () => void;
   filterUndone:() => void;
   filterDone:() => void;
+  saveTodos:(arr: ITask[]) => void;
 };

@@ -7,6 +7,7 @@ import { paginate } from "@/helpers/paginate";
 import Pagination from "./Pagination";
 import { Container, EmptyContainer } from "@/styles/containers";
 import { TasksContext } from "@/context/TasksContext";
+import { api } from "@/utils/axios/axios";
 const CardBlock = styled.div`
   background-color: #f4f4f4;
   border-radius: 10px;
@@ -17,7 +18,9 @@ const CardBlock = styled.div`
 `;
 
 const Card: FC = () => {
-  const { todos, updateTodo } = React.useContext(TasksContext) as TasksContextType;
+  const { allTodos, todos, updateTodo, saveTodos } = React.useContext(
+    TasksContext
+  ) as TasksContextType;
 
   const [tasks, setTasks] = useState<React.ReactNode>();
   // const [tasks, setTasks] = useState<ITask[]>([]);
@@ -31,24 +34,46 @@ const Card: FC = () => {
   };
 
   useEffect(() => {
-    if (todos !== null && Array.isArray(todos)) {
-      setTasksCount(todos.length);
-      todos.length<11 ? setCurrentPage(1) : null;
-      const paginatedTasks = paginate(todos, currentPage, pageSize);
-       const arr = paginatedTasks.map((item: ITask) => {
-        return (
-          <Task
-            id={item.id}
-            key={item.id}
-            name={item.name}
-            isCompleted={item.isCompleted}
-            date={item.date}
-            updateTodo={updateTodo}
-          />
-        );
-      });
-      setTasks(arr);
-    }
+    const getTasks = async () => {
+      try {
+        const paginatedTasks = await api(`/api/todos/1?page=${currentPage}`);
+        const arr = paginatedTasks.data.map((item: ITask) => {
+          return (
+            <Task
+              id={item.id}
+              key={item.id}
+              name={item.title}
+              isCompleted={item.completed}
+              date={item.date}
+              updateTodo={updateTodo}
+            />
+          );
+        });
+        setTasks(arr);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    // if (todos !== null && Array.isArray(todos)) {
+    //   setTasksCount(todos.length);
+    //   todos.length < 11 ? setCurrentPage(1) : null;
+    //   const paginatedTasks = paginate(todos, currentPage, pageSize);
+    //   const arr = paginatedTasks.map((item: ITask) => {
+    //     return (
+    //       <Task
+    //         id={item.id}
+    //         key={item.id}
+    //         name={item.name}
+    //         isCompleted={item.isCompleted}
+    //         date={item.date}
+    //         updateTodo={updateTodo}
+    //       />
+    //     );
+    //   });
+    //   setTasks(arr);
+    // }
+    getTasks();
+    // console.log(allTodos);
   }, [todos, currentPage, updateTodo]);
 
   return (

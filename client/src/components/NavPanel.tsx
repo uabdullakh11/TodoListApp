@@ -10,6 +10,7 @@ import { NavContainer, SortingContainer } from "@/styles/containers";
 import { AddTaskBtn, AllBtn, DateBtn, TodayBtn } from "@/styles/buttons";
 import { TasksContextType } from "@/types/types";
 import { TasksContext } from "@/context/TasksContext";
+import { api } from "@/utils/axios/axios";
 // import { useClickAway } from "@uidotdev/usehooks";
 const NavBlock = styled.div`
   font-size: 16px;
@@ -25,13 +26,15 @@ const NavPanel: FC = () => {
   const [isAllClicked, setIsAllClicked] = useState<boolean>(false);
   const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
 
-  const handleTodayClick = () => {
+  const handleTodayClick = async () => {
     // isTodayClicked ? setIsTodayClicked(false) : setIsTodayClicked(true);
     setIsTodayClicked(!isTodayClicked);
     isAllClicked ? setIsAllClicked(false) : false;
     isDateClicked ? setIsDateClicked(false) : false;
-  
-    filterToday()
+    
+    const todayTodos = await api('/api/todos/1/today?page=1')
+    console.log(todayTodos.data)
+    // filterToday()
   };
   const handleAllClick = () => {
     // isAllClicked ? setIsAllClicked(false) : setIsAllClicked(true);

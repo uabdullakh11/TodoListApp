@@ -33,8 +33,9 @@ const Task: FC<TasksProps> = ({ isCompleted, id, name, date, updateTodo }) => {
   const [isOptionsBtnClicked, setOptionsBtnClicked] = useState<boolean>(false);
   const [typeModal, setTypeModal] = useState<string>("");
 
-  const handleClickDoneBtn = () => {
-    updateTodo(id)
+  const handleClickDoneBtn = async () => {
+    
+    // updateTodo(id)
   };
   const handleClickEditBtn = () => {
     isOptionsBtnClicked

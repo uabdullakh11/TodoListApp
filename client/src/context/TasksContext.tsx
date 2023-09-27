@@ -22,6 +22,9 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
 
   const { currentDate } = getDate();
 
+  const saveTodos = (arr: ITask[])=>{
+    setAllTodos(arr)
+  }
   const saveTodo = async (todo: ITask) => {
     const newTodo: ITask = {
       id: todo.id,
@@ -107,7 +110,7 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
     setTodos([...undoneTasks])
   }
 
-  return <TasksContext.Provider value={{ todos, saveTodo, updateTodo, editTodo, deleteTodo, filterNew, filterPast, filterToday, filterAll, filterUndone, filterDone  }}>{children}</TasksContext.Provider>;
+  return <TasksContext.Provider value={{ allTodos, todos,saveTodos, saveTodo, updateTodo, editTodo, deleteTodo, filterNew, filterPast, filterToday, filterAll, filterUndone, filterDone  }}>{children}</TasksContext.Provider>;
 };
 
 export default TasksProvider;
