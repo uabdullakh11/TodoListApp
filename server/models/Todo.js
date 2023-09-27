@@ -1,30 +1,8 @@
-/* import { INTEGER } from "sequelize"
-
-const Todo = () =>{
-    title: {
-        type: String,
-        required: true,
-    },
-    date: {
-        type: Date,
-        default: Date.now,
-        required: true,
-    },
-    completed : {
-        type: Boolean,
-        default: false,
-        required: true,
-    }
-    userId: {
-        type: INTEGER,
-        required: true,
-    }
-
-}
-const Todo = model('Todo', Todo)
-import { Sequelize, DataType } from "sequelize";*/
 import { sequelize } from "./index.js";
 import { DataTypes } from "sequelize";
+import getDate from "../heplers/getDate.js";
+
+const { fullDate} = getDate();
 const Todo = sequelize.define("tasks", {
   id: {
     type: DataTypes.INTEGER,
@@ -37,8 +15,8 @@ const Todo = sequelize.define("tasks", {
     allowNull: false,
   },
   date: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
+    type: DataTypes.STRING,
+    defaultValue: fullDate,
     allowNull: false,
   },
   completed: {

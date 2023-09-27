@@ -1,9 +1,6 @@
-import getDate from "../config/getDate.js";
-// import fs from "fs";
+import getDate from "../heplers/getDate.js";
 import Todo from "../models/Todo.js";
 import { Op } from "sequelize";
-
-// const filePath = "public/todos.json";
 
 const { currentDate } = getDate();
 const pageSize = 10;
@@ -25,10 +22,6 @@ const getTodos = async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-  // const content = fs.readFileSync(filePath, "utf8");
-  // const todos = JSON.parse(content);
-  // const myTodos = todos.filter((todo) => todo.userId == id);
-  // res.send(myTodos);
 };
 const getTodayTodos = async (req, res) => {
   if (!req.params.id) return res.sendStatus(400);
@@ -37,11 +30,12 @@ const getTodayTodos = async (req, res) => {
     const todayTodos = await Todo.findAll({
       order: [["createdAt", "ASC"]],
       where: {
+        // [Op.and]: [{ userId: id }, { date: currentDate }],
         userId: {
           [Op.eq]: id,
         },
         date: {
-          [Op.eq]: currentDate,
+          [Op.startsWith]: `%${currentDate}`,
         },
       },
       offset: (req.query.page - 1) * pageSize,
@@ -51,17 +45,6 @@ const getTodayTodos = async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-  // const content = fs.readFileSync(filePath, "utf8");
-  // const todos = JSON.parse(content);
-  // const myTodos = todos.filter((todo) => todo.userId == id);
-  // myTodos.sort((a, b) => {
-  //   if (a.date < b.date) return 1;
-  //   else return -1;
-  // });
-  // const todayTodos = myTodos.filter(
-  //   (item) => item.date.slice(0, 9) === currentDate
-  // );
-  // res.send(todayTodos);
 };
 const getNewTodos = async (req, res) => {
   if (!req.params.id) return res.sendStatus(400);
@@ -81,14 +64,6 @@ const getNewTodos = async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-  // const content = fs.readFileSync(filePath, "utf8");
-  // const todos = JSON.parse(content);
-  // const myTodos = todos.filter((todo) => todo.userId == id);
-  // myTodos.sort((a, b) => {
-  //   if (a.date < b.date) return 1;
-  //   else return -1;
-  // });
-  // res.send(myTodos);
 };
 const getPastTodos = async (req, res) => {
   if (!req.params.id) return res.sendStatus(400);
@@ -108,14 +83,6 @@ const getPastTodos = async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-  // const content = fs.readFileSync(filePath, "utf8");
-  // const todos = JSON.parse(content);
-  // const myTodos = todos.filter((todo) => todo.userId == id);
-  // myTodos.sort((a, b) => {
-  //   if (a.date > b.date) return 1;
-  //   else return -1;
-  // });
-  // res.send(myTodos);
 };
 const getDoneTodos = async (req, res) => {
   if (!req.params.id) return res.sendStatus(400);
@@ -124,12 +91,13 @@ const getDoneTodos = async (req, res) => {
     const doneTodos = await Todo.findAll({
       order: [["createdAt", "ASC"]],
       where: {
-        userId: {
-          [Op.eq]: id,
-        },
-        completed: {
-          [Op.eq]: true,
-        },
+        [Op.and]: [{ userId: id }, { completed: true }],
+        // userId: {
+        //   [Op.eq]: id,
+        // },
+        // completed: {
+        //   [Op.eq]: true,
+        // },
       },
       offset: (req.query.page - 1) * pageSize,
       limit: pageSize,
@@ -138,11 +106,6 @@ const getDoneTodos = async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-  // const content = fs.readFileSync(filePath, "utf8");
-  // const todos = JSON.parse(content);
-  // const myTodos = todos.filter((todo) => todo.userId == id);
-  // const doneTodos = myTodos.filter((item) => item.completed);
-  // res.send(doneTodos);
 };
 const getUndoneTodos = async (req, res) => {
   if (!req.params.id) return res.sendStatus(400);
@@ -151,12 +114,13 @@ const getUndoneTodos = async (req, res) => {
     const undoneTodos = await Todo.findAll({
       order: [["createdAt", "ASC"]],
       where: {
-        userId: {
-          [Op.eq]: id,
-        },
-        completed: {
-          [Op.eq]: false,
-        },
+        [Op.and]: [{ userId: id }, { completed: false }],
+        // userId: {
+        //   [Op.eq]: id,
+        // },
+        // completed: {
+        //   [Op.eq]: false,
+        // },
       },
       offset: (req.query.page - 1) * pageSize,
       limit: pageSize,
@@ -165,11 +129,6 @@ const getUndoneTodos = async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-  // const content = fs.readFileSync(filePath, "utf8");
-  // const todos = JSON.parse(content);
-  // const myTodos = todos.filter((todo) => todo.userId == id);
-  // const undoneTodos = myTodos.filter((item) => !item.completed);
-  // res.send(undoneTodos);
 };
 const addTodo = async (req, res) => {
   if (!req.body) return res.sendStatus(400);
@@ -190,57 +149,27 @@ const addTodo = async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-  // let todo = { userId, date, title, completed };
-
-  // let data = fs.readFileSync(filePath, "utf8");
-  // let todos = JSON.parse(data);
-
-  // const id = Math.max.apply(
-  //   Math,
-  //   todos.map(function (o) {
-  //     return o.id;
-  //   })
-  // );
-  // todos.id = id + 1;
-  // todos.push(todo);
-
-  // data = JSON.stringify(todos);
-  // fs.writeFileSync("public/todos.json", data);
-  // res.send(todos);
 };
 const deleteTodo = async (req, res) => {
-  if (!req.params.id) return res.sendStatus(400);
-  const id = req.params.id;
+  if (!req.params.id || !req.body) return res.sendStatus(400);
+  const userId = req.params.id;
+  const id = req.body.id;
   try {
     await Todo.destroy({
       where: {
-        id: {
-          [Op.eq]: id,
-        },
+        [Op.and]: [{ userId: id }, { id: id }],
+        // userId: {
+        //   [Op.eq]: userId,
+        // },
+        // id: {
+        //   [Op.eq]: id,
+        // },
       },
     });
-    res.send("delete");
+    res.send(`Delete task ${id} successfully of user ${userId}`);
   } catch (e) {
     console.log(e);
   }
-  // let data = fs.readFileSync(filePath, "utf8");
-  // let todos = JSON.parse(data);
-  // let index = -1;
-
-  // todos.forEach((item, i) => {
-  //   if (item.id == id) {
-  //     index = i;
-  //   }
-  // });
-
-  // if (index > -1) {
-  //   const todo = todos.splice(index, 1)[0];
-  //   data = JSON.stringify(todos);
-  //   fs.writeFileSync("public/todos.json", data);
-  //   res.send(todo);
-  // } else {
-  //   res.status(404).send("404");
-  // }
 };
 const updateTodo = async (req, res) => {
   if (!req.body) return res.sendStatus(400);
@@ -269,25 +198,6 @@ const updateTodo = async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-  //возвращает один
-  // let data = fs.readFileSync(filePath, "utf8");
-  // let todos = JSON.parse(data);
-  // let todo;
-
-  // for (let i = 0; i < todos.length; i++) {
-  //   if (todos[i].id == id) {
-  //     todo = todos[i];
-  //     break;
-  //   }
-  // }
-  // if (todo) {
-  //   [todo.title, todo.completed, todo.date] = [title, completed, date];
-  //   data = JSON.stringify(todos);
-  //   fs.writeFileSync("public/todos.json", data);
-  //   res.send(todo);
-  // } else {
-  //   res.status(404).send(todo);
-  // }
 };
 
 export {
