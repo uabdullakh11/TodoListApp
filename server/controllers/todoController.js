@@ -139,7 +139,7 @@ const addTodo = async (req, res) => {
     req.body.date,
   ];
   try {
-    console.log(userId)
+    console.log(userId);
     const newTodo = await Todo.create({
       title: title,
       date: date,
@@ -155,10 +155,13 @@ const deleteTodo = async (req, res) => {
   if (!req.params.id || !req.body) return res.sendStatus(400);
   const userId = req.params.id;
   const id = req.body.id;
+  console.log(id);
   try {
     await Todo.destroy({
       where: {
-        [Op.and]: [{ userId: id }, { id: id }],
+        userId: userId,
+        id: id,
+        // [Op.and]: [{ userId: id }, { id: id }],
         // userId: {
         //   [Op.eq]: userId,
         // },
@@ -173,31 +176,59 @@ const deleteTodo = async (req, res) => {
   }
 };
 const updateTodo = async (req, res) => {
-  if (!req.body) return res.sendStatus(400);
+  if (!req.body || !req.params.id) return res.sendStatus(400);
+  const userId = req.params.id;
   const [id, title, completed, date] = [
     req.body.id,
     req.body.title,
     req.body.completed,
     req.body.date,
   ];
-  try {
-    const updateTodo = await Todo.update(
-      {
-        title: title,
-        completed: completed,
-        date: date,
-      },
-      {
-        where: {
-          id: {
-            [Op.eq]: id,
-          },
+  console.log(userId, id)
+  if (req.query.update == 'title') {
+    try {
+      const updateTodo = await Todo.update(
+        {
+          title: title,
+          date: date,
         },
-      }
-    );
-    res.send(updateTodo);
-  } catch (e) {
-    console.log(e);
+        {
+          where: {
+            id: {
+              [Op.eq]: id,
+            },
+            userId: {
+              [Op.eq]: userId,
+            },
+          },
+        }
+      );
+      res.send(updateTodo);
+    } catch (e) {
+      console.log(e);
+    }
+  } else if (req.query.update == 'completed') {
+    try {
+      const updateTodo = await Todo.update(
+        {
+          completed: completed,
+          date: date,
+        },
+        {
+          where: {
+            id: {
+              [Op.eq]: id,
+            },
+            userId: {
+              [Op.eq]: userId,
+            },
+          },
+        }
+      );
+      res.send(updateTodo);
+    } catch (e) {
+      console.log(e);
+    }
   }
 };
 

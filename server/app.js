@@ -17,9 +17,6 @@ app.use(morgan("tiny"));
 
 app.use("/api/users", userRouter)
 app.use("/api/todos", todoRouter);
-app.use((req, res) => {
-  res.status(404).send("Not Found");
-});
 
 async function dbConnect() {
   try {

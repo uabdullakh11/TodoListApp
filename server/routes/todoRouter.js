@@ -12,7 +12,7 @@ todoRouter
   .get("/:id/undone", todoController.getUndoneTodos)
   .post("/", jsonParser, todoController.addTodo)
   .delete("/:id", todoController.deleteTodo)
-  .put("/", jsonParser, todoController.updateTodo);
+  .put("/:id", jsonParser, todoController.updateTodo);
 
 // module.exports = todoRouter;
 
