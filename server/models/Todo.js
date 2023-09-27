@@ -1,8 +1,9 @@
 import { sequelize } from "./index.js";
 import { DataTypes } from "sequelize";
 import getDate from "../heplers/getDate.js";
+import User from "./User.js";
 
-const { fullDate} = getDate();
+const { fullDate } = getDate();
 const Todo = sequelize.define("tasks", {
   id: {
     type: DataTypes.INTEGER,
@@ -24,24 +25,20 @@ const Todo = sequelize.define("tasks", {
     defaultValue: false,
     allowNull: false,
   },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: {
-        tableName: 'users',
-        schema: 'schema'
-      },
-      key: 'id'
-    },
-  },
   createdAt: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: false,
   },
   updatedAt: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: false,
+  },
+});
+
+Todo.belongsTo(User, {
+  as: "user",
+  foreignKey: {
+    name: "userId",
   },
 });
 // sequelize

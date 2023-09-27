@@ -28,8 +28,14 @@ module.exports = {
             allowNull: false,
           },
           userId: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
+            type:  Sequelize.INTEGER,
+            references: {
+              model: {
+                tableName: "users",
+              },
+              key: "id",
+            },
+            onDelete: 'SET NULL',
           },
           createdAt: {
             type: Sequelize.DATE,

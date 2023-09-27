@@ -4,5 +4,6 @@ const jsonParser = express.json();
 const userRouter = express.Router();
 
 userRouter.post('/', jsonParser, userController.createUser)
+userRouter.delete('/', jsonParser, userController.deleteUser)
 
 export {userRouter}

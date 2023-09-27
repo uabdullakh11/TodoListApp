@@ -1,3 +1,4 @@
+import Todo from "./Todo.js";
 import { sequelize } from "./index.js";
 import { DataTypes } from "sequelize";
 const User = sequelize.define("users", {
@@ -31,6 +32,13 @@ const User = sequelize.define("users", {
     allowNull: false,
   },
 });
+User.hasMany(Todo, {
+  as: 'todo',
+  foreignKey: {
+    name: 'userId',
+  },
+});
+
 // sequelize
 //   .sync({ force: false })
 //   .then(() => console.log("Correct synchronization!"))
