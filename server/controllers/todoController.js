@@ -1,24 +1,48 @@
 import getDate from "../heplers/getDate.js";
+import { paginate } from "../heplers/paginate.js";
 import Todo from "../models/Todo.js";
 import { Op } from "sequelize";
 
 const { currentDate } = getDate();
 const pageSize = 10;
+const todos = {
+  allTodosCount: 0,
+  currentTodos: [],
+};
 
 const getTodos = async (req, res) => {
   if (!req.params.id) return res.sendStatus(400);
   const id = req.params.id;
   try {
-    const all = await Todo.findAll({
+    // todos.allTodos = await Todo.findAll({
+    //   where: {
+    //     userId: {
+    //       [Op.eq]: id,
+    //     },
+    //   },
+    //   order: [["id"]],
+    // })
+    // todos.currentTodos = await Todo.findAll({
+    //   where: {
+    //     userId: {
+    //       [Op.eq]: id,
+    //     },
+    //   },
+    //   order: [["id"]],
+    //   offset: (req.query.page - 1) * pageSize,
+    //   limit: pageSize,
+    // });
+    const allTodos = await Todo.findAll({
       where: {
         userId: {
           [Op.eq]: id,
         },
       },
-      offset: (req.query.page - 1) * pageSize,
-      limit: pageSize,
+      order: [["id"]],
     });
-    res.send(all);
+    todos.allTodosCount = allTodos.length;
+    todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
+    res.send(todos);
   } catch (e) {
     console.log(e);
   }
@@ -27,7 +51,7 @@ const getTodayTodos = async (req, res) => {
   if (!req.params.id) return res.sendStatus(400);
   const id = req.params.id;
   try {
-    const todayTodos = await Todo.findAll({
+    const allTodos = await Todo.findAll({
       order: [["createdAt", "ASC"]],
       where: {
         // [Op.and]: [{ userId: id }, { date: currentDate }],
@@ -38,10 +62,24 @@ const getTodayTodos = async (req, res) => {
           [Op.startsWith]: `%${currentDate}`,
         },
       },
-      offset: (req.query.page - 1) * pageSize,
-      limit: pageSize,
     });
-    res.send(todayTodos);
+    // todayTodos.currentTodos = await Todo.findAll({
+    //   order: [["createdAt", "ASC"]],
+    //   where: {
+    //     // [Op.and]: [{ userId: id }, { date: currentDate }],
+    //     userId: {
+    //       [Op.eq]: id,
+    //     },
+    //     date: {
+    //       [Op.startsWith]: `%${currentDate}`,
+    //     },
+    //   },
+    //   offset: (req.query.page - 1) * pageSize,
+    //   limit: pageSize,
+    // });
+    todos.allTodosCount = allTodos.length;
+    todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
+    res.send(todos);
   } catch (e) {
     console.log(e);
   }
@@ -50,17 +88,27 @@ const getNewTodos = async (req, res) => {
   if (!req.params.id) return res.sendStatus(400);
   const id = req.params.id;
   try {
-    const newTodos = await Todo.findAll({
+    // const newTodos = await Todo.findAll({
+    //   order: [["createdAt", "ASC"]],
+    //   where: {
+    //     userId: {
+    //       [Op.eq]: id,
+    //     },
+    //   },
+    //   offset: (req.query.page - 1) * pageSize,
+    //   limit: pageSize,
+    // });
+    const allTodos = await Todo.findAll({
       order: [["createdAt", "ASC"]],
       where: {
         userId: {
           [Op.eq]: id,
         },
       },
-      offset: (req.query.page - 1) * pageSize,
-      limit: pageSize,
     });
-    res.send(newTodos);
+    todos.allTodosCount = allTodos.length;
+    todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
+    res.send(todos);
   } catch (e) {
     console.log(e);
   }
@@ -69,17 +117,27 @@ const getPastTodos = async (req, res) => {
   if (!req.params.id) return res.sendStatus(400);
   try {
     const id = req.params.id;
-    const pastTodos = await Todo.findAll({
+    // const pastTodos = await Todo.findAll({
+    //   order: [["createdAt", "DESC"]],
+    //   where: {
+    //     userId: {
+    //       [Op.eq]: id,
+    //     },
+    //   },
+    //   offset: (req.query.page - 1) * pageSize,
+    //   limit: pageSize,
+    // });
+    const allTodos = await Todo.findAll({
       order: [["createdAt", "DESC"]],
       where: {
         userId: {
           [Op.eq]: id,
         },
       },
-      offset: (req.query.page - 1) * pageSize,
-      limit: pageSize,
     });
-    res.send(pastTodos);
+    todos.allTodosCount = allTodos.length;
+    todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
+    res.send(todos);
   } catch (e) {
     console.log(e);
   }
@@ -88,21 +146,29 @@ const getDoneTodos = async (req, res) => {
   if (!req.params.id) return res.sendStatus(400);
   const id = req.params.id;
   try {
-    const doneTodos = await Todo.findAll({
+    // const doneTodos = await Todo.findAll({
+    //   order: [["createdAt", "ASC"]],
+    //   where: {
+    //     [Op.and]: [{ userId: id }, { completed: true }],
+    //     // userId: {
+    //     //   [Op.eq]: id,
+    //     // },
+    //     // completed: {
+    //     //   [Op.eq]: true,
+    //     // },
+    //   },
+    //   offset: (req.query.page - 1) * pageSize,
+    //   limit: pageSize,
+    // });
+    const allTodos = await Todo.findAll({
       order: [["createdAt", "ASC"]],
       where: {
         [Op.and]: [{ userId: id }, { completed: true }],
-        // userId: {
-        //   [Op.eq]: id,
-        // },
-        // completed: {
-        //   [Op.eq]: true,
-        // },
       },
-      offset: (req.query.page - 1) * pageSize,
-      limit: pageSize,
     });
-    res.send(doneTodos);
+    todos.allTodosCount = allTodos.length;
+    todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
+    res.send(todos);
   } catch (e) {
     console.log(e);
   }
@@ -111,21 +177,31 @@ const getUndoneTodos = async (req, res) => {
   if (!req.params.id) return res.sendStatus(400);
   const id = req.params.id;
   try {
-    const undoneTodos = await Todo.findAll({
+    // const undoneTodos = await Todo.findAll({
+    //   order: [["createdAt", "ASC"]],
+    //   where: {
+    //     [Op.and]: [{ userId: id }, { completed: false }],
+    //     // userId: {
+    //     //   [Op.eq]: id,
+    //     // },
+    //     // completed: {
+    //     //   [Op.eq]: false,
+    //     // },
+    //   },
+    //   offset: (req.query.page - 1) * pageSize,
+    //   limit: pageSize,
+    // });
+    const allTodos = await Todo.findAll({
       order: [["createdAt", "ASC"]],
       where: {
         [Op.and]: [{ userId: id }, { completed: false }],
-        // userId: {
-        //   [Op.eq]: id,
-        // },
-        // completed: {
-        //   [Op.eq]: false,
-        // },
       },
       offset: (req.query.page - 1) * pageSize,
       limit: pageSize,
     });
-    res.send(undoneTodos);
+    todos.allTodosCount = allTodos.length;
+    todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
+    res.send(todos);
   } catch (e) {
     console.log(e);
   }
@@ -184,10 +260,9 @@ const updateTodo = async (req, res) => {
     req.body.completed,
     req.body.date,
   ];
-  console.log(userId, id)
-  if (req.query.update == 'title') {
-    try {
-      const updateTodo = await Todo.update(
+  try {
+    if (req.query.update == "title") {
+      await Todo.update(
         {
           title: title,
           date: date,
@@ -203,13 +278,8 @@ const updateTodo = async (req, res) => {
           },
         }
       );
-      res.send(updateTodo);
-    } catch (e) {
-      console.log(e);
-    }
-  } else if (req.query.update == 'completed') {
-    try {
-      const updateTodo = await Todo.update(
+    } else if (req.query.update == "completed") {
+      await Todo.update(
         {
           completed: completed,
           date: date,
@@ -225,10 +295,10 @@ const updateTodo = async (req, res) => {
           },
         }
       );
-      res.send(updateTodo);
-    } catch (e) {
-      console.log(e);
     }
+    res.send(`Update title successfully`);
+  } catch (e) {
+    console.log(e);
   }
 };
 
