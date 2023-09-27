@@ -139,6 +139,7 @@ const addTodo = async (req, res) => {
     req.body.date,
   ];
   try {
+    console.log(userId)
     const newTodo = await Todo.create({
       title: title,
       date: date,

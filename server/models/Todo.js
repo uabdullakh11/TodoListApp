@@ -35,15 +35,13 @@ const Todo = sequelize.define("tasks", {
   },
 });
 
+
 Todo.belongsTo(User, {
   as: "user",
   foreignKey: {
     name: "userId",
   },
 });
-// sequelize
-//   .sync({force: false})
-//   .then(() => console.log('Correct synchronization!'))
-//   .catch((err) => console.log(err));
+
 
 export default Todo;

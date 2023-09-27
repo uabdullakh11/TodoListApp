@@ -1,6 +1,6 @@
-import Todo from "./Todo.js";
 import { sequelize } from "./index.js";
 import { DataTypes } from "sequelize";
+import Todo from "./Todo.js";
 const User = sequelize.define("users", {
   id: {
     type: DataTypes.INTEGER,
@@ -32,16 +32,17 @@ const User = sequelize.define("users", {
     allowNull: false,
   },
 });
-User.hasMany(Todo, {
-  as: 'todo',
-  foreignKey: {
-    name: 'userId',
-  },
-});
-
-// sequelize
-//   .sync({ force: false })
-//   .then(() => console.log("Correct synchronization!"))
-//   .catch((err) => console.log(err));
+sequelize
+  .sync({ force: false })
+  .then(() =>{
+    User.hasMany(Todo, {
+      as: 'todo',
+      foreignKey: {
+        name: 'userId',
+      },
+    });
+    console.log("Synchronized tables");
+  })
+  .catch((err) => console.log(err));
 
 export default User;

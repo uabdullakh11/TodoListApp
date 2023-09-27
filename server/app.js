@@ -15,8 +15,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use(morgan("tiny"));
 
-app.use("/api/todos", todoRouter);
 app.use("/api/users", userRouter)
+app.use("/api/todos", todoRouter);
 app.use((req, res) => {
   res.status(404).send("Not Found");
 });
