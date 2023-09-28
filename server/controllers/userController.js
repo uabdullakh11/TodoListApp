@@ -1,20 +1,36 @@
 import Todo from "../models/Todo.js";
 import User from "../models/User.js";
+import { hashPassword } from "../utils/auth.js";
 
-const createUser = async (req, res) => {
-  if (!req.body) return res.sendStatus(400);
-  const [login, email, password] = [
-    req.body.login,
-    req.body.email,
-    req.body.password,
-  ];
+// const createUser = async (req, res) => {
+//   if (!req.body) return res.sendStatus(400);
+//   const [login, email, password] = [
+//     req.body.login,
+//     req.body.email,
+//     req.body.password,
+//   ];
+//   const hashedPassword = hashPassword(password);
+//   try {
+//     const newUser = await User.create({
+//       login,
+//       email,
+//       password: hashedPassword,
+//     });
+//     res.send(newUser);
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
+
+const createUser = async (login, email, password) => {
+  const hashedPassword = hashPassword(password);
   try {
     const newUser = await User.create({
       login,
       email,
-      password,
+      password: hashedPassword,
     });
-    res.send(newUser);
+    return newUser;
   } catch (err) {
     console.log(err);
   }

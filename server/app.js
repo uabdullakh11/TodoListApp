@@ -5,6 +5,7 @@ import cors from "cors";
 import { sequelize } from "./models/index.js";
 import { config } from "./config/index.js";
 import morgan from "morgan";
+import { authRouter } from "./routes/authRouter.js";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(morgan("tiny"));
 
 app.use("/api/users", userRouter)
 app.use("/api/todos", todoRouter);
+app.use("/api/auth", authRouter)
 
 async function dbConnect() {
   try {

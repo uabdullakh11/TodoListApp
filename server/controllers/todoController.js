@@ -38,7 +38,7 @@ const getTodos = async (req, res) => {
           [Op.eq]: id,
         },
       },
-      order: [["date", "ASC"]],
+      order: [["date", "DESC"]],
     });
     todos.allTodosCount = allTodos.length;
     todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
@@ -161,7 +161,7 @@ const getDoneTodos = async (req, res) => {
     //   limit: pageSize,
     // });
     const allTodos = await Todo.findAll({
-      order: [["date", "ASC"]],
+      order: [["date", "DESC"]],
       where: {
         [Op.and]: [{ userId: id }, { completed: true }],
       },
@@ -192,7 +192,7 @@ const getUndoneTodos = async (req, res) => {
     //   limit: pageSize,
     // });
     const allTodos = await Todo.findAll({
-      order: [["date", "ASC"]],
+      order: [["date", "DESC"]],
       where: {
         [Op.and]: [{ userId: id }, { completed: false }],
       },
