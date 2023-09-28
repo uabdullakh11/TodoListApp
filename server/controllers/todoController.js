@@ -38,7 +38,7 @@ const getTodos = async (req, res) => {
           [Op.eq]: id,
         },
       },
-      order: [["id"]],
+      order: [["date", "ASC"]],
     });
     todos.allTodosCount = allTodos.length;
     todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
@@ -52,7 +52,7 @@ const getTodayTodos = async (req, res) => {
   const id = req.params.id;
   try {
     const allTodos = await Todo.findAll({
-      order: [["createdAt", "ASC"]],
+      order: [["date", "ASC"]],
       where: {
         // [Op.and]: [{ userId: id }, { date: currentDate }],
         userId: {
@@ -99,7 +99,7 @@ const getNewTodos = async (req, res) => {
     //   limit: pageSize,
     // });
     const allTodos = await Todo.findAll({
-      order: [["createdAt", "ASC"]],
+      order: [["date", "DESC"]],
       where: {
         userId: {
           [Op.eq]: id,
@@ -128,7 +128,7 @@ const getPastTodos = async (req, res) => {
     //   limit: pageSize,
     // });
     const allTodos = await Todo.findAll({
-      order: [["createdAt", "DESC"]],
+      order: [["date", "ASC"]],
       where: {
         userId: {
           [Op.eq]: id,
@@ -161,7 +161,7 @@ const getDoneTodos = async (req, res) => {
     //   limit: pageSize,
     // });
     const allTodos = await Todo.findAll({
-      order: [["createdAt", "ASC"]],
+      order: [["date", "ASC"]],
       where: {
         [Op.and]: [{ userId: id }, { completed: true }],
       },
@@ -192,12 +192,10 @@ const getUndoneTodos = async (req, res) => {
     //   limit: pageSize,
     // });
     const allTodos = await Todo.findAll({
-      order: [["createdAt", "ASC"]],
+      order: [["date", "ASC"]],
       where: {
         [Op.and]: [{ userId: id }, { completed: false }],
       },
-      offset: (req.query.page - 1) * pageSize,
-      limit: pageSize,
     });
     todos.allTodosCount = allTodos.length;
     todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
@@ -215,7 +213,6 @@ const addTodo = async (req, res) => {
     req.body.date,
   ];
   try {
-    console.log(userId);
     const newTodo = await Todo.create({
       title: title,
       date: date,
