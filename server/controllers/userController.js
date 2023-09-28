@@ -1,6 +1,6 @@
 import Todo from "../models/Todo.js";
 import User from "../models/User.js";
-import { hashPassword } from "../utils/auth.js";
+import { hashPassword, verifyToken } from "../utils/auth.js";
 
 // const createUser = async (req, res) => {
 //   if (!req.body) return res.sendStatus(400);
@@ -57,16 +57,21 @@ const updateUser = async (req, res) => {
 
 }
 
-const getUser = async (req, res) => {
-  if (!req.params.id) return res.sendStatus(400);
-  const id = req.params.id;
+const getUserById = async (req, res) => {
+  // if (!req.params.id) return res.sendStatus(400);
+  const authHeader = req.headers.authorization;
+  const token = authHeader.slice(7,);
+  // if (!token) return res.sendStatus(400);
+  // req.user = verifyToken(token, config.JWT_SECRET_KEY);
+  const authUser = verifyToken(token, 'secret');
+  const id = authUser.id;
   try {
     const user = await User.findByPk(id);
-    console.log((await User.findAll({ include: Todo })).toJSON())
+    // console.log((await User.findAll({ include: Todo })).toJSON())
     res.send(user);
   } catch (err) {
     console.log(err);
   }
 }
 
-export { createUser, deleteUser, getUser};
+export { createUser, deleteUser, getUserById};

@@ -3,7 +3,8 @@ import { userController } from "../controllers/index.js";
 const jsonParser = express.json();
 const userRouter = express.Router();
 
-userRouter.post('/', jsonParser, userController.createUser)
-userRouter.delete('/', jsonParser, userController.deleteUser)
+userRouter.get('/', userController.getUserById)
+// userRouter.post('/', jsonParser, userController.createUser)
+userRouter.delete('/:id', jsonParser, userController.deleteUser)
 
 export {userRouter}
