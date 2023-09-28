@@ -18,7 +18,7 @@ const NavBlock = styled.div`
 `;
 
 const NavPanel: FC = () => {
-  const { filterToday} = React.useContext(TasksContext) as TasksContextType;
+  const { filterToday, currentPage } = React.useContext(TasksContext) as TasksContextType;
 
   const [isShowingModal, toggleModal] = useModal();
 
@@ -32,9 +32,9 @@ const NavPanel: FC = () => {
     isAllClicked ? setIsAllClicked(false) : false;
     isDateClicked ? setIsDateClicked(false) : false;
     
-    const todayTodos = await api('/api/todos/1/today?page=1')
-    console.log(todayTodos.data)
-    // filterToday()
+    // const todayTodos = await api('/api/todos/1/today?page=1')
+    // console.log(todayTodos.data)
+    filterToday(currentPage)
   };
   const handleAllClick = () => {
     // isAllClicked ? setIsAllClicked(false) : setIsAllClicked(true);

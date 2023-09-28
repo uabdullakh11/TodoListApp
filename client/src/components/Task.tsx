@@ -16,13 +16,14 @@ import {
 import { DataLine, TaskName } from "@/styles/text";
 import { TaskContainer } from "@/styles/containers";
 import getDate from "@/helpers/getDate";
+import { api } from "@/utils/axios/axios";
 
 interface TasksProps {
   id: number;
   name: string;
   isCompleted: boolean;
   date: string;
- updateTodo: (id: number) => void;
+ updateTodo: (id: number, completed: boolean) => void;
 }
 const Task: FC<TasksProps> = ({ isCompleted, id, name, date, updateTodo }) => {
   const {currentDate} = getDate();
@@ -34,8 +35,13 @@ const Task: FC<TasksProps> = ({ isCompleted, id, name, date, updateTodo }) => {
   const [typeModal, setTypeModal] = useState<string>("");
 
   const handleClickDoneBtn = async () => {
-    
-    // updateTodo(id)
+    // const todo = {
+    //   id:id,
+    //   completed: !isCompleted
+    // }
+    // const editTodo = await api.put("api/todos/1?update=completed", todo);
+    // console.log(editTodo);
+    updateTodo(id, isCompleted)
   };
   const handleClickEditBtn = () => {
     isOptionsBtnClicked

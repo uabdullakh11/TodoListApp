@@ -53,9 +53,11 @@ const Modal = (props: ModalProps) => {
         completed: false,
         date: fullDate,
         userId: 1,
+        id: 1
       };
-      const newTodo = await api.post("api/todos/", todo);
-      console.log(newTodo.data);
+      // const newTodo = await api.post("api/todos/", todo);
+      // console.log(newTodo.data);
+      saveTodo(todo)
       props.onCloseButtonClick();
     } else {
       setErrorCaption("Please enter name of task!");
@@ -63,27 +65,28 @@ const Modal = (props: ModalProps) => {
   };
   const handleDeleteClick = async () => {
     if (props.taskId) {
-      // deleteTodo(props.taskId)
-      const id = {
-        id: props.taskId,
-      };
-      const deleteTodo = await api.delete("api/todos/1", {
-        data: id,
-      });
-      console.log(deleteTodo);
+      deleteTodo(props.taskId)
+      // const id = {
+      //   id: props.taskId,
+      // };
+      // const deleteTodo = await api.delete("api/todos/1", {
+      //   data: id,
+      // });
+      // console.log(deleteTodo);
       props.onCloseButtonClick();
     }
   };
   const handleChangeClick = async () => {
     if (changeNameRef.current && props.taskId) {
       // editTodo(props.taskId, changeNameRef.current.value, fullDate);
-      const todo = {
-        id:props.taskId,
-        title: changeNameRef.current.value,
-        date: fullDate,
-      }
-      const editTodo = await api.put("api/todos/1", todo);
-      console.log(editTodo);
+      // const todo = {
+      //   id:props.taskId,
+      //   title: changeNameRef.current.value,
+      //   date: fullDate,
+      // }
+      // const editTodo = await api.put("api/todos/1?update=title", todo);
+      // console.log(editTodo);
+      editTodo(props.taskId, changeNameRef.current.value, fullDate)
       props.onCloseButtonClick();
     } else {
       setErrorCaption("Please enter name of task!");

@@ -1,8 +1,9 @@
 export interface ITask {
+  completed: boolean;
+  title: string;
   id: number;
-  name: string;
-  isCompleted: boolean;
   date: string;
+  userId?: number;
 }
 export interface IUser {
     id: number;
@@ -15,15 +16,19 @@ export type TasksArray = {
 export type TasksContextType = {
   todos: ITask[];
   allTodos: ITask[];
-  saveTodo: (todo: ITask) => void;
-  updateTodo: (id: number) => void;
+  todosCount: number;
+  currentPage: number;
+  setPage: (pageNumber:number)=>void;
+  // saveTodo: (todo: ITask) => void;
+  saveTodo: (todo: ITask) => void
+  updateTodo: (id: number, completed: boolean) => void;
   editTodo:(id: number, newName: string, newDate: string) => void;
   deleteTodo:(id: number) => void;
-  filterToday: () => void;
+  filterToday: (currentPage:number) => void;
   filterNew: () => void;
   filterPast: () => void;
-  filterAll: () => void;
-  filterUndone:() => void;
+  filterAll: (currentPage:number) => void;
+  filterUndone:(currentPage:number) => void;
   filterDone:() => void;
-  saveTodos:(arr: ITask[]) => void;
+  saveTodos:(currentPage: number) => void;
 };

@@ -4,7 +4,6 @@ import { NewBtn, PastBtn } from "@/styles/buttons";
 import { SortingButtonsContainer } from "@/styles/containers";
 import { TasksContextType } from "@/types/types";
 import { TasksContext } from "@/context/TasksContext";
-import { api } from "@/utils/axios/axios";
 
 const DateSortingButtons:FC = () => {
   const {filterPast, filterNew } = React.useContext(TasksContext) as TasksContextType;
@@ -18,18 +17,18 @@ const DateSortingButtons:FC = () => {
     !isNewClicked ? setIsNewClicked(true) : false;
     isPastClicked ? setIsPastClicked(false) : false;
 
-    const newTodos = await api("api/todos/1/new?page=1")
-    console.log(newTodos.data)
-    // filterNew()
+    // const newTodos = await api("api/todos/1/new?page=1")
+    // console.log(newTodos.data)
+    filterNew()
   };
   const handlePastClick = async () => {
     setIsChoosed(true);
     !isPastClicked ? setIsPastClicked(true) : false;
     isNewClicked ? setIsNewClicked(false) : false;
 
-    const pastTodos = await api("api/todos/1/past?page=1")
-    console.log(pastTodos.data)
-    // filterPast()
+    // const pastTodos = await api("api/todos/1/past?page=1")
+    // console.log(pastTodos.data)
+    filterPast()
   };
   const handleChoosedClick = () => {
     setIsChoosed(false);
