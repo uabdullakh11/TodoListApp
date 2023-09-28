@@ -28,18 +28,19 @@ const getTodos = async (currentPage: number) => {
 }
 
 const Card: FC = () => {
-  const { todos, updateTodo, saveTodos, todosCount,setPage } = React.useContext(
+  const { todos, updateTodo, saveTodos, todosCount, setPage, currentPage } = React.useContext(
     TasksContext
   ) as TasksContextType;
 
   const [tasks, setTasks] = useState<React.ReactNode>();
   const [tasksCount, setTasksCount] = useState<number>(10);
 
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
   const onPageChange = (page: number) => {
-    setCurrentPage(page);
+    // setCurrentPage(page);
+    console.log(page)
     setPage(page)
   };
 
@@ -67,7 +68,7 @@ const Card: FC = () => {
       try {
         const paginatedTasks = await api(`/api/todos/1?page=${currentPage}`);
         setTasksCount(paginatedTasks.data.allTodosCount);
-        paginatedTasks.data.allTodosCount < 11 ? setCurrentPage(1) : null;
+        paginatedTasks.data.allTodosCount < 11 ? setPage(1) : null;
         const arr = paginatedTasks.data.currentTodos.map((item: ITask) => {
           return (
             <Task
@@ -114,7 +115,7 @@ const Card: FC = () => {
   useEffect(() => {
     if (todos !== null && Array.isArray(todos)) {
       setTasksCount(todosCount);
-      todosCount < 11 ? setCurrentPage(1) : null;
+      todosCount < 11 ? setPage(1) : null;
       const arr = todos.map((item: ITask) => {
         return (
           <Task

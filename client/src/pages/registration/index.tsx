@@ -6,6 +6,9 @@ import { ErrorCaption, FormTitle, LinkTo } from "@/styles/text";
 import { Input } from "@/styles/inputs";
 import { AuthButton } from "@/styles/buttons";
 import { useState } from "react";
+import { useRouter } from "next/router";
+import { api } from "@/utils/axios/axios";
+
 
 export default function SignUp() {
   const [login, setLogin] = useState<string>("")
@@ -14,7 +17,9 @@ export default function SignUp() {
   const [rePassword, setRePassword] = useState<string>("")
   const [error, setError] = useState<string>("")
 
-  const handleSubmitSignUp = (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+
+  const handleSubmitSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     !login || !password || !email || !rePassword ? setError("Please fill out the form!") : setError("");
     if (password !== rePassword) {
@@ -25,7 +30,11 @@ export default function SignUp() {
       password,
       login,
     }
-
+    const user = await api.post('api/auth/register', userData)
+    const token = await api.post('api/auth/login', userData)
+    sessionStorage.setItem('user', JSON.stringify(user.data))
+    sessionStorage.setItem('token', token.data)
+    router.push("/");
   }
   return (
     <AuthLayout>

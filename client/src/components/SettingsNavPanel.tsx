@@ -10,13 +10,16 @@ const NavBlock = styled.div`
 
 const SettingsNavPanel: FC = () => {
  
+  const handleLogout = async () =>{
+    
+  }
   return (
     <NavBlock>
       <NavContainer>
         <SortingContainer>
           
         </SortingContainer>
-        <LogOutBtn> Log out</LogOutBtn>
+        <LogOutBtn onClick={handleLogout}> Log out</LogOutBtn>
       </NavContainer>
     </NavBlock>
   );

@@ -20,7 +20,7 @@ export type TasksContextType = {
   currentPage: number;
   setPage: (pageNumber:number)=>void;
   // saveTodo: (todo: ITask) => void;
-  saveTodo: (todo: ITask) => void
+  createTodo: (todo: ITask) => void
   updateTodo: (id: number, completed: boolean) => void;
   editTodo:(id: number, newName: string, newDate: string) => void;
   deleteTodo:(id: number) => void;
@@ -28,7 +28,7 @@ export type TasksContextType = {
   filterNew: () => void;
   filterPast: () => void;
   filterAll: (currentPage:number) => void;
-  filterUndone:(currentPage:number) => void;
+  filterUndone:() => void;
   filterDone:() => void;
   saveTodos:(currentPage: number) => void;
 };

@@ -6,19 +6,27 @@ import { ErrorCaption, FormTitle, LinkTo } from "@/styles/text";
 import { Input } from "@/styles/inputs";
 import { AuthButton } from "@/styles/buttons";
 import { useState } from "react";
+import { api } from "@/utils/axios/axios";
+import { useRouter } from "next/router";
+
 
 export default function SignIn() {
   const [login, setLogin] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [error, setError] = useState<string>("")
 
-  const handleSubmitLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+
+  const handleSubmitLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     !login || !password ? setError("Please enter login and password!") : setError("");
     const userData = {
       login,
       password,
     }
+    const token = await api.post('api/auth/login', userData)
+    sessionStorage.setItem('token', token.data)
+    router.push("/");
   }
 
   return (

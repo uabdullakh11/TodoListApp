@@ -42,7 +42,7 @@ const StatusSortingButtons:FC = () => {
 
     // const undoneTodos = await api('api/todos/1/undone?page=1');
     // console.log(undoneTodos.data)
-    filterUndone(currentPage);
+    filterUndone();
   };
   const handleChoosedClick = () => {
     setIsChoosed(false);

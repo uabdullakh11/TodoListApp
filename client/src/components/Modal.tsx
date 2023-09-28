@@ -28,7 +28,7 @@ interface ModalProps {
 }
 
 const Modal = (props: ModalProps) => {
-  const { saveTodo, deleteTodo, editTodo } = React.useContext(
+  const { createTodo, deleteTodo, editTodo } = React.useContext(
     TasksContext
   ) as TasksContextType;
 
@@ -57,7 +57,7 @@ const Modal = (props: ModalProps) => {
       };
       // const newTodo = await api.post("api/todos/", todo);
       // console.log(newTodo.data);
-      saveTodo(todo)
+      createTodo(todo)
       props.onCloseButtonClick();
     } else {
       setErrorCaption("Please enter name of task!");
