@@ -4,7 +4,7 @@ const jsonParser = express.json();
 const userRouter = express.Router();
 
 userRouter.get('/', userController.getUserById)
-// userRouter.post('/', jsonParser, userController.createUser)
-userRouter.delete('/:id', jsonParser, userController.deleteUser)
+userRouter.put('/', jsonParser, userController.updateUser)
+userRouter.delete('/', jsonParser, userController.deleteUser)
 
 export {userRouter}

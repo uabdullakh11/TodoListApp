@@ -4,15 +4,15 @@ const jsonParser = express.json();
 const todoRouter = express.Router();
 
 todoRouter
-  .get("/:id", todoController.getTodos)
-  .get("/:id/today", todoController.getTodayTodos)
-  .get("/:id/new", todoController.getNewTodos)
-  .get("/:id/past", todoController.getPastTodos)
-  .get("/:id/done", todoController.getDoneTodos)
-  .get("/:id/undone", todoController.getUndoneTodos)
+  .get("/", todoController.getTodos)
+  .get("/today", todoController.getTodayTodos)
+  .get("/new", todoController.getNewTodos)
+  .get("/past", todoController.getPastTodos)
+  .get("/done", todoController.getDoneTodos)
+  .get("/undone", todoController.getUndoneTodos)
   .post("/", jsonParser, todoController.addTodo)
   .delete("/:id", todoController.deleteTodo)
-  .put("/:id", jsonParser, todoController.updateTodo);
+  .put("/", jsonParser, todoController.updateTodo);
 
 // module.exports = todoRouter;
 

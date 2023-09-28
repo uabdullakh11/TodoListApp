@@ -2,6 +2,8 @@ import getDate from "../heplers/getDate.js";
 import { paginate } from "../heplers/paginate.js";
 import Todo from "../models/Todo.js";
 import { Op } from "sequelize";
+import { config } from "../config/index.js";
+import { verifyToken } from "../utils/auth.js";
 
 const { currentDate } = getDate();
 const pageSize = 10;
@@ -11,8 +13,14 @@ const todos = {
 };
 
 const getTodos = async (req, res) => {
-  if (!req.params.id) return res.sendStatus(400);
-  const id = req.params.id;
+  // if (!req.params.id) return res.sendStatus(400);
+  // const id = req.params.id;
+  const authHeader = req.headers.authorization;
+  console.log(authHeader)
+  const token = authHeader.slice(7);
+  if (!token) return res.sendStatus(400);
+  const authUser = verifyToken(token, config.JWT_SECRET_KEY);
+  const id = authUser.id;
   try {
     // todos.allTodos = await Todo.findAll({
     //   where: {
@@ -32,6 +40,7 @@ const getTodos = async (req, res) => {
     //   offset: (req.query.page - 1) * pageSize,
     //   limit: pageSize,
     // });
+    
     const allTodos = await Todo.findAll({
       where: {
         userId: {
@@ -48,8 +57,13 @@ const getTodos = async (req, res) => {
   }
 };
 const getTodayTodos = async (req, res) => {
-  if (!req.params.id) return res.sendStatus(400);
-  const id = req.params.id;
+  // if (!req.params.id) return res.sendStatus(400);
+  // const id = req.params.id;
+  const authHeader = req.headers.authorization;
+  const token = authHeader.slice(7);
+  if (!token) return res.sendStatus(400);
+  const authUser = verifyToken(token, config.JWT_SECRET_KEY);
+  const id = authUser.id;
   try {
     const allTodos = await Todo.findAll({
       order: [["date", "ASC"]],
@@ -85,8 +99,13 @@ const getTodayTodos = async (req, res) => {
   }
 };
 const getNewTodos = async (req, res) => {
-  if (!req.params.id) return res.sendStatus(400);
-  const id = req.params.id;
+  // if (!req.params.id) return res.sendStatus(400);
+  // const id = req.params.id;
+  const authHeader = req.headers.authorization;
+  const token = authHeader.slice(7);
+  if (!token) return res.sendStatus(400);
+  const authUser = verifyToken(token, config.JWT_SECRET_KEY);
+  const id = authUser.id;
   try {
     // const newTodos = await Todo.findAll({
     //   order: [["createdAt", "ASC"]],
@@ -114,9 +133,14 @@ const getNewTodos = async (req, res) => {
   }
 };
 const getPastTodos = async (req, res) => {
-  if (!req.params.id) return res.sendStatus(400);
+  // if (!req.params.id) return res.sendStatus(400);
+  // const id = req.params.id;
+  const authHeader = req.headers.authorization;
+  const token = authHeader.slice(7);
+  if (!token) return res.sendStatus(400);
+  const authUser = verifyToken(token, config.JWT_SECRET_KEY);
+  const id = authUser.id;
   try {
-    const id = req.params.id;
     // const pastTodos = await Todo.findAll({
     //   order: [["createdAt", "DESC"]],
     //   where: {
@@ -143,8 +167,13 @@ const getPastTodos = async (req, res) => {
   }
 };
 const getDoneTodos = async (req, res) => {
-  if (!req.params.id) return res.sendStatus(400);
-  const id = req.params.id;
+  // if (!req.params.id) return res.sendStatus(400);
+  // const id = req.params.id;
+  const authHeader = req.headers.authorization;
+  const token = authHeader.slice(7);
+  if (!token) return res.sendStatus(400);
+  const authUser = verifyToken(token, config.JWT_SECRET_KEY);
+  const id = authUser.id;
   try {
     // const doneTodos = await Todo.findAll({
     //   order: [["createdAt", "ASC"]],
@@ -174,8 +203,13 @@ const getDoneTodos = async (req, res) => {
   }
 };
 const getUndoneTodos = async (req, res) => {
-  if (!req.params.id) return res.sendStatus(400);
-  const id = req.params.id;
+  // if (!req.params.id) return res.sendStatus(400);
+  // const id = req.params.id;
+  const authHeader = req.headers.authorization;
+  const token = authHeader.slice(7);
+  if (!token) return res.sendStatus(400);
+  const authUser = verifyToken(token, config.JWT_SECRET_KEY);
+  const id = authUser.id;
   try {
     // const undoneTodos = await Todo.findAll({
     //   order: [["createdAt", "ASC"]],
@@ -206,10 +240,20 @@ const getUndoneTodos = async (req, res) => {
 };
 const addTodo = async (req, res) => {
   if (!req.body) return res.sendStatus(400);
-  const [title, completed, userId, date] = [
+  const authHeader = req.headers.authorization;
+  const token = authHeader.slice(7);
+  if (!token) return res.sendStatus(400);
+  const authUser = verifyToken(token, config.JWT_SECRET_KEY);
+  const userId = authUser.id;
+  // const [title, completed, userId, date] = [
+  //   req.body.title,
+  //   req.body.completed,
+  //   req.body.userId,
+  //   req.body.date,
+  // ];
+  const [title, completed, date] = [
     req.body.title,
     req.body.completed,
-    req.body.userId,
     req.body.date,
   ];
   try {
@@ -225,10 +269,15 @@ const addTodo = async (req, res) => {
   }
 };
 const deleteTodo = async (req, res) => {
-  if (!req.params.id || !req.body) return res.sendStatus(400);
-  const userId = req.params.id;
-  const id = req.body.id;
-  console.log(id);
+  // if (!req.params.id || !req.body) return res.sendStatus(400);
+  if (!req.params.id) return res.sendStatus(400);
+  // const userId = req.params.id;
+  const authHeader = req.headers.authorization;
+  const token = authHeader.slice(7);
+  if (!token) return res.sendStatus(400);
+  const authUser = verifyToken(token, config.JWT_SECRET_KEY);
+  const userId = authUser.id;
+  const id = req.params.id;
   try {
     await Todo.destroy({
       where: {
@@ -249,8 +298,12 @@ const deleteTodo = async (req, res) => {
   }
 };
 const updateTodo = async (req, res) => {
-  if (!req.body || !req.params.id) return res.sendStatus(400);
-  const userId = req.params.id;
+  if (!req.body) return res.sendStatus(400);
+  const authHeader = req.headers.authorization;
+  const token = authHeader.slice(7);
+  if (!token) return res.sendStatus(400);
+  const authUser = verifyToken(token, config.JWT_SECRET_KEY);
+  const userId = authUser.id;
   const [id, title, completed, date] = [
     req.body.id,
     req.body.title,
