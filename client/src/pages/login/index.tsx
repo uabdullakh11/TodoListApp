@@ -37,7 +37,7 @@ export default function SignIn() {
           <Form name="login-form" id="login-form" onSubmit={handleSubmitLogin}>
             <InputContainer>
               <Input
-                placeholder="Enter login..."
+                placeholder="Enter login or email..."
                 type="text"
                 name="enter-login-input"
                 id="enter-login-input"

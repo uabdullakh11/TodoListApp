@@ -1,19 +1,19 @@
 import express from "express";
 import { todoController } from "../controllers/index.js";
+import { authCheck } from "../heplers/authCheck.js";
+
 const jsonParser = express.json();
 const todoRouter = express.Router();
 
 todoRouter
-  .get("/", todoController.getTodos)
-  .get("/today", todoController.getTodayTodos)
-  .get("/new", todoController.getNewTodos)
-  .get("/past", todoController.getPastTodos)
-  .get("/done", todoController.getDoneTodos)
-  .get("/undone", todoController.getUndoneTodos)
-  .post("/", jsonParser, todoController.addTodo)
-  .delete("/:id", todoController.deleteTodo)
-  .put("/", jsonParser, todoController.updateTodo);
-
-// module.exports = todoRouter;
+  .get("/", authCheck, todoController.getTodos)
+  .get("/today", authCheck, todoController.getTodayTodos)
+  .get("/new",authCheck, todoController.getNewTodos)
+  .get("/past",authCheck, todoController.getPastTodos)
+  .get("/done",authCheck, todoController.getDoneTodos)
+  .get("/undone", authCheck, todoController.getUndoneTodos)
+  .post("/", jsonParser,authCheck, todoController.addTodo)
+  .delete("/:id",authCheck, todoController.deleteTodo)
+  .put("/", jsonParser,authCheck, todoController.updateTodo);
 
 export { todoRouter };

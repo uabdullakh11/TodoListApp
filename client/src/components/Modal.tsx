@@ -28,7 +28,7 @@ interface ModalProps {
 }
 
 const Modal = (props: ModalProps) => {
-  const { createTodo, deleteTodo, editTodo } = React.useContext(
+  const { addTask, deleteTask, editTask } = React.useContext(
     TasksContext
   ) as TasksContextType;
 
@@ -36,9 +36,6 @@ const Modal = (props: ModalProps) => {
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const changeNameRef = useRef<HTMLInputElement>(null);
-  // const containerRef = useClickAway(() => {
-  //   props.onCloseButtonClick()
-  // });
 
   const [errorCaption, setErrorCaption] = useState("");
 
@@ -52,12 +49,14 @@ const Modal = (props: ModalProps) => {
         title: nameInputRef.current.value,
         completed: false,
         date: fullDate,
-        userId: 1,
-        id: 1
+        // userId: 3,
+        // id: 1
       };
+      addTask(todo)
+      // await api.post("/api/todos", todo);
       // const newTodo = await api.post("api/todos/", todo);
       // console.log(newTodo.data);
-      createTodo(todo)
+      // createTodo(todo)
       props.onCloseButtonClick();
     } else {
       setErrorCaption("Please enter name of task!");
@@ -65,7 +64,8 @@ const Modal = (props: ModalProps) => {
   };
   const handleDeleteClick = async () => {
     if (props.taskId) {
-      deleteTodo(props.taskId)
+      deleteTask(props.taskId)
+      // deleteTodo(props.taskId)
       // const id = {
       //   id: props.taskId,
       // };
@@ -86,7 +86,8 @@ const Modal = (props: ModalProps) => {
       // }
       // const editTodo = await api.put("api/todos/1?update=title", todo);
       // console.log(editTodo);
-      editTodo(props.taskId, changeNameRef.current.value, fullDate)
+      // editTodo(props.taskId, changeNameRef.current.value, fullDate)
+      editTask(props.taskId, changeNameRef.current.value, fullDate )
       props.onCloseButtonClick();
     } else {
       setErrorCaption("Please enter name of task!");

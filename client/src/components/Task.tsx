@@ -16,16 +16,18 @@ import {
 import { DataLine, TaskName } from "@/styles/text";
 import { TaskContainer } from "@/styles/containers";
 import getDate from "@/helpers/getDate";
-import { api } from "@/utils/axios/axios";
+import {TasksContext} from "@/context/TasksContext";
+import { TasksContextType } from "@/types/types";
 
 interface TasksProps {
-  id: number;
+  id?: number;
   name: string;
   isCompleted: boolean;
   date: string;
- updateTodo: (id: number, completed: boolean) => void;
 }
-const Task: FC<TasksProps> = ({ isCompleted, id, name, date, updateTodo }) => {
+const Task: FC<TasksProps> = ({ isCompleted, id, name, date }) => {
+  const { updateTask } = React.useContext(TasksContext) as TasksContextType;
+
   const {currentDate} = getDate();
   const [isShowingModal, toggleModal] = useModal();
 
@@ -41,7 +43,10 @@ const Task: FC<TasksProps> = ({ isCompleted, id, name, date, updateTodo }) => {
     // }
     // const editTodo = await api.put("api/todos/1?update=completed", todo);
     // console.log(editTodo);
-    updateTodo(id, isCompleted)
+    // updateTodo(id, isCompleted)
+    if (id){
+      updateTask(id,isCompleted,date)
+    }
   };
   const handleClickEditBtn = () => {
     isOptionsBtnClicked

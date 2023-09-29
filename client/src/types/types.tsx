@@ -1,34 +1,26 @@
 export interface ITask {
   completed: boolean;
   title: string;
-  id: number;
+  id?: number | undefined;
   date: string;
-  userId?: number;
 }
 export interface IUser {
-    id: number;
-    name: string;
-    email: string;
+  id: number;
+  name: string;
+  email: string;
 }
 export type TasksArray = {
+  [x: string]: any;
   todos: ITask[];
 }
 export type TasksContextType = {
-  todos: ITask[];
-  allTodos: ITask[];
-  todosCount: number;
-  currentPage: number;
-  setPage: (pageNumber:number)=>void;
-  // saveTodo: (todo: ITask) => void;
-  createTodo: (todo: ITask) => void
-  updateTodo: (id: number, completed: boolean) => void;
-  editTodo:(id: number, newName: string, newDate: string) => void;
-  deleteTodo:(id: number) => void;
-  filterToday: (currentPage:number) => void;
-  filterNew: () => void;
-  filterPast: () => void;
-  filterAll: (currentPage:number) => void;
-  filterUndone:() => void;
-  filterDone:() => void;
-  saveTodos:(currentPage: number) => void;
+  updateTask: (id: number, completed: boolean, date: string) => void,
+  addTask: (todo: ITask) => void,
+  deleteTask: (id: number) => void,
+  editTask: (id: number, newName: string, newDate: string) => void,
+  onPageChange: (page: number) => void,
+  handleSetFilter: (value: string) => void,
+  tasksArray:TasksArray | undefined,
+  currentPage: number,
+  tasksCount: number,
 };

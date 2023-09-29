@@ -1,12 +1,7 @@
-import React from "react";
-import { ITask, TasksContextType } from "@/types/types";
-import getDate from "@/helpers/getDate";
+import React, { useState } from "react";
+import { ITask, TasksArray, TasksContextType } from "@/types/types";
 import { api } from "@/utils/axios/axios";
 
-const getTodos = async (currentPage: number) => {
-  const res = await api(`/api/todos/1?page=${currentPage}`);
-  return res.data;
-};
 
 export const TasksContext = React.createContext<TasksContextType | null>(null);
 
@@ -14,176 +9,108 @@ interface Props {
   children: React.ReactNode;
 }
 const TasksProvider: React.FC<Props> = ({ children }) => {
-  const [todos, setTodos] = React.useState<ITask[]>([]);
-  const [currentPage, setCurrentPage] = React.useState<number>(1);
 
-  const [allTodos, setAllTodos] = React.useState<ITask[]>([]);
+  const [tasksArray, setTasksArray] = useState<TasksArray>()
+  const [filter, setFilter] = useState<string>("all")
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [tasksCount, setTasksCount] = useState<number>(10);
 
-  const [todosCount, setTodosCount] = React.useState<number>(0);
-  // const { currentDate } = getDate();
-
-  const setPage = async (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const saveTodos = async (currentPage: number) => {
-    const data = await getTodos(currentPage);
-    // setAllTodos([...data.currentTodos])
-    setTodos([...data.currentTodos]);
-    setTodosCount(data.allTodosCount);
-  };
-  // const saveTodo = async (todo: ITask) => {
-  //   const newTodo: ITask = {
-  //     id: todo.id,
-  //     title: todo.title,
-  //     completed: todo.completed,
-  //     date: todo.date,
-  //   };
-  //   //const res = await api.post('/api/todos', newTodo);
-  //   const data = await getTodos();
-  //   console.log(data)
-  //   setTodos([...todos, newTodo]);
-  //   setAllTodos([...todos, newTodo])
-  // };
-
-  const createTodo = async (todo: ITask) => {
-    const newTodo: ITask = {
-      id: todo.id,
-      title: todo.title,
-      completed: todo.completed,
-      date: todo.date,
-      userId: todo.userId,
+  React.useEffect(() => {
+    const getTodos = async (type: string) => {
+      switch (type) {
+        case "all":
+          const all = await api(`/api/todos?page=${currentPage}`);
+          setTasksArray(all.data.currentTodos)
+          setTasksCount(all.data.allTodosCount)
+          break;
+        case "today":
+          const today = await api(`/api/todos/today?page=${currentPage}`);
+          setTasksArray(today.data.currentTodos)
+          setTasksCount(today.data.allTodosCount)
+          break;
+        case "done":
+          const done = await api(`/api/todos/done?page=${currentPage}`);
+          setTasksArray(done.data.currentTodos)
+          setTasksCount(done.data.allTodosCount)
+          break;
+        case "undone":
+          const undone = await api(`/api/todos/undone?page=${currentPage}`);
+          setTasksArray(undone.data.currentTodos)
+          setTasksCount(undone.data.allTodosCount)
+          break;
+        case "new":
+          const newTodos = await api(`/api/todos/new?page=${currentPage}`);
+          console.log(newTodos)
+          setTasksArray(newTodos.data.currentTodos)
+          setTasksCount(newTodos.data.allTodosCount)
+          console.log(currentPage)
+          break;
+        case "past":
+          const past = await api(`/api/todos/past?page=${currentPage}`);
+          setTasksArray(past.data.currentTodos)
+          setTasksCount(past.data.allTodosCount)
+          break;
+        default:
+          const res = await api(`/api/todos?page=${currentPage}`);
+          setTasksArray(res.data.currentTodos)
+          setTasksCount(res.data.allTodosCount)
+      }
+      tasksCount < 11 ? setCurrentPage(1) : null;
     };
-    await api.post("/api/todos", newTodo);
-    setTodos([...todos, newTodo]);
-  };
-  const updateTodo = async (id: number, completed: boolean) => {
-    // todos.filter((todo: ITask) => {
-    //   if (todo.id === id) {
-    //     todo.completed = !todo.completed;
-    //     setTodos([...todos]);
-    //   }
-    // });
-    // setAllTodos([...todos])
-    const todo = {
-      id: id,
-      completed: !completed,
-    };
-    await api.put("api/todos/1?update=completed", todo);
+    getTodos(filter)
+  }, [currentPage, filter, tasksCount])
+
+  const handleSetFilter = (value: string) => {
+    setFilter(value)
+  }
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
-  const deleteTodo = async (id: number) => {
-    // const newTodos = todos.filter((todo: ITask) => todo.id !== id)
-    // setTodos([...newTodos]);
-    const taskId = {
-      id: id,
-    };
-    await api.delete("api/todos/1", {
-      data: taskId,
-    });
-    // setTodos([...newTodos]);
-    // setAllTodos([...todos])
-  };
-
-  const editTodo = async (id: number, newName: string, newDate: string) => {
-    // const newTasks = todos.map((item: ITask) => {
-    //   if (item.id === id) {
-    //     [item.title, item.date] = [newName, newDate]
-    //   }
-    //   return item;
-    // });
-    // setTodos(newTasks);
-    // setAllTodos([...todos])
+  const editTask = async (id: number, newName: string, newDate: string) => {
     const todo = {
       id,
       title: newName,
       date: newDate,
     };
-    await api.put("api/todos/1?update=title", todo);
-  };
-
-  const filterToday = async (currentPage: number) => {
-    // allTodos.sort((a: ITask, b: ITask) => {
-    //   if (a.date < b.date) return 1
-    //   else return -1
-    // })
-    // allTodos.filter((item: ITask) => {
-    //   if (item.date.slice(0, 9) === currentDate) {
-    //     return item
-    //   }
-    // });
-    // setTodos([...allTodos]);
-    const todayTodos = await api(`/api/todos/1/today?page=${currentPage}`);
-    setTodos([...todayTodos.data.currentTodos]);
-    setTodosCount(todayTodos.data.allTodosCount);
-  };
-
-  const filterNew = async () => {
-    // todos.sort((a: ITask, b: ITask) => {
-    //   if (a.date < b.date) return 1
-    //   else return -1
-    // })
-    // setTodos([...todos])
-
-    const newTodos = await api("api/todos/1/new?page=1");
-    setTodos([...newTodos.data.currentTodos]);
-    setTodosCount(newTodos.data.allTodosCount);
-  };
-
-  const filterPast = async () => {
-    // todos.sort((a: ITask, b: ITask) => {
-    //   if (a.date > b.date) return 1
-    //   else return -1
-    // })
-    // setTodos([...todos])
-    const pastTodos = await api("api/todos/1/past?page=1");
-    setTodos([...pastTodos.data.currentTodos]);
-    setTodosCount(pastTodos.data.allTodosCount);
-  };
-
-  const filterAll = async (currentPage: number) => {
-    // setTodos([...allTodos]);
-    const allTodos = await api(`api/todos/1?page=${currentPage}`);
-    setTodos([...allTodos.data.currentTodos]);
-    setTodosCount(allTodos.data.allTodosCount);
-  };
-
-  const filterDone = async () => {
-    // const doneTasks = allTodos.filter((item: ITask) => item.completed)
-    // setTodos([...doneTasks])
-    const doneTodos = await api(`api/todos/1/done?page=${currentPage}`);
-    setTodos([...doneTodos.data.currentTodos]);
-    setTodosCount(doneTodos.data.allTodosCount);
-  };
-
-  const filterUndone = async () => {
-    // const undoneTasks = allTodos.filter((item: ITask) => !item.completed)
-    // setTodos([...undoneTasks])
-    console.log(currentPage);
-    const undoneTodos = await api(`api/todos/1/undone?page=${currentPage}`);
-    setTodos([...undoneTodos.data.currentTodos]);
-    setTodosCount(undoneTodos.data.allTodosCount);
-  };
+    await api.put("api/todos?update=title", todo);
+    setFilter("all")
+  }
+  const deleteTask = async (id: number) => {
+    await api.delete(`api/todos/${id}`);
+    setFilter("all")
+  }
+  const addTask = async (todo: ITask) => {
+    const newTodo: ITask = {
+      title: todo.title,
+      completed: todo.completed,
+      date: todo.date,
+    };
+    await api.post("/api/todos", newTodo);
+    setFilter("all")
+  }
+  const updateTask = async (id: number, completed: boolean, date: string) => {
+    const todo = {
+      id: id,
+      completed: !completed,
+      date,
+    };
+    await api.put("api/todos?update=completed", todo);
+    setFilter("all")
+  }
 
   return (
     <TasksContext.Provider
       value={{
-        todosCount,
-        allTodos,
-        todos,
+        updateTask,
+        addTask,
+        deleteTask,
+        editTask,
+        onPageChange,
+        handleSetFilter,
+        tasksArray,
         currentPage,
-        setPage,
-        saveTodos,
-        createTodo,
-        updateTodo,
-        editTodo,
-        deleteTodo,
-        filterNew,
-        filterPast,
-        filterToday,
-        filterAll,
-        filterUndone,
-        filterDone,
+        tasksCount,
       }}
     >
       {children}
@@ -192,3 +119,4 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
 };
 
 export default TasksProvider;
+

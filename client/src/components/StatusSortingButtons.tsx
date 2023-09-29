@@ -6,8 +6,12 @@ import { TasksContextType } from "@/types/types";
 import { TasksContext } from "@/context/TasksContext";
 import { api } from "@/utils/axios/axios";
 
-const StatusSortingButtons:FC = () => {
-  const {filterAll, filterUndone, filterDone, currentPage} = React.useContext(TasksContext) as TasksContextType;
+interface StatusSorting {
+  handleSetFilter: (value: string)=> void;
+}
+// const StatusSortingButtons = (props:StatusSorting) => {
+const StatusSortingButtons = () => {
+  const {handleSetFilter} = React.useContext(TasksContext) as TasksContextType;
 
   const [isChoosed, setIsChoosed] = useState<boolean>(false);
   const [isAllClicked, setIsAllClicked] = useState<boolean>(false);
@@ -20,9 +24,11 @@ const StatusSortingButtons:FC = () => {
     isDoneClicked ? setIsDoneClicked(false) : false;
     isUndoneClicked ? setIsUndoneClicked(false) : false;
 
+    // props.handleSetFilter("all")
+    handleSetFilter("all")
     // const allTodos = await api('api/todos/1?page=1');
     // console.log(allTodos.data)
-    filterAll(currentPage);
+    // filterAll(currentPage);
   };
   const handleDoneClick = async () => {
     setIsChoosed(true);
@@ -30,9 +36,10 @@ const StatusSortingButtons:FC = () => {
     isAllClicked ? setIsAllClicked(false) : false;
     isUndoneClicked ? setIsUndoneClicked(false) : false;
 
+    handleSetFilter("done")
     // const doneTodos = await api('api/todos/1/done?page=1');
     // console.log(doneTodos.data)
-    filterDone();
+    // filterDone();
   };
   const handleUndoneClick = async () => {
     setIsChoosed(true);
@@ -40,9 +47,10 @@ const StatusSortingButtons:FC = () => {
     isAllClicked ? setIsAllClicked(false) : false;
     isDoneClicked ? setIsDoneClicked(false) : false;
 
+    handleSetFilter("undone")
     // const undoneTodos = await api('api/todos/1/undone?page=1');
     // console.log(undoneTodos.data)
-    filterUndone();
+    // filterUndone();
   };
   const handleChoosedClick = () => {
     setIsChoosed(false);

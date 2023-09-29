@@ -5,8 +5,8 @@ import { PaginationItem, PaginationLink } from "@/styles/text";
 interface PaginationProps {
   items: number;
   pageSize: number;
-  currentPage: any;
-  onPageChange: any;
+  currentPage: number;
+  onPageChange: (pageNumber: number) => void;
 }
 
 const Pagination: FC<PaginationProps> = ({

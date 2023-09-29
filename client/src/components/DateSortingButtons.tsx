@@ -5,8 +5,13 @@ import { SortingButtonsContainer } from "@/styles/containers";
 import { TasksContextType } from "@/types/types";
 import { TasksContext } from "@/context/TasksContext";
 
-const DateSortingButtons:FC = () => {
-  const {filterPast, filterNew } = React.useContext(TasksContext) as TasksContextType;
+interface DateSorting {
+  handleSetFilter: (value: string)=> void;
+}
+
+// const DateSortingButtons = (props: DateSorting) => {
+const DateSortingButtons = () => {
+  const {handleSetFilter} = React.useContext(TasksContext) as TasksContextType;
 
   const [isChoosed, setIsChoosed] = useState<boolean>(false);
   const [isNewClicked, setIsNewClicked] = useState<boolean>(false);
@@ -19,16 +24,18 @@ const DateSortingButtons:FC = () => {
 
     // const newTodos = await api("api/todos/1/new?page=1")
     // console.log(newTodos.data)
-    filterNew()
+    handleSetFilter("new")
+    // filterNew()
   };
   const handlePastClick = async () => {
     setIsChoosed(true);
     !isPastClicked ? setIsPastClicked(true) : false;
     isNewClicked ? setIsNewClicked(false) : false;
 
+    handleSetFilter("past")
     // const pastTodos = await api("api/todos/1/past?page=1")
     // console.log(pastTodos.data)
-    filterPast()
+    // filterPast()
   };
   const handleChoosedClick = () => {
     setIsChoosed(false);

@@ -16,9 +16,12 @@ const NavBlock = styled.div`
   font-size: 16px;
   font-weight: 400;
 `;
-
-const NavPanel: FC = () => {
-  const { filterToday, currentPage } = React.useContext(TasksContext) as TasksContextType;
+interface NavpanelProps {
+  handleSetFilter:(value:string)=>void
+}
+// const NavPanel = (props:NavpanelProps) => {
+const NavPanel = () => {
+  const { handleSetFilter } = React.useContext(TasksContext) as TasksContextType;
 
   const [isShowingModal, toggleModal] = useModal();
 
@@ -34,7 +37,9 @@ const NavPanel: FC = () => {
     
     // const todayTodos = await api('/api/todos/1/today?page=1')
     // console.log(todayTodos.data)
-    filterToday(currentPage)
+    // props.handleSetFilter("today")
+    handleSetFilter("today")
+    // filterToday(currentPage)
   };
   const handleAllClick = () => {
     // isAllClicked ? setIsAllClicked(false) : setIsAllClicked(true);
@@ -57,12 +62,14 @@ const NavPanel: FC = () => {
         <SortingContainer>
           <TodayBtn $active={isTodayClicked} onClick={handleTodayClick}>Today</TodayBtn>
           {isAllClicked ? (
+            // <StatusSortingButtons handleSetFilter={props.handleSetFilter}/>
             <StatusSortingButtons />
           ) : (
             <AllBtn onClick={handleAllClick}>All</AllBtn>
           )}
 
           {isDateClicked ? (
+            // <DateSortingButtons handleSetFilter={props.handleSetFilter} />
             <DateSortingButtons />
           ) : (
             <DateBtn onClick={handleDateClick}>Date</DateBtn>

@@ -1,27 +1,6 @@
 import Todo from "../models/Todo.js";
-import { config } from "../config/index.js";
 import User from "../models/User.js";
-import { hashPassword, verifyToken } from "../utils/auth.js";
-
-// const createUser = async (req, res) => {
-//   if (!req.body) return res.sendStatus(400);
-//   const [login, email, password] = [
-//     req.body.login,
-//     req.body.email,
-//     req.body.password,
-//   ];
-//   const hashedPassword = hashPassword(password);
-//   try {
-//     const newUser = await User.create({
-//       login,
-//       email,
-//       password: hashedPassword,
-//     });
-//     res.send(newUser);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
+import { hashPassword } from "../utils/auth.js";
 
 const createUser = async (login, email, password) => {
   const hashedPassword = hashPassword(password);
@@ -38,13 +17,7 @@ const createUser = async (login, email, password) => {
 };
 
 const deleteUser = async (req, res) => {
-  // if (!req.body) return res.sendStatus(400);
-  // const [id] = [req.body.id];
-  const authHeader = req.headers.authorization;
-  const token = authHeader.slice(7);
-  if (!token) return res.sendStatus(400);
-  const authUser = verifyToken(token, config.JWT_SECRET_KEY);
-  const id = authUser.id;
+  const id = req.userId;
   try {
     await User.destroy({
       where: {
@@ -60,29 +33,14 @@ const deleteUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader.slice(7);
-  if (!token) return res.sendStatus(400);
-  const authUser = verifyToken(token, config.JWT_SECRET_KEY);
-  const id = authUser.id;
+  const id = req.userId;
   if (!req.body) return res.sendStatus(400);
   // const [user]
 };
 
 const getUserById = async (req, res) => {
-  // if (!req.params.id) return res.sendStatus(400);
-  const authHeader = req.headers.authorization;
-  const token = authHeader.slice(7);
-  if (!token) return res.sendStatus(400);
-  const authUser = verifyToken(token, config.JWT_SECRET_KEY);
-  const id = authUser.id;
+  const id = req.userId;
   try {
-    // const user = await User.findByPk(id);
-    // const tasks = await Todo.findAll({
-    //   where: {
-    //     userId: id,
-    //   },
-    // })
     const userInfo = await User.findAll({
       where: {
          id: id,
@@ -94,7 +52,6 @@ const getUserById = async (req, res) => {
         },
       ],
     });
-    // res.send({ user, tasks });
     res.send(userInfo)
   } catch (err) {
     console.log(err);
