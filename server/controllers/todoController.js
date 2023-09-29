@@ -32,7 +32,7 @@ const getTodayTodos = async (req, res) => {
   const id = req.userId;
   try {
     const allTodos = await Todo.findAll({
-      order: [["date", "ASC"]],
+      order: [["date", "DESC"]],
       where: {
         userId: {
           [Op.eq]: id,
@@ -200,7 +200,7 @@ const updateTodo = async (req, res) => {
         }
       );
     }
-    res.send(`Update title successfully`);
+    res.send(`Update successfully`);
   } catch (e) {
     console.log(e);
   }

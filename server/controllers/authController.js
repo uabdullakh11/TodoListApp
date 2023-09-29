@@ -7,15 +7,14 @@ const login = async (req, res) => {
   if (!req.body) return res.send("No data send!");
 
   const [login, password] = [req.body.login, req.body.password];
-  // const user = await User.findOne({ where: {login} });
-  const user = await User.findOne({
-    [Op.or]: [{ login: login }, { email: login }],
-  });
+  const user = await User.findOne({ where: {login} });
+  // const user = await User.findOne({
+  //   [Op.or]: [{ login: login }, { email: login }],
+  // });
   if (!user) return res.send("Can't find user!");
   if (!(await comparePasswords(password, user.password))) {
     res.send("Invalid login or password!");
   }
-
   res.send(generateAccessToken(user.id));
 };
 
