@@ -1,4 +1,3 @@
-// "use client";
 import React, { useState, FC, useEffect } from "react";
 import useModal from "@/utils/hooks/useModal";
 import Image from "next/image";
@@ -37,13 +36,6 @@ const Task: FC<TasksProps> = ({ isCompleted, id, name, date }) => {
   const [typeModal, setTypeModal] = useState<string>("");
 
   const handleClickDoneBtn = async () => {
-    // const todo = {
-    //   id:id,
-    //   completed: !isCompleted
-    // }
-    // const editTodo = await api.put("api/todos/1?update=completed", todo);
-    // console.log(editTodo);
-    // updateTodo(id, isCompleted)
     if (id){
       updateTask(id,isCompleted,date)
     }
@@ -56,12 +48,12 @@ const Task: FC<TasksProps> = ({ isCompleted, id, name, date }) => {
   const handleEditTask = () => {
     setOptionsBtnClicked(false);
     setTypeModal("editModal");
-    toggleModal();
+    toggleModal(true);
   };
   const handleDeleteTask = () => {
     setOptionsBtnClicked(false);
     setTypeModal("deleteModal");
-    toggleModal();
+    toggleModal(true);
   };
   useEffect(() => {
     if (isCompleted) {

@@ -2,20 +2,33 @@ import User from "../models/User.js";
 import { Op } from "sequelize";
 import { comparePasswords, generateAccessToken } from "../utils/auth.js";
 import { userController } from "./index.js";
+// import BadRequest from 'http-errors';
 
 const login = async (req, res) => {
   if (!req.body) return res.send("No data send!");
 
   const [login, password] = [req.body.login, req.body.password];
-  const user = await User.findOne({ where: {login} });
-  // const user = await User.findOne({
-  //   [Op.or]: [{ login: login }, { email: login }],
-  // });
-  if (!user) return res.send("Can't find user!");
-  if (!(await comparePasswords(password, user.password))) {
-    res.send("Invalid login or password!");
+  try {
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [
+          {
+            email: login,
+          },
+          {
+            login: login,
+          },
+        ],
+      },
+    });
+    if (!user) return res.status(500).send("User not found!");
+    if (!(await comparePasswords(password, user.password))) {
+      return res.status(400).send("Invalid login or password!");
+    }
+    return res.send(generateAccessToken(user.id));
+  } catch (err) {
+    console.log(err);
   }
-  res.send(generateAccessToken(user.id));
 };
 
 const register = async (req, res) => {
@@ -25,11 +38,26 @@ const register = async (req, res) => {
     req.body.email,
     req.body.password,
   ];
-  let user = await User.findOne({ where: { email } });
-  if (user) res.send("User already exist!");
-  user = await userController.createUser(login, email, password);
-  res.send(user);
-  return user;
+  // let user = await User.findOne({ where: { email } });
+  try {
+    let user = await User.findOne({
+      where: {
+        [Op.or]: [
+          {
+            email: email,
+          },
+          {
+            login: login,
+          },
+        ],
+      },
+    });
+    if (user) return res.status(404).send("User already exist!");
+    user = await userController.createUser(login, email, password);
+    return res.send(generateAccessToken(user.id));
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export { login, register };

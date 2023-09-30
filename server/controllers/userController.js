@@ -1,6 +1,6 @@
 import Todo from "../models/Todo.js";
 import User from "../models/User.js";
-import { hashPassword } from "../utils/auth.js";
+import { hashPassword, comparePasswords } from "../utils/auth.js";
 
 const createUser = async (login, email, password) => {
   const hashedPassword = hashPassword(password);
@@ -32,18 +32,50 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+const createUserAvatar = async (req, res) => {
   const id = req.userId;
   if (!req.body) return res.sendStatus(400);
   // const [user]
 };
+
+const changeUserPassword = async (req, res) => {
+  const id = req.userId;
+  const [currentPassword, newPassword] = [
+    req.body.currentPassword,
+    req.body.newPassword,
+  ];
+  const user = await User.findOne({ where: { id } });
+  const isPasswordCorrect = await comparePasswords(
+    currentPassword,
+    user.password
+  );
+  if (!isPasswordCorrect) return res.sendStatus(400).send("Incorrect current password!");
+  user.password = hashPassword(newPassword);
+  user.save();
+  return res.send("Password changed successfully!");
+};
+
+const changeUserLogin = async (req, res) => {
+  const id = req.userId;
+  const user = await User.findOne({ where: { id } });
+  const isPasswordCorrect = await comparePasswords(
+    currentPassword,
+    user.password
+  );
+  if (!isPasswordCorrect) return res.sendStatus(400).send("Incorrect current password!");
+  user.login = hashPassword(newPassword);
+  user.save();
+  return res.send("Password changed successfully!");
+};
+
+const createUserEmail = async (req, res) => {};
 
 const getUserById = async (req, res) => {
   const id = req.userId;
   try {
     const userInfo = await User.findAll({
       where: {
-         id: id,
+        id: id,
       },
       include: [
         {
@@ -52,10 +84,18 @@ const getUserById = async (req, res) => {
         },
       ],
     });
-    res.send(userInfo)
+    res.send(userInfo);
   } catch (err) {
     console.log(err);
   }
 };
 
-export { createUser, deleteUser, getUserById, updateUser };
+export {
+  createUser,
+  deleteUser,
+  getUserById,
+  createUserAvatar,
+  changeUserPassword,
+  changeUserLogin,
+  createUserEmail,
+};

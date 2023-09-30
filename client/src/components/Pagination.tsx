@@ -27,8 +27,8 @@ const Pagination: FC<PaginationProps> = ({
         {pages.map((page) => (
           <PaginationItem key={page}>
             <PaginationLink onClick={() => onPageChange(page)} $active={
-             page === currentPage ? true : false
-           }>{page}</PaginationLink>
+              page === currentPage ? true : false
+            }>{page}</PaginationLink>
           </PaginationItem>
         ))}
       </PaginationList>

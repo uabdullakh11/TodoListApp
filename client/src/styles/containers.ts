@@ -89,8 +89,62 @@ export const Form = styled.form`
 `;
 
 export const InputContainer = styled.div`
-display: flex;
-flex-direction: column;
-gap: 1.5rem;
-width: 100%;
-`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+`;
+
+export const ProfileContainer = styled.div`
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+`;
+
+export const AvatarContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+`;
+export const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+`;
+
+export const StatisticContainer = styled.div`
+  font-size: 18px;
+  text-align: center;
+  color: #9333ea;
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+`;
+export const ThisWeek = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+`;
+
+export const AllTime = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+`;
+
+export const ButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+`;
+
+export const AccountPageForm = styled(Form)`
+  margin: 0;
+`;
+export const UserLoginContainer = styled.div``;
+export const UserEmailContainer = styled.div``;

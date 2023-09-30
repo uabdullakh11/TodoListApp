@@ -70,9 +70,21 @@ export const LinkTo = styled(Link)`
   align-self: flex-end;
   color: #ad89ce;
 `;
-export const ErrorTitle = styled.h1<{$size:number}>`
-  font-size: ${(props) => (props.$size)}px;
+export const ErrorTitle = styled.h1<{ $size: number }>`
+  font-size: ${(props) => props.$size}px;
   font-weight: 700;
   text-align: center;
   color: #9333ea;
-`
+`;
+export const UserLogin = styled.div`
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+`;
+export const UserEmail = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+`;

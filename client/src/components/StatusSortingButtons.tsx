@@ -1,17 +1,11 @@
-// "use client";
 import React,{ useState, FC } from "react";
 import { SortingButtonsContainer } from "@/styles/containers";
 import { AllBtn, DoneBtn, UndoneBtn } from "@/styles/buttons";
 import { TasksContextType } from "@/types/types";
 import { TasksContext } from "@/context/TasksContext";
-import { api } from "@/utils/axios/axios";
 
-interface StatusSorting {
-  handleSetFilter: (value: string)=> void;
-}
-// const StatusSortingButtons = (props:StatusSorting) => {
-const StatusSortingButtons = () => {
-  const {handleSetFilter} = React.useContext(TasksContext) as TasksContextType;
+const StatusSortingButtons:FC = () => {
+  const {handleSetFilter, onPageChange} = React.useContext(TasksContext) as TasksContextType;
 
   const [isChoosed, setIsChoosed] = useState<boolean>(false);
   const [isAllClicked, setIsAllClicked] = useState<boolean>(false);
@@ -24,11 +18,8 @@ const StatusSortingButtons = () => {
     isDoneClicked ? setIsDoneClicked(false) : false;
     isUndoneClicked ? setIsUndoneClicked(false) : false;
 
-    // props.handleSetFilter("all")
-    handleSetFilter("all")
-    // const allTodos = await api('api/todos/1?page=1');
-    // console.log(allTodos.data)
-    // filterAll(currentPage);
+    handleSetFilter("All")
+    onPageChange(1)
   };
   const handleDoneClick = async () => {
     setIsChoosed(true);
@@ -36,10 +27,8 @@ const StatusSortingButtons = () => {
     isAllClicked ? setIsAllClicked(false) : false;
     isUndoneClicked ? setIsUndoneClicked(false) : false;
 
-    handleSetFilter("done")
-    // const doneTodos = await api('api/todos/1/done?page=1');
-    // console.log(doneTodos.data)
-    // filterDone();
+    handleSetFilter("Done")
+    onPageChange(1)
   };
   const handleUndoneClick = async () => {
     setIsChoosed(true);
@@ -47,10 +36,8 @@ const StatusSortingButtons = () => {
     isAllClicked ? setIsAllClicked(false) : false;
     isDoneClicked ? setIsDoneClicked(false) : false;
 
-    handleSetFilter("undone")
-    // const undoneTodos = await api('api/todos/1/undone?page=1');
-    // console.log(undoneTodos.data)
-    // filterUndone();
+    handleSetFilter("Undone")
+    onPageChange(1)
   };
   const handleChoosedClick = () => {
     setIsChoosed(false);

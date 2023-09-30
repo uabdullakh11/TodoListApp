@@ -1,4 +1,3 @@
-// "use client";
 import React from "react";
 import { HeaderBlock } from "@/styles/header";
 import { HeaderContainer } from "@/styles/containers";

@@ -1,4 +1,3 @@
-// "use client";
 import { AuthForm } from "@/components/AuthForm";
 import AuthLayout from "@/layouts/AuthLayout";
 import { Form, InputContainer } from "@/styles/containers";
@@ -8,6 +7,7 @@ import { AuthButton } from "@/styles/buttons";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { api } from "@/utils/axios/axios";
+import axios from "axios";
 
 
 export default function SignUp() {
@@ -21,20 +21,30 @@ export default function SignUp() {
 
   const handleSubmitSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    !login || !password || !email || !rePassword ? setError("Please fill out the form!") : setError("");
-    if (password !== rePassword) {
+    if (!login.trim() || !password.trim() || !email.trim() || !rePassword.trim()) {
+      setError("Please fill out the form!")
+    }
+    else if (password !== rePassword) {
       setError("Password did not match!")
     }
-    const userData = {
-      email,
-      password,
-      login,
+    else {
+      setError("");
+      try {
+        const userData = {
+          email: email.trim(),
+          password,
+          login: login.trim(),
+        }
+        const token = await api.post('api/auth/register', userData)
+        sessionStorage.setItem('token', token.data)
+        router.push("/");
+      }
+      catch (err) {
+        if (axios.isAxiosError(err) && err.response){
+          setError(err.response.data)
+        }
+      }
     }
-    const user = await api.post('api/auth/register', userData)
-    const token = await api.post('api/auth/login', userData)
-    sessionStorage.setItem('user', JSON.stringify(user.data))
-    sessionStorage.setItem('token', token.data)
-    router.push("/");
   }
   return (
     <AuthLayout>
@@ -48,6 +58,7 @@ export default function SignUp() {
                 type="text"
                 name="enter-login-input"
                 id="enter-login-input"
+                minLength={3}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLogin(e.target.value)}
               />
               <Input
@@ -55,6 +66,7 @@ export default function SignUp() {
                 type="email"
                 name="enter-email-input"
                 id="enter-email-input"
+                minLength={6}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
               />
               <Input
@@ -62,6 +74,7 @@ export default function SignUp() {
                 type="password"
                 name="enter-current-password-input"
                 id="enter-current-password-input"
+                minLength={6}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
               />
               <Input
@@ -69,6 +82,7 @@ export default function SignUp() {
                 type="password"
                 name="enter-repeat-password-input"
                 id="enter-repeat-password-input"
+                minLength={6}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRePassword(e.target.value)}
               />
               {error && <ErrorCaption>{error}</ErrorCaption>}

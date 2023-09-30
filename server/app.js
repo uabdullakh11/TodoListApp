@@ -6,6 +6,7 @@ import { sequelize } from "./models/index.js";
 import { config } from "./config/index.js";
 import morgan from "morgan";
 import { authRouter } from "./routes/authRouter.js";
+import { errorHandler } from './utils/errorHandlers.js';
 
 const app = express();
 
@@ -19,6 +20,8 @@ app.use(morgan("tiny"));
 app.use("/api/users", userRouter);
 app.use("/api/todos", todoRouter);
 app.use("/api/auth", authRouter);
+
+app.use(errorHandler);
 
 async function dbConnect() {
   try {

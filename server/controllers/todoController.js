@@ -118,15 +118,15 @@ const getUndoneTodos = async (req, res) => {
   }
 };
 const addTodo = async (req, res) => {
-  if (!req.body) return res.send('No data sent!');
+  if (!req.body) return res.status(400).send("No data sent!");
   const userId = req.userId;
   const [title, completed, date] = [
     req.body.title,
     req.body.completed,
     req.body.date,
   ];
-  const taskToCheck = await Todo.findOne({ where: { title } });
-  if (taskToCheck) return res.send("Task already exist!");
+  const taskToCheck = await Todo.findOne({ where: { title, userId: userId } });
+  if (taskToCheck) return res.status(400).send("Task already exist!");
   try {
     const newTodo = await Todo.create({
       title: title,
@@ -140,7 +140,7 @@ const addTodo = async (req, res) => {
   }
 };
 const deleteTodo = async (req, res) => {
-  if (!req.params.id) return res.send('No id sent!');
+  if (!req.params.id) return res.status(400).send("No id sent!");
   const userId = req.userId;
   const id = req.params.id;
   try {
@@ -156,7 +156,7 @@ const deleteTodo = async (req, res) => {
   }
 };
 const updateTodo = async (req, res) => {
-  if (!req.body) return res.send('No data sent!');
+  if (!req.body) return res.status(400).send("No data sent!");
   const userId = req.userId;
   const [id, title, completed, date] = [
     req.body.id,
@@ -166,6 +166,8 @@ const updateTodo = async (req, res) => {
   ];
   try {
     if (req.query.update == "title") {
+      const taskToCheck = await Todo.findOne({ where: { title, userId: userId } });
+      if (taskToCheck) return res.status(400).send("Task with this title already exist!");
       await Todo.update(
         {
           title: title,

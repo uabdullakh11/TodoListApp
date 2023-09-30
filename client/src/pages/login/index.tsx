@@ -1,4 +1,3 @@
-// "use client";
 import { AuthForm } from "@/components/AuthForm";
 import AuthLayout from "@/layouts/AuthLayout";
 import { Form, InputContainer } from "@/styles/containers";
@@ -8,6 +7,7 @@ import { AuthButton } from "@/styles/buttons";
 import { useState } from "react";
 import { api } from "@/utils/axios/axios";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 
 export default function SignIn() {
@@ -19,14 +19,26 @@ export default function SignIn() {
 
   const handleSubmitLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    !login || !password ? setError("Please enter login and password!") : setError("");
-    const userData = {
-      login,
-      password,
+    if (!login.trim() || !password.trim() ){
+      setError("Please enter login and password!")
     }
-    const token = await api.post('api/auth/login', userData)
-    sessionStorage.setItem('token', token.data)
-    router.push("/");
+    else {
+      setError("");
+      try {
+        const userData = {
+          login: login.trim(),
+          password,
+        }
+        const token = await api.post('api/auth/login', userData)
+        sessionStorage.setItem('token', token.data)
+        router.push("/");
+      }
+      catch(err){
+        if (axios.isAxiosError(err) && err.response){
+          setError(err.response.data)
+        }
+      }
+    }
   }
 
   return (
@@ -50,6 +62,7 @@ export default function SignIn() {
                 name="enter-password-input"
                 id="enter-password-input"
                 autoComplete="true"
+                minLength={6}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
               />
               {error && <ErrorCaption>{error}</ErrorCaption>}

@@ -23,4 +23,6 @@ export type TasksContextType = {
   tasksArray:TasksArray | undefined,
   currentPage: number,
   tasksCount: number,
+  errors: string,
+  filter: string,
 };

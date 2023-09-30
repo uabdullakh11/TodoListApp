@@ -8,7 +8,7 @@ const Error = () => {
   const router = useRouter();
 
   useEffect(() => {
-    setTimeout(() => {
+    const interval = setTimeout(() => {
       router.push("/");
     }, 5000);
   }, [router]);
@@ -16,7 +16,7 @@ const Error = () => {
     <NotFoundPageLayout>
       <Container>
         <ErrorTitle $size={45}>404</ErrorTitle>
-        <ErrorTitle $size={30}>This page doesn't exist</ErrorTitle>
+        <ErrorTitle $size={30}>This page doesn&apos;t exist</ErrorTitle>
         <LinkTo href="/">Go back</LinkTo>
       </Container>
     </NotFoundPageLayout>

@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import { config } from "../config/index.js";
-import jwt from 'jsonwebtoken';
-
+import jwt from "jsonwebtoken";
 
 export function hashPassword(password) {
   return bcrypt.hashSync(password, 8);

@@ -7,6 +7,7 @@ const ModalButton = styled.button`
   background-position-x: 30px;
   width: 100%;
   border: none;
+  cursor: pointer;
   @media (max-width: 400px) {
     padding: 10px 40px;
     background-position-x: 10px;
@@ -123,6 +124,7 @@ const InOutBtn = styled.button`
   color: #9333ea;
   padding: 10px 70px;
   margin-top: 40px;
+  cursor: pointer;
 `;
 export const AuthButton = styled(InOutBtn)`
   background: url("../auth-btn-icon.svg"), #9333ea0f;
@@ -137,4 +139,65 @@ export const LogOutBtn = styled(InOutBtn)`
   background-position-y: center;
   background-position-x: 40px;
   background-size: 25px;
+  margin-top: 50px;
+`;
+
+const UserProfileButtons = styled.div`
+  padding: 10px 30px;
+  color: #6b7280;
+  cursor: pointer;
+  padding-right: 70px;
+  padding-left: 35px;
+  @media (max-width: 689px) {
+    padding-right: 35px;
+  }
+`;
+export const ProfileBtn = styled(UserProfileButtons)<{ $active: boolean }>`
+  ${(props) =>
+    props.$active
+      ? css`
+          background: url("../person-logo.svg"), #9333ea0f;
+          color: #9333ea;
+          border-radius: 10px;
+        `
+      : css`
+          background: url("../person-logo.svg");
+        `}
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-size: 25px;
+`;
+export const SecurtyBtn = styled(UserProfileButtons)<{ $active: boolean }>`
+  ${(props) =>
+    props.$active
+      ? css`
+          background: url("../security-btn-icon.svg"), #9333ea0f;
+          color: #9333ea;
+          border-radius: 10px;
+        `
+      : css`
+          background: url("../security-btn-icon.svg");
+        `}
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-size: 25px;
+`;
+
+export const ChangePassBtn = styled(InOutBtn)`
+  background: url("../change-password-icon-btn.svg"), #9333ea0f;
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: 40px;
+  background-size: 25px;
+`;
+
+export const ChangeBtn = styled(ModalSaveButton)`
+  padding: 10px 10px;
+  background-image: none;
+  width: auto;
+`;
+export const CancelBtn = styled(ModalCloseButton)`
+  padding: 10px 10px;
+  background-image: none;
+  width: auto;
 `;

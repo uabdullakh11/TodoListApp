@@ -1,5 +1,4 @@
-// "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState, FC } from "react";
 import {
   ModalBlock,
   ModalBody,
@@ -17,18 +16,17 @@ import { ErrorCaption, ModalText } from "../styles/text";
 import getDate from "../helpers/getDate";
 import { TasksContextType } from "../types/types";
 import { TasksContext } from "../context/TasksContext";
-import { api } from "@/utils/axios/axios";
-// import { useClickAway } from "@uidotdev/usehooks";
+import { useClickOutside } from '../utils/hooks/useClickOutside';
 
 interface ModalProps {
   show: boolean;
   type: string;
   taskId?: number;
-  onCloseButtonClick: () => void;
+  onCloseButtonClick: (isShow: boolean) => void;
 }
 
-const Modal = (props: ModalProps) => {
-  const { addTask, deleteTask, editTask } = React.useContext(
+const Modal:FC<ModalProps> = (props: ModalProps) => {
+  const { addTask, deleteTask, editTask, errors } = React.useContext(
     TasksContext
   ) as TasksContextType;
 
@@ -39,25 +37,34 @@ const Modal = (props: ModalProps) => {
 
   const [errorCaption, setErrorCaption] = useState("");
 
-  if (!props.show) {
-    return null;
+  const handleCloseButton = () => {
+    props.onCloseButtonClick(false)
+    setErrorCaption("");
+  }
+
+  const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      const target = e.target as HTMLInputElement
+      target.id === "enter-name-input" && handleSaveClick();
+      target.id === "change-name-input" && handleChangeClick();
+    }
   }
 
   const handleSaveClick = async () => {
-    if (nameInputRef.current) {
+    if (nameInputRef.current && nameInputRef.current.value.trim()) {
       const todo = {
         title: nameInputRef.current.value,
         completed: false,
         date: fullDate,
-        // userId: 3,
-        // id: 1
       };
       addTask(todo)
-      // await api.post("/api/todos", todo);
-      // const newTodo = await api.post("api/todos/", todo);
-      // console.log(newTodo.data);
-      // createTodo(todo)
-      props.onCloseButtonClick();
+      console.log(errors)
+      if (errors) {
+        setErrorCaption(errors)
+      }
+      else {
+        handleCloseButton()
+      }
     } else {
       setErrorCaption("Please enter name of task!");
     }
@@ -65,38 +72,38 @@ const Modal = (props: ModalProps) => {
   const handleDeleteClick = async () => {
     if (props.taskId) {
       deleteTask(props.taskId)
-      // deleteTodo(props.taskId)
-      // const id = {
-      //   id: props.taskId,
-      // };
-      // const deleteTodo = await api.delete("api/todos/1", {
-      //   data: id,
-      // });
-      // console.log(deleteTodo);
-      props.onCloseButtonClick();
+      props.onCloseButtonClick(false);
     }
   };
   const handleChangeClick = async () => {
-    if (changeNameRef.current && props.taskId) {
-      // editTodo(props.taskId, changeNameRef.current.value, fullDate);
-      // const todo = {
-      //   id:props.taskId,
-      //   title: changeNameRef.current.value,
-      //   date: fullDate,
-      // }
-      // const editTodo = await api.put("api/todos/1?update=title", todo);
-      // console.log(editTodo);
-      // editTodo(props.taskId, changeNameRef.current.value, fullDate)
-      editTask(props.taskId, changeNameRef.current.value, fullDate )
-      props.onCloseButtonClick();
+    if (changeNameRef.current && changeNameRef.current.value.trim() && props.taskId) {
+      editTask(props.taskId, changeNameRef.current.value, fullDate)
     } else {
       setErrorCaption("Please enter name of task!");
     }
   };
 
+  useEffect(() => {
+    const close = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleCloseButton()
+      }
+    };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  });
+
+  const ref = useClickOutside(() => {
+    handleCloseButton()
+  });
+  
+  if (!props.show) {
+    return null;
+  }
+
   return (
     <ModalBlock>
-      <ModalContainer>
+      <ModalContainer ref={ref}>
         {props.type === "createModal" && (
           <>
             <ModalHeader>Create task</ModalHeader>
@@ -106,13 +113,15 @@ const Modal = (props: ModalProps) => {
                 name="enter-name-input"
                 id="enter-name-input"
                 ref={nameInputRef}
+                autoFocus={true}
+                onKeyDown={handleEnterPress}
               />
               <ErrorCaption>{errorCaption}</ErrorCaption>
               <ModalButtons>
                 <ModalSaveButton onClick={handleSaveClick}>
                   Save
                 </ModalSaveButton>
-                <ModalCloseButton onClick={props.onCloseButtonClick}>
+                <ModalCloseButton onClick={handleCloseButton}>
                   Close
                 </ModalCloseButton>
               </ModalButtons>
@@ -128,7 +137,7 @@ const Modal = (props: ModalProps) => {
                 <ModalDeleteButton onClick={handleDeleteClick}>
                   Delete
                 </ModalDeleteButton>
-                <ModalCloseButton onClick={props.onCloseButtonClick}>
+                <ModalCloseButton onClick={handleCloseButton}>
                   Close
                 </ModalCloseButton>
               </ModalButtons>
@@ -144,13 +153,15 @@ const Modal = (props: ModalProps) => {
                 name="change-name-input"
                 id="change-name-input"
                 ref={changeNameRef}
+                autoFocus={true}
+                onKeyDown={handleEnterPress}
               />
               <ErrorCaption>{errorCaption}</ErrorCaption>
               <ModalButtons>
                 <ModalSaveButton onClick={handleChangeClick}>
                   Change
                 </ModalSaveButton>
-                <ModalCloseButton onClick={props.onCloseButtonClick}>
+                <ModalCloseButton onClick={handleCloseButton}>
                   Close
                 </ModalCloseButton>
               </ModalButtons>
