@@ -13,9 +13,14 @@ const app = express();
 const port = config.PORT;
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+  extended: true,
+}));
 app.use(cors());
 app.use(morgan("tiny"));
+
+app.use('/static/avatars', express.static('./static/avatars'));
+// app.use('static/avatars', express.static(path.join(__dirname, 'static/avatars')));
 
 app.use("/api/users", userRouter);
 app.use("/api/todos", todoRouter);

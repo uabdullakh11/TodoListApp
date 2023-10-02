@@ -1,14 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/',
-  //       destination: '/home',
-  //       permanent: true,
-  //     },
-  //   ]
-  // },
+  images: {
+    // path: 'http://localhost:5000',
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '5000',
+        // pathname: '/account123/**',
+      },
+    ],
+  },
 }
 
 module.exports = nextConfig

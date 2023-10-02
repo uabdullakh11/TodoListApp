@@ -1,6 +1,6 @@
 import express from "express";
 import { todoController } from "../controllers/index.js";
-import { authCheck } from "../heplers/authCheck.js";
+import { authCheck } from "../helpers/authCheck.js";
 
 const jsonParser = express.json();
 const todoRouter = express.Router();

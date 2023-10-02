@@ -1,5 +1,5 @@
-import getDate from "../heplers/getDate.js";
-import { paginate } from "../heplers/paginate.js";
+import getDate from "../helpers/getDate.js";
+import { paginate } from "../helpers/paginate.js";
 import Todo from "../models/Todo.js";
 import { Op } from "sequelize";
 

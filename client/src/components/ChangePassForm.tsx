@@ -30,16 +30,15 @@ const ChangePassForm = () => {
             try {
                 const userNewPassword = {
                     currentPassword,
-                    password: newPassword,
+                    newPassword,
                 }
-                await api.patch('api/user/password', userNewPassword)
-                sessionStorage.remove('token')
+                await api.patch('api/users/password', userNewPassword)
+                sessionStorage.removeItem('token')
                 router.push("/login");
             }
             catch (err) {
                 if (axios.isAxiosError(err) && err.response) {
                     setError(err.response.data)
-
                 }
             }
         }

@@ -29,6 +29,10 @@ module.exports = {
             allowNull: false,
             protected: true,
           },
+          avatar:{
+            type: Sequelize.STRING,
+            defaultValue: "/static/avatars/person-logo.svg"
+          },
           createdAt: {
             type: Sequelize.DATE,
             allowNull: false,

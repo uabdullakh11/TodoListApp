@@ -26,7 +26,7 @@ interface ModalProps {
 }
 
 const Modal:FC<ModalProps> = (props: ModalProps) => {
-  const { addTask, deleteTask, editTask, errors } = React.useContext(
+  const { addTask, deleteTask, editTask } = React.useContext(
     TasksContext
   ) as TasksContextType;
 
@@ -37,6 +37,9 @@ const Modal:FC<ModalProps> = (props: ModalProps) => {
 
   const [errorCaption, setErrorCaption] = useState("");
 
+  const handleError = (error: string) =>{
+    setErrorCaption(error)
+  }
   const handleCloseButton = () => {
     props.onCloseButtonClick(false)
     setErrorCaption("");
@@ -57,14 +60,8 @@ const Modal:FC<ModalProps> = (props: ModalProps) => {
         completed: false,
         date: fullDate,
       };
-      addTask(todo)
-      console.log(errors)
-      if (errors) {
-        setErrorCaption(errors)
-      }
-      else {
-        handleCloseButton()
-      }
+      const isSuccess = await addTask(todo, handleError)
+      isSuccess ? handleCloseButton() : false;
     } else {
       setErrorCaption("Please enter name of task!");
     }
@@ -77,7 +74,13 @@ const Modal:FC<ModalProps> = (props: ModalProps) => {
   };
   const handleChangeClick = async () => {
     if (changeNameRef.current && changeNameRef.current.value.trim() && props.taskId) {
-      editTask(props.taskId, changeNameRef.current.value, fullDate)
+      const todo = {
+        id: props.taskId,
+        title:changeNameRef.current.value.trim(),
+        date: fullDate,
+      };
+      const isSuccess = await editTask(todo, handleError)
+      isSuccess ? handleCloseButton() : false;
     } else {
       setErrorCaption("Please enter name of task!");
     }

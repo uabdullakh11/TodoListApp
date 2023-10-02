@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import Link from "next/link";
+import Image from "next/image";
 export const ModalText = styled.p`
   color: #9333ea;
   font-weight: bold;
@@ -88,3 +89,7 @@ export const UserEmail = styled.div`
   align-items: center;
   gap: 0.5rem;
 `;
+
+export const AvatarImage = styled(Image)`
+  border-radius: 50%;
+`

@@ -1,15 +1,15 @@
 import express from "express";
 import { userController } from "../controllers/index.js";
-import { authCheck } from "../heplers/authCheck.js";
+import { authCheck } from "../helpers/authCheck.js";
+import { imgUploader } from "../utils/multer.js";
 
-const jsonParser = express.json();
 const userRouter = express.Router();
 
 userRouter.get('/', authCheck, userController.getUserById)
-userRouter.delete('/', jsonParser, authCheck, userController.deleteUser)
-userRouter.put('/avatar', authCheck, userController.createUserAvatar)
+userRouter.get('/statistic', authCheck, userController.getUserStatistic)
+userRouter.delete('/', authCheck, userController.deleteUser)
+userRouter.put('/avatar', authCheck, imgUploader,  userController.createUserAvatar)
 userRouter.patch('/password', authCheck, userController.changeUserPassword)
-userRouter.patch('/username', authCheck, userController.changeUserLogin)
-userRouter.patch('/email', authCheck, userController.createUserEmail)
+userRouter.patch('/', authCheck, userController.changeUserInfo)
 
 export {userRouter}

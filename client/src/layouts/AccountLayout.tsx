@@ -1,8 +1,7 @@
 import { useEffect, type ReactElement, useState } from 'react'
 import { Header } from "@/components/Header";
-import { LogoTitle, PageName } from "@/styles/text";
+import { AvatarImage, LogoTitle, PageName } from "@/styles/text";
 import { ProfileLogo } from "@/styles/header";
-import Image from "next/image";
 import Head from 'next/head';
 import { api } from '@/utils/axios/axios';
 
@@ -12,20 +11,20 @@ export default function AccountLayout({
   children: ReactElement;
 }) {
 
-  const [linkToAvatar, setLinkToAvatar] = useState<string>("../person-logo.svg")
-  
+  const [linkToAvatar, setLinkToAvatar] = useState<string>("http://localhost:5000/static/avatars/person-logo.svg")
+
   useEffect(() => {
     const getUserData = async () => {
       try {
         const res = await api('/api/users/')
-        setLinkToAvatar(res.data[0].avatarUrl)
+        setLinkToAvatar("http://localhost:5000" + res.data[0].avatar)
       }
       catch (err) {
         console.log(err);
       }
     }
     getUserData()
-    return () => { }
+    // return () => { }
   }, [])
   return (
     <>
@@ -36,8 +35,8 @@ export default function AccountLayout({
         <>
           <LogoTitle $auth={true}>To-Do</LogoTitle>
           <PageName>Settings</PageName>
-          <ProfileLogo href="account" $profile={true}>
-            <Image src={linkToAvatar} alt="" height={40} width={40}></Image>
+          <ProfileLogo href="/" $profile={true}>
+            <AvatarImage src={linkToAvatar} alt="" height={40} width={40}></AvatarImage>
           </ProfileLogo>
         </>
       </Header>

@@ -1,6 +1,6 @@
 import { sequelize } from "./index.js";
 import { DataTypes } from "sequelize";
-import getDate from "../heplers/getDate.js";
+import getDate from "../helpers/getDate.js";
 import User from "./User.js";
 
 const { fullDate } = getDate();

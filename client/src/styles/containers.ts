@@ -146,5 +146,11 @@ export const ButtonsContainer = styled.div`
 export const AccountPageForm = styled(Form)`
   margin: 0;
 `;
-export const UserLoginContainer = styled.div``;
-export const UserEmailContainer = styled.div``;
+export const UserLoginContainer = styled.div`
+  max-width: 220px;
+  display: flex;
+`;
+export const UserEmailContainer = styled.div`
+  max-width: 220px;
+  display: flex;
+`;

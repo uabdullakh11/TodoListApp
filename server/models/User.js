@@ -23,6 +23,10 @@ const User = sequelize.define("users", {
     allowNull: false,
     protected: true,
   },
+  avatar:{
+    type: DataTypes.STRING,
+    defaultValue: "/static/avatars/person-logo.svg"
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
