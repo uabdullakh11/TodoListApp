@@ -27,7 +27,7 @@ const NavPanel:FC = () => {
     isAllClicked ? setIsAllClicked(false) : false;
     isDateClicked ? setIsDateClicked(false) : false;
     
-    handleSetFilter("Today")
+    handleSetFilter("today")
     onPageChange(1)
   };
   const handleAllClick = () => {

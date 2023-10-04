@@ -1,26 +1,26 @@
 export interface ITask {
   completed: boolean;
   title: string;
-  id?: number | undefined;
+  id: number;
   date: string;
 }
 export interface IUser {
   id: number;
   name: string;
   email: string;
+  avatar: string;
+  weekStatistics: number;
+  allStatistics: number;
 }
-export type TasksArray = {
-  [x: string]: any;
-  todos: ITask[];
-}
+
 export type TasksContextType = {
-  updateTask: (id: number, completed: boolean, date: string) => void,
-  addTask: (todo: ITask, handleError: (error: string) => void) => Promise<boolean | undefined>,
+  updateTask: (todo:ITask) => void,
+  addTask: (todo: {title: string,completed: boolean, date: string}, handleError: (error: string) => void) => Promise<boolean | undefined>,
   deleteTask: (id: number) => void,
-  editTask: ({id, title,  date}:{ id:number, title:string,  date:string }, handleError: (error: string) => void) => Promise<boolean | undefined>,
+  editTask: (todo:ITask, handleError: (error: string) => void) => Promise<boolean | undefined>,
   onPageChange: (page: number) => void,
   handleSetFilter: (value: string) => void,
-  tasksArray: TasksArray | undefined,
+  tasksArray: ITask[],
   currentPage: number,
   tasksCount: number,
   filter: string,

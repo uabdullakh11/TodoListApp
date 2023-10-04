@@ -65,7 +65,7 @@ export const UserInfo: FC= () => {
         if (userNameRef.current) {
             try {
                 const data = {
-                    newLogin: userNameRef.current.value
+                    newLogin: userNameRef.current.value,
                 }
                 const res = await api.patch(`api/users?change=username`, data)
                 setUserName(res.data)
@@ -84,7 +84,7 @@ export const UserInfo: FC= () => {
         if (emailRef.current) {
             try {
                 const data = {
-                    newEmail: emailRef.current.value
+                    newEmail: emailRef.current.value,
                 }
                 const res = await api.patch(`api/users?change=email`, data)
                 setEmail(res.data)
@@ -102,14 +102,14 @@ export const UserInfo: FC= () => {
     useEffect(() => {
         const getUserData = async () => {
           try {
-            const res = await api('/api/users/')
+            const res = await api('/api/users')
             setUserName(res.data[0].login)
             setEmail(res.data[0].email)
             // userNameRef.current.value = res.data[0].login
             // emailRef.current.value= res.data[0].email
           }
-          catch (err) {
-            console.log(err)
+          catch (error) {
+            console.log(error)
           }
         }
         getUserData()

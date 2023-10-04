@@ -18,7 +18,7 @@ const StatusSortingButtons:FC = () => {
     isDoneClicked ? setIsDoneClicked(false) : false;
     isUndoneClicked ? setIsUndoneClicked(false) : false;
 
-    handleSetFilter("All")
+    handleSetFilter("all")
     onPageChange(1)
   };
   const handleDoneClick = async () => {
@@ -27,7 +27,7 @@ const StatusSortingButtons:FC = () => {
     isAllClicked ? setIsAllClicked(false) : false;
     isUndoneClicked ? setIsUndoneClicked(false) : false;
 
-    handleSetFilter("Done")
+    handleSetFilter("done")
     onPageChange(1)
   };
   const handleUndoneClick = async () => {
@@ -36,7 +36,7 @@ const StatusSortingButtons:FC = () => {
     isAllClicked ? setIsAllClicked(false) : false;
     isDoneClicked ? setIsDoneClicked(false) : false;
 
-    handleSetFilter("Undone")
+    handleSetFilter("undone")
     onPageChange(1)
   };
   const handleChoosedClick = () => {

@@ -16,7 +16,7 @@ export default function HomeLayout({
   const router = useRouter();
 
   useEffect(() => {
-    if (!sessionStorage.getItem('token')) {
+    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
       router.push("/login");
     }
     return () => { }

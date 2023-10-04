@@ -16,7 +16,7 @@ const DateSortingButtons:FC = () => {
     !isNewClicked ? setIsNewClicked(true) : false;
     isPastClicked ? setIsPastClicked(false) : false;
 
-    handleSetFilter("New")
+    handleSetFilter("new")
     onPageChange(1)
   };
   const handlePastClick = async () => {
@@ -24,7 +24,7 @@ const DateSortingButtons:FC = () => {
     !isPastClicked ? setIsPastClicked(true) : false;
     isNewClicked ? setIsNewClicked(false) : false;
 
-    handleSetFilter("Past")
+    handleSetFilter("past")
     onPageChange(1)
   };
   const handleChoosedClick = () => {

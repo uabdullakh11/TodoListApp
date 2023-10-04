@@ -36,7 +36,8 @@ export default function SignUp() {
           login: login.trim(),
         }
         const token = await api.post('api/auth/register', userData)
-        sessionStorage.setItem('token', token.data)
+        sessionStorage.setItem('ACCESS_TOKEN', token.data.ACCESS_TOKEN)
+        sessionStorage.setItem('REFRESH_TOKEN', token.data.REFRESH_TOKEN)
         router.push("/");
       }
       catch (err) {

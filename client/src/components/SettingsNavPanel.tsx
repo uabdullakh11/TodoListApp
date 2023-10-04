@@ -17,7 +17,8 @@ const SettingsNavPanel: FC<SettingPanelProps> = (props: SettingPanelProps) => {
   const [securityClick, setSecurityClick] = useState<boolean>(false)
 
   const handleLogout = async () => {
-    sessionStorage.removeItem("token")
+    sessionStorage.removeItem("ACCESS_TOKEN")
+    sessionStorage.removeItem("REFRESH_TOKEN")
     router.push('/login')
   }
 

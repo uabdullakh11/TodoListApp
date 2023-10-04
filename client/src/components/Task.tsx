@@ -15,19 +15,19 @@ import {
 import { DataLine, TaskName } from "@/styles/text";
 import { TaskContainer } from "@/styles/containers";
 import getDate from "@/helpers/getDate";
-import {TasksContext} from "@/context/TasksContext";
+import { TasksContext } from "@/context/TasksContext";
 import { TasksContextType } from "@/types/types";
 
 interface TasksProps {
-  id?: number;
-  name: string;
-  isCompleted: boolean;
+  id: number;
+  title: string;
+  completed: boolean;
   date: string;
 }
-const Task: FC<TasksProps> = ({ isCompleted, id, name, date }) => {
+const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
   const { updateTask } = React.useContext(TasksContext) as TasksContextType;
 
-  const {currentDate} = getDate();
+  const { currentDate } = getDate();
   const [isShowingModal, toggleModal] = useModal();
 
   const [isDone, setIsDone] = useState<boolean>(false);
@@ -36,9 +36,7 @@ const Task: FC<TasksProps> = ({ isCompleted, id, name, date }) => {
   const [typeModal, setTypeModal] = useState<string>("");
 
   const handleClickDoneBtn = async () => {
-    if (id){
-      updateTask(id,isCompleted,date)
-    }
+    updateTask({ completed, id, title, date })
   };
   const handleClickEditBtn = () => {
     isOptionsBtnClicked
@@ -56,24 +54,28 @@ const Task: FC<TasksProps> = ({ isCompleted, id, name, date }) => {
     toggleModal(true);
   };
   useEffect(() => {
-    if (isCompleted) {
+    if (completed) {
       setIsDone(true);
     } else {
       setIsDone(false);
     }
-  }, [isCompleted]);  
+  }, [completed]);
 
   useEffect(() => {
+    // let day = new Date();
+    // day.setDate(day.getDate() - 1);
+    // console.log(day.toLocaleString("en-US"));
+    // console.log(date.toDateString());
     if (date.slice(0, 9) === currentDate) {
-      setTaskDate(`Today at ${date.slice(11,16)}`)
+      setTaskDate(`Today at ${date.slice(11, 16)}`)
     }
-    else if (Number(date.slice(2, 4))===Number(currentDate.slice(2,4))-1) {
-      setTaskDate(`Yesterday at ${date.slice(11,16)}`)
+    else if (Number(date.slice(2, 4)) === Number(currentDate.slice(2, 4)) - 1) {
+      setTaskDate(`Yesterday at ${date.slice(11, 16)}`)
     }
     else {
-      setTaskDate(`${date.slice(0, 9)} at ${date.slice(11,16)}`)
+      setTaskDate(`${date.slice(0, 9)} at ${date.slice(11, 16)}`)
     }
-  }, [date,currentDate]);
+  }, [date, currentDate]);
   return (
     <TaskBlock>
       <TaskContainer>
@@ -87,7 +89,7 @@ const Task: FC<TasksProps> = ({ isCompleted, id, name, date }) => {
               onClick={handleClickDoneBtn}
             />
           </DoneButton>
-          <TaskName>{name}</TaskName>
+          <TaskName>{title}</TaskName>
         </LeftContainer>
         <RightContainer>
           <DataLine>{taskdate}</DataLine>
@@ -118,7 +120,7 @@ const Task: FC<TasksProps> = ({ isCompleted, id, name, date }) => {
         show={isShowingModal}
         onCloseButtonClick={toggleModal}
         type={typeModal}
-        taskId={id}
+        taskObj={{ completed, id, title, date }}
       />
     </TaskBlock>
   );

@@ -30,7 +30,9 @@ export default function SignIn() {
           password,
         }
         const token = await api.post('api/auth/login', userData)
-        sessionStorage.setItem('token', token.data)
+        sessionStorage.setItem('ACCESS_TOKEN', token.data.ACCESS_TOKEN)
+        sessionStorage.setItem('expires_in', token.data.expires_in)
+        sessionStorage.setItem('REFRESH_TOKEN', token.data.REFRESH_TOKEN)
         router.push("/");
       }
       catch(err){

@@ -21,11 +21,11 @@ import { useClickOutside } from '../utils/hooks/useClickOutside';
 interface ModalProps {
   show: boolean;
   type: string;
-  taskId?: number;
+  taskObj: { completed: boolean, id: number, title: string, date: string }
   onCloseButtonClick: (isShow: boolean) => void;
 }
 
-const Modal:FC<ModalProps> = (props: ModalProps) => {
+const Modal: FC<ModalProps> = (props: ModalProps) => {
   const { addTask, deleteTask, editTask } = React.useContext(
     TasksContext
   ) as TasksContextType;
@@ -37,7 +37,7 @@ const Modal:FC<ModalProps> = (props: ModalProps) => {
 
   const [errorCaption, setErrorCaption] = useState("");
 
-  const handleError = (error: string) =>{
+  const handleError = (error: string) => {
     setErrorCaption(error)
   }
   const handleCloseButton = () => {
@@ -67,17 +67,17 @@ const Modal:FC<ModalProps> = (props: ModalProps) => {
     }
   };
   const handleDeleteClick = async () => {
-    if (props.taskId) {
-      deleteTask(props.taskId)
-      props.onCloseButtonClick(false);
-    }
+    deleteTask(props.taskObj.id)
+    props.onCloseButtonClick(false);
   };
+  
   const handleChangeClick = async () => {
-    if (changeNameRef.current && changeNameRef.current.value.trim() && props.taskId) {
+    if (changeNameRef.current && changeNameRef.current.value.trim()) {
       const todo = {
-        id: props.taskId,
-        title:changeNameRef.current.value.trim(),
-        date: fullDate,
+        id: props.taskObj.id,
+        title: changeNameRef.current.value.trim(),
+        completed: props.taskObj.completed,
+        date: props.taskObj.date,
       };
       const isSuccess = await editTask(todo, handleError)
       isSuccess ? handleCloseButton() : false;
@@ -99,7 +99,7 @@ const Modal:FC<ModalProps> = (props: ModalProps) => {
   const ref = useClickOutside(() => {
     handleCloseButton()
   });
-  
+
   if (!props.show) {
     return null;
   }
