@@ -1,63 +1,41 @@
-import User from "../models/User.js";
-import { Op } from "sequelize";
-import { comparePasswords, generateAccessToken } from "../utils/auth.js";
-import { userController } from "./index.js";
-// import BadRequest from 'http-errors';
+import pkg from "http-errors";
+const { BadRequest } = pkg;
+import { AuthService } from "../services/index.js";
 
 const login = async (req, res) => {
-  if (!req.body) return res.send("No data send!");
-
+  // if (!req.body) throw new BadRequest("No data send!");
   const [login, password] = [req.body.login, req.body.password];
   try {
-    const user = await User.findOne({
-      where: {
-        [Op.or]: [
-          {
-            email: login,
-          },
-          {
-            login: login,
-          },
-        ],
-      },
-    });
-    if (!user) return res.status(500).send("User not found!");
-    if (!(await comparePasswords(password, user.password))) {
-      return res.status(400).send("Invalid login or password!");
-    }
-    return res.send(generateAccessToken(user.id));
-  } catch (err) {
-    console.log(err);
+    const result = await AuthService.login(login, password);
+    res.json(result);
+  } catch (error) {
+    res.status(400).send(error.message);
   }
 };
 
 const register = async (req, res) => {
-  if (!req.body) return res.send("No data send!");
+  // if (!req.body) throw new BadRequest("No data send!");
   const [login, email, password] = [
     req.body.login,
     req.body.email,
     req.body.password,
   ];
-  // let user = await User.findOne({ where: { email } });
   try {
-    let user = await User.findOne({
-      where: {
-        [Op.or]: [
-          {
-            email: email,
-          },
-          {
-            login: login,
-          },
-        ],
-      },
-    });
-    if (user) return res.status(404).send("User already exist!");
-    user = await userController.createUser(login, email, password);
-    return res.send(generateAccessToken(user.id));
-  } catch (err) {
-    console.log(err);
+    const result = await AuthService.register(login, email, password);
+    res.json(result);
+  } catch (error) {
+    res.status(400).send(error.message);
   }
 };
 
-export { login, register };
+const refreshToken = async (req, res) => {
+  // if (!req.body.refreshToken) throw new BadRequest("No refresh token");
+  try {
+    const result = await AuthService.refreshToken(req.body.refreshToken);
+    res.json(result);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
+export { login, register, refreshToken };

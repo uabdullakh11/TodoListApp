@@ -1,162 +1,62 @@
-import getDate from "../helpers/getDate.js";
-import { paginate } from "../helpers/paginate.js";
-import Todo from "../models/Todo.js";
-import { Op } from "sequelize";
-
-const { currentDate } = getDate();
-const pageSize = 10;
-const todos = {
-  allTodosCount: 0,
-  currentTodos: [],
-};
+import { TodoService } from "../services/index.js";
+import pkg from "http-errors";
+const { BadRequest } = pkg;
 
 const getTodos = async (req, res) => {
   const id = req.userId;
-  try {
-    const allTodos = await Todo.findAll({
-      where: {
-        userId: {
-          [Op.eq]: id,
-        },
-      },
-      order: [["date", "DESC"]],
-    });
-    todos.allTodosCount = allTodos.length;
-    todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
-    res.send(todos);
-  } catch (e) {
-    console.log(e);
-  }
+  const todos = await TodoService.getTodos(id, req.query.page, req.query.filter);
+  res.json(todos);
 };
-const getTodayTodos = async (req, res) => {
-  const id = req.userId;
-  try {
-    const allTodos = await Todo.findAll({
-      order: [["date", "DESC"]],
-      where: {
-        userId: {
-          [Op.eq]: id,
-        },
-        date: {
-          [Op.startsWith]: `%${currentDate}`,
-        },
-      },
-    });
-    todos.allTodosCount = allTodos.length;
-    todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
-    res.send(todos);
-  } catch (e) {
-    console.log(e);
-  }
-};
-const getNewTodos = async (req, res) => {
-  const id = req.userId;
-  try {
-    const allTodos = await Todo.findAll({
-      order: [["date", "DESC"]],
-      where: {
-        userId: {
-          [Op.eq]: id,
-        },
-      },
-    });
-    todos.allTodosCount = allTodos.length;
-    todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
-    res.send(todos);
-  } catch (e) {
-    console.log(e);
-  }
-};
-const getPastTodos = async (req, res) => {
-  const id = req.userId;
-  try {
-    const allTodos = await Todo.findAll({
-      order: [["date", "ASC"]],
-      where: {
-        userId: {
-          [Op.eq]: id,
-        },
-      },
-    });
-    todos.allTodosCount = allTodos.length;
-    todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
-    res.send(todos);
-  } catch (e) {
-    console.log(e);
-  }
-};
-const getDoneTodos = async (req, res) => {
-  const id = req.userId;
-  try {
-    const allTodos = await Todo.findAll({
-      order: [["date", "DESC"]],
-      where: {
-        [Op.and]: [{ userId: id }, { completed: true }],
-      },
-    });
-    todos.allTodosCount = allTodos.length;
-    todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
-    res.send(todos);
-  } catch (e) {
-    console.log(e);
-  }
-};
-const getUndoneTodos = async (req, res) => {
-  const id = req.userId;
-  try {
-    const allTodos = await Todo.findAll({
-      order: [["date", "DESC"]],
-      where: {
-        [Op.and]: [{ userId: id }, { completed: false }],
-      },
-    });
-    todos.allTodosCount = allTodos.length;
-    todos.currentTodos = paginate(allTodos, req.query.page, pageSize);
-    res.send(todos);
-  } catch (e) {
-    console.log(e);
-  }
-};
+// const getTodayTodos = async (req, res) => {
+//   const id = req.userId;
+//   const todos = await TodoService.getTodayTodos(id, req.query.page);
+//   res.json(todos);
+// };
+// const getNewTodos = async (req, res) => {
+//   const id = req.userId;
+//   const todos = await TodoService.getNewTodos(id, req.query.page);
+//   res.json(todos);
+// };
+// const getPastTodos = async (req, res) => {
+//   const id = req.userId;
+//   const todos = await TodoService.getPastTodos(id, req.query.page);
+//   res.json(todos);
+// };
+// const getDoneTodos = async (req, res) => {
+//   const id = req.userId;
+//   const todos = await TodoService.getDoneTodos(id, req.query.page);
+//   res.json(todos);
+// };
+// const getUndoneTodos = async (req, res) => {
+//   const id = req.userId;
+//   const todos = await TodoService.getUndoneTodos(id, req.query.page);
+//   res.json(todos);
+// };
 const addTodo = async (req, res) => {
-  if (!req.body) return res.status(400).send("No data sent!");
+  // if (!req.body) throw new BadRequest("No data sent!");
   const userId = req.userId;
   const [title, completed, date] = [
     req.body.title,
     req.body.completed,
     req.body.date,
   ];
-  const taskToCheck = await Todo.findOne({ where: { title, userId: userId } });
-  if (taskToCheck) return res.status(400).send("Task already exist!");
   try {
-    const newTodo = await Todo.create({
-      title: title,
-      date: date,
-      userId: userId,
-      completed: completed,
-    });
-    res.send(newTodo);
-  } catch (e) {
-    console.log(e);
+    const result = await TodoService.addTodo(title, completed, date, userId);
+    res.json(result);
+  } catch (error) {
+    console.log("this todoController " + error.message)
+    res.status(400).send(error.message);
   }
 };
 const deleteTodo = async (req, res) => {
-  if (!req.params.id) return res.status(400).send("No id sent!");
+  if (!req.params.id) throw new BadRequest("No id sent!");
   const userId = req.userId;
   const id = req.params.id;
-  try {
-    await Todo.destroy({
-      where: {
-        userId: userId,
-        id: id,
-      },
-    });
-    res.send(`Delete task ${id} successfully of user ${userId}`);
-  } catch (e) {
-    console.log(e);
-  }
+  const result = await TodoService.deleteTodo(id, userId);
+  res.json(result);
 };
 const updateTodo = async (req, res) => {
-  if (!req.body) return res.status(400).send("No data sent!");
+  // if (!req.body) return res.status(400).send("No data sent!");
   const userId = req.userId;
   const [id, title, completed, date] = [
     req.body.id,
@@ -165,56 +65,27 @@ const updateTodo = async (req, res) => {
     req.body.date,
   ];
   try {
-    if (req.query.update == "title") {
-      const taskToCheck = await Todo.findOne({ where: { title, userId: userId } });
-      if (taskToCheck) return res.status(400).send("Task with this title already exist!");
-      await Todo.update(
-        {
-          title: title,
-          date: date,
-        },
-        {
-          where: {
-            id: {
-              [Op.eq]: id,
-            },
-            userId: {
-              [Op.eq]: userId,
-            },
-          },
-        }
-      );
-    } else if (req.query.update == "completed") {
-      await Todo.update(
-        {
-          completed: completed,
-          date: date,
-        },
-        {
-          where: {
-            id: {
-              [Op.eq]: id,
-            },
-            userId: {
-              [Op.eq]: userId,
-            },
-          },
-        }
-      );
-    }
-    res.send(`Update successfully`);
-  } catch (e) {
-    console.log(e);
+    const result = await TodoService.updateTodo(
+      id,
+      userId,
+      title,
+      completed,
+      date,
+      req.query.update
+    );
+    res.json(result);
+  }catch (error) {
+    res.status(400).send(error.message);
   }
 };
 
 export {
   getTodos,
-  getTodayTodos,
-  getNewTodos,
-  getPastTodos,
-  getDoneTodos,
-  getUndoneTodos,
+  // getTodayTodos,
+  // getNewTodos,
+  // getPastTodos,
+  // getDoneTodos,
+  // getUndoneTodos,
   addTodo,
   deleteTodo,
   updateTodo,

@@ -6,7 +6,7 @@ import { sequelize } from "./models/index.js";
 import { config } from "./config/index.js";
 import morgan from "morgan";
 import { authRouter } from "./routes/authRouter.js";
-import { errorHandler } from './utils/errorHandlers.js';
+import { errorHandler } from './middleware/errorHandlers.js';
 
 const app = express();
 
@@ -20,7 +20,6 @@ app.use(cors());
 app.use(morgan("tiny"));
 
 app.use('/static/avatars', express.static('./static/avatars'));
-// app.use('static/avatars', express.static(path.join(__dirname, 'static/avatars')));
 
 app.use("/api/users", userRouter);
 app.use("/api/todos", todoRouter);

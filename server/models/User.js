@@ -36,17 +36,17 @@ const User = sequelize.define("users", {
     allowNull: false,
   },
 });
-sequelize
-  .sync({ force: false })
-  .then(() =>{
-    User.hasMany(Todo, {
-      as: 'todo',
-      foreignKey: {
-        name: 'userId',
-      },
-    });
-    console.log("Synchronized tables");
-  })
-  .catch((err) => console.log(err));
+// sequelize
+//   .sync({ force: false })
+//   .then(() =>{
+//     User.hasMany(Todo, {
+//       as: 'todo',
+//       foreignKey: {
+//         name: 'userId',
+//       },
+//     });
+//     console.log("Synchronized tables");
+//   })
+//   .catch((err) => console.log(err));
 
 export default User;
