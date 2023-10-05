@@ -5,13 +5,12 @@ import { ErrorCaption, FormTitle, LinkTo } from "@/styles/text";
 import { Input } from "@/styles/inputs";
 import { AuthButton } from "@/styles/buttons";
 import { useState } from "react";
-import { api } from "@/utils/axios/axios";
 import { useRouter } from "next/router";
-import axios from "axios";
+import { login } from "@/utils/services/auth.service";
 
 
 export default function SignIn() {
-  const [login, setLogin] = useState<string>("")
+  const [userLogin, setLogin] = useState<string>("")
   const [password, setPassword] = useState<string>("")
   const [error, setError] = useState<string>("")
 
@@ -19,26 +18,28 @@ export default function SignIn() {
 
   const handleSubmitLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!login.trim() || !password.trim() ){
+    if (!userLogin.trim() || !password.trim()) {
       setError("Please enter login and password!")
     }
     else {
       setError("");
       try {
         const userData = {
-          login: login.trim(),
+          login: userLogin.trim(),
           password,
         }
-        const token = await api.post('api/auth/login', userData)
-        sessionStorage.setItem('ACCESS_TOKEN', token.data.ACCESS_TOKEN)
-        sessionStorage.setItem('expires_in', token.data.expires_in)
-        sessionStorage.setItem('REFRESH_TOKEN', token.data.REFRESH_TOKEN)
+        await login(userData);
+        // const token = await axiosInstance.post('api/auth/login',userData)
+        // sessionStorage.setItem('ACCESS_TOKEN', token.data.ACCESS_TOKEN)
+        // sessionStorage.setItem('expires_in', token.data.expires_in)
+        // sessionStorage.setItem('REFRESH_TOKEN', token.data.REFRESH_TOKEN)
         router.push("/");
       }
-      catch(err){
-        if (axios.isAxiosError(err) && err.response){
-          setError(err.response.data)
-        }
+      catch (err) {
+        setError(err.message)
+        // if (axios.isAxiosError(err) && err.response){
+        //   setError(err.response.data.message)
+        // }
       }
     }
   }

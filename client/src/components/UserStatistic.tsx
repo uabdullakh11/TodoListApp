@@ -1,5 +1,5 @@
 import { AllTime, StatisticContainer, ThisWeek } from "@/styles/containers"
-import { api } from "@/utils/axios/axios"
+import { getUserStatistic } from "@/utils/services/user.service"
 import { useEffect, useState } from "react"
 
 export const UserStatistic = () => {
@@ -8,9 +8,9 @@ export const UserStatistic = () => {
     useEffect(()=>{
         const getStatistics = async () =>{
             try {
-                const res = await api('api/users/statistic')
-                setWeekStatistic(res.data.WeekPercant)
-                setAllTimeStatistic(res.data.AllTimePercant)
+                const {WeekPercant,AllTimePercant } = await getUserStatistic();
+                setWeekStatistic(WeekPercant)
+                setAllTimeStatistic(AllTimePercant)
             }
             catch(err){
                 console.log(err)

@@ -40,6 +40,7 @@ const Modal: FC<ModalProps> = (props: ModalProps) => {
   const handleError = (error: string) => {
     setErrorCaption(error)
   }
+
   const handleCloseButton = () => {
     props.onCloseButtonClick(false)
     setErrorCaption("");
@@ -56,12 +57,17 @@ const Modal: FC<ModalProps> = (props: ModalProps) => {
   const handleSaveClick = async () => {
     if (nameInputRef.current && nameInputRef.current.value.trim()) {
       const todo = {
-        title: nameInputRef.current.value,
+        title: nameInputRef.current.value.trim(),
         completed: false,
         date: fullDate,
       };
-      const isSuccess = await addTask(todo, handleError)
-      isSuccess ? handleCloseButton() : false;
+      try {
+        const isSuccess = await addTask(todo, handleError)
+        isSuccess ? handleCloseButton() : false;
+      }
+      catch(err){
+        console.log(err)
+      }
     } else {
       setErrorCaption("Please enter name of task!");
     }

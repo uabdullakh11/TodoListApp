@@ -7,6 +7,7 @@ import { ChangePassBtn } from "@/styles/buttons";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { api } from '@/utils/axios/axios';
+import { changePassword } from '@/utils/services/user.service';
 
 const ChangePassForm = () => {
     const [currentPassword, setCurrentPassword] = useState<string>("")
@@ -32,14 +33,18 @@ const ChangePassForm = () => {
                     currentPassword,
                     newPassword,
                 }
-                await api.patch('api/users/password', userNewPassword)
-                sessionStorage.removeItem('token')
+                // await api.patch('api/users/password', userNewPassword)
+                await changePassword(userNewPassword)
+                sessionStorage.removeItem('ACCESS_TOKEN')
+                sessionStorage.removeItem('REFRESH_TOKEN')
+                sessionStorage.removeItem('expires_in')
                 router.push("/login");
             }
             catch (err) {
-                if (axios.isAxiosError(err) && err.response) {
-                    setError(err.response.data)
-                }
+                setError(err.message)
+                // if (axios.isAxiosError(err) && err.response) {
+                //     setError(err.response.data)
+                // }
             }
         }
     }

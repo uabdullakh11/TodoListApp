@@ -1,20 +1,21 @@
-import axios, { AxiosRequestConfig, InternalAxiosRequestConfig } from "axios";
+import axios from "axios";
 export const api = axios.create({
   baseURL: "http://localhost:5000",
 });
+export const axiosInstance = axios.create({
+  baseURL: "http://localhost:5000",
+})
 
 api.interceptors.request.use(async (request) => {
   const refresh_token = sessionStorage.getItem("REFRESH_TOKEN");
   const accessTokenExpDate = Number(sessionStorage.getItem("expires_in"));
-  const nowTime = Math.floor(new Date().getTime() / 1000) - 60;
+  const nowTime = Math.floor(new Date().getTime() / 1000) - 3600;
   if (refresh_token && accessTokenExpDate <= nowTime) {
-    console.log("need to refresh");
     return axios
       .post("http://localhost:5000/api/auth/refresh", {
         refreshToken: refresh_token,
       })
       .then((res) => {
-        console.log(res.data);
         request.headers["Authorization"] = `Bearer ${res.data.ACCESS_TOKEN}`;
         sessionStorage.setItem("ACCESS_TOKEN", res.data.ACCESS_TOKEN);
         sessionStorage.setItem("expires_in", res.data.expires_in);
@@ -47,6 +48,9 @@ api.interceptors.response.use(
           return res;
         })
         .catch((err) => console.error(err));
+    }
+    else {
+      return Promise.reject(error)
     }
   }
 );

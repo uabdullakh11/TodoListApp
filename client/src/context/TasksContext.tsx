@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ITask, TasksContextType } from "@/types/types";
 import { api } from "@/utils/axios/axios";
 import axios from "axios";
-import { getTasks } from "@/utils/services/todo.service";
+import { addTodo, deleteTodo, getTasks, updateTodo } from "@/utils/services/todo.service";
 
 interface Props {
   children: React.ReactNode;
@@ -19,44 +19,6 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
 
   const getTodos = React.useCallback(async (type: string) => {
     try {
-      // switch (type) {
-      //   case "All":
-      //     // const all = await api(`/api/todos?page=${currentPage}`);
-      //     const all = await getTasks('all', currentPage);
-      //     console.log(all)
-      //     // setTasksArray(all.data.currentTodos)
-      //     // setTasksCount(all.data.allTodosCount)
-      //     break;
-      //   case "Today":
-      //     const today = await api(`/api/todos/today?page=${currentPage}`);
-      //     setTasksArray(today.data.currentTodos)
-      //     setTasksCount(today.data.allTodosCount)
-      //     break;
-      //   case "Done":
-      //     const done = await api(`/api/todos/done?page=${currentPage}`);
-      //     setTasksArray(done.data.currentTodos)
-      //     setTasksCount(done.data.allTodosCount)
-      //     break;
-      //   case "Undone":
-      //     const undone = await api(`/api/todos/undone?page=${currentPage}`);
-      //     setTasksArray(undone.data.currentTodos)
-      //     setTasksCount(undone.data.allTodosCount)
-      //     break;
-      //   case "New":
-      //     const newTodos = await api(`/api/todos/new?page=${currentPage}`);
-      //     setTasksArray(newTodos.data.currentTodos)
-      //     setTasksCount(newTodos.data.allTodosCount)
-      //     break;
-      //   case "Past":
-      //     const past = await api(`/api/todos/past?page=${currentPage}`);
-      //     setTasksArray(past.data.currentTodos)
-      //     setTasksCount(past.data.allTodosCount)
-      //     break;
-      //   default:
-      //     const res = await api(`/api/todos?page=${currentPage}`);
-      //     setTasksArray(res.data.currentTodos)
-      //     setTasksCount(res.data.allTodosCount)
-      // }
       const all = await getTasks(type, currentPage);
       setTasksArray(all.currentTodos)
       setTasksCount(all.allTodosCount)
@@ -82,21 +44,25 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
   const editTask = async (todo: ITask, handleError: (error: string) => void): Promise<boolean | undefined> => {
     try {
       // await api.put("api/todos?update=title", {id, title, date});
-      await api.put("api/todos?update=title", todo)
+      // await api.put("api/todos?update=title", todo)
+      await updateTodo("title", todo)
       getTodos("today")
       return true;
     }
     catch (err) {
-      if (axios.isAxiosError(err) && err.response) {
-        handleError(err.response.data)
-        return false;
-      }
+      handleError(err.message)
+      return false;
+      // if (axios.isAxiosError(err) && err.response) {
+      //   handleError(err.response.data)
+      //   return false;
+      // }
     }
   }
   const deleteTask = async (id: number) => {
     try {
-      await api.delete(`api/todos/${id}`);
+      // await api.delete(`api/todos/${id}`);
       // setTasksCount(prev=>prev-1)
+      await deleteTodo(id)
       getTodos("today")
     }
     catch (err) {
@@ -105,29 +71,20 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
 
   }
   const addTask = async (todo: { title: string, completed: boolean, date: string }, handleError: (error: string) => void): Promise<boolean | undefined> => {
-    const newTodo: { title: string, completed: boolean, date: string } = {
-      title: todo.title.trim(),
-      completed: todo.completed,
-      date: todo.date,
-    };
     try {
-      await api.post("/api/todos", newTodo);
-      // setTasksCount(prev=>prev+1)
+      await addTodo(todo)
       getTodos("today")
       return true;
     }
     catch (err) {
-      if (axios.isAxiosError(err) && err.response) {
-        // setErrors(err.response.data)
-        console.log(err)
-        handleError(err.response.data)
-        return false;
-      }
+      handleError(err.message)
+      return false;
     }
   }
   const updateTask = async (todo: ITask) => {
     try {
-      await api.put("api/todos?update=completed", todo);
+      // await api.put("api/todos?update=completed", todo);
+      await updateTodo("completed", todo);
       getTodos("today")
     }
     catch (err) {

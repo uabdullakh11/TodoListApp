@@ -6,8 +6,7 @@ import { Input } from "@/styles/inputs";
 import { AuthButton } from "@/styles/buttons";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { api } from "@/utils/axios/axios";
-import axios from "axios";
+import { register } from "@/utils/services/auth.service";
 
 
 export default function SignUp() {
@@ -35,15 +34,18 @@ export default function SignUp() {
           password,
           login: login.trim(),
         }
-        const token = await api.post('api/auth/register', userData)
-        sessionStorage.setItem('ACCESS_TOKEN', token.data.ACCESS_TOKEN)
-        sessionStorage.setItem('REFRESH_TOKEN', token.data.REFRESH_TOKEN)
+        await register(userData)
+        // const token = await api.post('api/auth/register', userData)
+        // const token = await axiosInstance.post('api/auth/register', userData)
+        // sessionStorage.setItem('ACCESS_TOKEN', token.data.ACCESS_TOKEN)
+        // sessionStorage.setItem('REFRESH_TOKEN', token.data.REFRESH_TOKEN)
         router.push("/");
       }
       catch (err) {
-        if (axios.isAxiosError(err) && err.response){
-          setError(err.response.data)
-        }
+        setError(err.message)
+        // if (axios.isAxiosError(err) && err.response){
+        //   setError(err.response.data.message)
+        // }
       }
     }
   }

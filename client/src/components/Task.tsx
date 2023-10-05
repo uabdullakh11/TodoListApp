@@ -66,6 +66,7 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
     // day.setDate(day.getDate() - 1);
     // console.log(day.toLocaleString("en-US"));
     // console.log(date.toDateString());
+    console.log(Math.floor(new Date().getTime()/1000-86400))
     if (date.slice(0, 9) === currentDate) {
       setTaskDate(`Today at ${date.slice(11, 16)}`)
     }

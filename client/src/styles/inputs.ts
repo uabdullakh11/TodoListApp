@@ -23,7 +23,7 @@ const ChangeInput = styled.textarea`
   text-align: center;
   height: 3vh;
   border: none;
-  overflow: auto;
+  overflow: hidden;
   outline: none;
   resize: none;
   box-shadow: none;

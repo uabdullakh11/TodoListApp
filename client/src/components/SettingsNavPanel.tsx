@@ -8,7 +8,7 @@ const NavBlock = styled.div`
   font-weight: 400;
 `;
 interface SettingPanelProps {
-  handleClick: (value:boolean)=>void;
+  handleClick: (value: boolean) => void;
 }
 const SettingsNavPanel: FC<SettingPanelProps> = (props: SettingPanelProps) => {
   const router = useRouter()
@@ -17,17 +17,18 @@ const SettingsNavPanel: FC<SettingPanelProps> = (props: SettingPanelProps) => {
   const [securityClick, setSecurityClick] = useState<boolean>(false)
 
   const handleLogout = async () => {
-    sessionStorage.removeItem("ACCESS_TOKEN")
-    sessionStorage.removeItem("REFRESH_TOKEN")
+    sessionStorage.removeItem('ACCESS_TOKEN')
+    sessionStorage.removeItem('REFRESH_TOKEN')
+    sessionStorage.removeItem('expires_in')
     router.push('/login')
   }
 
-  const handleProfileClick = () =>{
+  const handleProfileClick = () => {
     setProfileClick(!profileClick)
     props.handleClick(!profileClick)
     setSecurityClick(false)
   }
-  const handleSecurityClick = () =>{
+  const handleSecurityClick = () => {
     setSecurityClick(!securityClick)
     setProfileClick(false)
     props.handleClick(!profileClick)

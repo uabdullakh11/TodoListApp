@@ -7,6 +7,7 @@ import { CancelBtn, ChangeBtn } from "@/styles/buttons";
 import { useClickOutside } from '../utils/hooks/useClickOutside';
 import axios from "axios";
 import { api } from "@/utils/axios/axios";
+import { changeUserData, getUser } from "@/utils/services/user.service";
 
 export const UserInfo: FC= () => {
 
@@ -64,18 +65,21 @@ export const UserInfo: FC= () => {
     const handleUserNameChange = async () => {
         if (userNameRef.current) {
             try {
-                const data = {
+                const userData = {
                     newLogin: userNameRef.current.value,
+                    newEmail: userEmail
                 }
-                const res = await api.patch(`api/users?change=username`, data)
-                setUserName(res.data)
+                const res = await changeUserData(userData, 'username')
+                // const res = await changeUserData(userNameRef.current.value, 'username')
+                setUserName(res)
                 // userNameRef.current.value = res.data
                 sideEffects(userNameRef.current, 'clear','name' )
             }
             catch (err) {
-                if (axios.isAxiosError(err) && err.response) {
-                    setErrorNameCaption(err.response.data)
-                }
+                setErrorNameCaption(err.message)
+                // if (axios.isAxiosError(err) && err.response) {
+                //     setErrorNameCaption(err.response.data)
+                // }
             }
         }
     }
@@ -83,18 +87,21 @@ export const UserInfo: FC= () => {
     const handleEmailChange = async () => {
         if (emailRef.current) {
             try {
-                const data = {
-                    newEmail: emailRef.current.value,
+                const userData = {
+                    newLogin: userName,
+                    newEmail: emailRef.current.value
                 }
-                const res = await api.patch(`api/users?change=email`, data)
-                setEmail(res.data)
+                const res = await changeUserData(userData, 'email')
+                // const res = await changeUserData(emailRef.current.value, 'email')
+                setEmail(res)
                 // emailRef.current.value = res.data;
                 sideEffects(emailRef.current, 'clear','email' )
             }
             catch (err) {
-                if (axios.isAxiosError(err) && err.response) {
-                    setErrorEmailCaption(err.response.data)
-                }
+                setErrorEmailCaption(err.message)
+                // if (axios.isAxiosError(err) && err.response) {
+                //     setErrorEmailCaption(err.response.data)
+                // }
             }
         }
     }
@@ -102,9 +109,10 @@ export const UserInfo: FC= () => {
     useEffect(() => {
         const getUserData = async () => {
           try {
-            const res = await api('/api/users')
-            setUserName(res.data[0].login)
-            setEmail(res.data[0].email)
+            
+            const res = await getUser()
+            setUserName(res.login)
+            setEmail(res.email)
             // userNameRef.current.value = res.data[0].login
             // emailRef.current.value= res.data[0].email
           }
