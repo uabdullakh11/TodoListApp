@@ -1,16 +1,13 @@
 import multer from "multer";
-import fs from 'fs';
 import path from 'path';
-import getDate from "../helpers/getDate.js";
 
-const {time} = getDate();
 const imgAllowed = /image\/jpeg|image\/jpg|image\/png|image\/svg/i;
 
 const imgFilter = (req, file, cb) => {
   if (imgAllowed.test(file.mimetype)) {
     cb(null, true);
   }
-  else cb("Not allowed type", false);
+  else cb(new Error("Not allowed type"), false);
 };
 
 const imgStorage = multer.diskStorage({

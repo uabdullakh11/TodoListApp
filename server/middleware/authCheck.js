@@ -1,7 +1,7 @@
 import { config } from "../config/index.js";
 import { verifyToken } from "../utils/auth.js";
 import pkg from "http-errors";
-const { Forbidden, BadRequest } = pkg;
+const {  BadRequest } = pkg;
 
 export function authCheck(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -19,8 +19,9 @@ export function authCheck(req, res, next) {
     /// authUser { id: 4, type: 'ACCESS', iat: 1696360398, exp: 1696363998 }
     req.userId = authUser.id;
   } catch (error) {
-    next(error, null);
-    return;
+    // return res.status(401).send(error.message)
+    next(error);
+    // return;
   }
   next();
 }

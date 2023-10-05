@@ -42,7 +42,12 @@ export const loginValidate = [
     .withMessage("Login or email is required")
     .isString()
     .withMessage("Login or emai should be string")
+    .isLength({ min: 3 })
+    .withMessage("Login must be at least 3 characters")
     .custom(async (value) => {
+      if (/@/i.test(value) && !/\S+@\S+\.\S+/.test(value)) {
+        throw new Error("Invalid email address");
+      }
       const isUserExist = await User.findOne({
         where: {
           [Op.or]: [
@@ -100,21 +105,24 @@ export const passwordValidate = [
 ];
 
 export const changeUserInfoValidate = [
-  body("newLogin").custom(async (value) => {
-    const existingUser = await User.findOne({
-      where: { login: value },
-    });
-    if (existingUser) {
-      throw new Error("This login already exists!");
-    }
-  }),
+  body("newLogin")
+    .isLength({ min: 3 })
+    .withMessage("Login must be at least 3 characters"),
+    // .custom(async (value) => {
+    //   const existingUser = await User.findOne({
+    //     where: { login: value },
+    //   });
+    //   if (existingUser) {
+    //     throw new Error("This login already exists!");
+    //   }
+    // }),
   body("newEmail")
     .isEmail()
-    .withMessage("Provide valid email")
-    .custom(async (value) => {
-      const existingUser = await User.findOne({ where: { email: value } });
-      if (existingUser) {
-        throw new Error("This email already exists!");
-      }
-    }),
+    .withMessage("Provide valid email"),
+    // .custom(async (value) => {
+    //   const existingUser = await User.findOne({ where: { email: value } });
+    //   if (existingUser) {
+    //     throw new Error("This email already exists!");
+    //   }
+    // }),
 ];

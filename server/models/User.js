@@ -23,9 +23,9 @@ const User = sequelize.define("users", {
     allowNull: false,
     protected: true,
   },
-  avatar:{
+  avatar: {
     type: DataTypes.STRING,
-    defaultValue: "/static/avatars/person-logo.svg"
+    defaultValue: "/static/avatars/person-logo.svg",
   },
   createdAt: {
     type: DataTypes.DATE,
@@ -36,6 +36,12 @@ const User = sequelize.define("users", {
     allowNull: false,
   },
 });
+// User.hasMany(Todo, {
+//   as: "todo",
+//   foreignKey: {
+//     name: "userId",
+//   },
+// });
 // sequelize
 //   .sync({ force: false })
 //   .then(() =>{

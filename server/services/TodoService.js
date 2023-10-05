@@ -81,93 +81,10 @@ const getTodos = async (id, page, filter) => {
     todos.currentTodos = paginate(tasks, page, pageSize);
     return todos;
   } catch (error) {
-    throw new BadRequest(error);
+    throw new Error(error);
   }
 };
-// const getTodayTodos = async (id, page) => {
-//   try {
-//     const allTodos = await Todo.findAll({
-//       order: [["date", "DESC"]],
-//       where: {
-//         userId: {
-//           [Op.eq]: id,
-//         },
-//         date: {
-//           [Op.startsWith]: `%${currentDate}`,
-//         },
-//       },
-//     });
-//     todos.allTodosCount = allTodos.length;
-//     todos.currentTodos = paginate(allTodos, page, pageSize);
-//     return todos;
-//   } catch (error) {
-//     throw new BadRequest(error);
-//   }
-// };
-// const getNewTodos = async (id, page) => {
-//   try {
-//     const allTodos = await Todo.findAll({
-//       order: [["date", "DESC"]],
-//       where: {
-//         userId: {
-//           [Op.eq]: id,
-//         },
-//       },
-//     });
-//     todos.allTodosCount = allTodos.length;
-//     todos.currentTodos = paginate(allTodos, page, pageSize);
-//     return todos;
-//   } catch (error) {
-//     throw new BadRequest(error);
-//   }
-// };
-// const getPastTodos = async (id, page) => {
-//   try {
-//     const allTodos = await Todo.findAll({
-//       order: [["date", "ASC"]],
-//       where: {
-//         userId: {
-//           [Op.eq]: id,
-//         },
-//       },
-//     });
-//     todos.allTodosCount = allTodos.length;
-//     todos.currentTodos = paginate(allTodos, page, pageSize);
-//     return todos;
-//   } catch (error) {
-//     throw new BadRequest(error);
-//   }
-// };
-// const getDoneTodos = async (id, page) => {
-//   try {
-//     const allTodos = await Todo.findAll({
-//       order: [["date", "DESC"]],
-//       where: {
-//         [Op.and]: [{ userId: id }, { completed: true }],
-//       },
-//     });
-//     todos.allTodosCount = allTodos.length;
-//     todos.currentTodos = paginate(allTodos, page, pageSize);
-//     return todos;
-//   } catch (error) {
-//     throw new BadRequest(error);
-//   }
-// };
-// const getUndoneTodos = async (id, page) => {
-//   try {
-//     const allTodos = await Todo.findAll({
-//       order: [["date", "DESC"]],
-//       where: {
-//         [Op.and]: [{ userId: id }, { completed: false }],
-//       },
-//     });
-//     todos.allTodosCount = allTodos.length;
-//     todos.currentTodos = paginate(allTodos, page, pageSize);
-//     return todos;
-//   } catch (error) {
-//     throw new BadRequest(error);
-//   }
-// };
+
 const addTodo = async (title, completed, date, id) => {
   const taskToCheck = await Todo.findOne({ where: { title, userId: id } });
   if (taskToCheck) throw new BadRequest("Task already exist!");
@@ -194,7 +111,7 @@ const deleteTodo = async (id, userId) => {
     });
     return `Delete task ${id} successfully of user ${userId}`;
   } catch (error) {
-    throw new BadRequest(error);
+    throw new Error(error);
   }
 };
 const updateTodo = async (id, userId, title, completed, date, type) => {
@@ -246,11 +163,6 @@ const updateTodo = async (id, userId, title, completed, date, type) => {
 };
 export {
   getTodos,
-  // getTodayTodos,
-  // getNewTodos,
-  // getPastTodos,
-  // getDoneTodos,
-  // getUndoneTodos,
   addTodo,
   deleteTodo,
   updateTodo,

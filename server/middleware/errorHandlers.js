@@ -7,7 +7,7 @@ export function errorHandler(err, req, res, next) {
       console.error(err);
       message = 'Internal Server Error';
     }
-    // if (err instanceof ApiError)
+    // console.log(err)
     res.status(statusCode).json({message: err.message, errors: err.errors});
   }
   

@@ -84,7 +84,7 @@ const refreshToken = async (refreshToken) => {
     const token = await Token.findOne({
       where: { token: refreshToken },
     });
-    if (!token) throw new BadRequest("Don't have refresh token");
+    if (!token) throw new BadRequest("Invalid refresh token");
     const user = verifyToken(refreshToken, config.JWT_REFRESH_SECRET_KEY);
     if (!user) throw new BadRequest("Invalid refresh token");
 

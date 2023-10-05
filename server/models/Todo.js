@@ -78,4 +78,11 @@ Todo.belongsTo(User, {
   },
 });
 
+User.hasMany(Todo, {
+  as: "todo",
+  foreignKey: {
+    name: "userId",
+  },
+});
+
 export default Todo;

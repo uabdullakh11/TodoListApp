@@ -15,7 +15,7 @@ const createUser = async (login, email, password) => {
     });
     return newUser;
   } catch (error) {
-    throw new BadRequest(error);
+    throw new Error(error);
   }
 };
 
@@ -30,7 +30,7 @@ const deleteUser = async (id) => {
     });
     return `Deleted user with id: ${id}`;
   } catch (error) {
-    throw new BadRequest(error);
+    throw new Error(error);
   }
 };
 
@@ -55,7 +55,7 @@ const changeUserPassword = async (id, currentPassword, newPassword) => {
       user.password
     );
     if (!isPasswordCorrect)
-      return new BadRequest("Incorrect current password!");
+      throw new BadRequest("Incorrect current password!");
     user.password = hashPassword(newPassword);
     user.save();
     return "Password changed successfully!";
@@ -71,6 +71,12 @@ const changeUserInfo = async (id, newLogin, newEmail, type) => {
       //   where: { login: newLogin },
       // });
       // if (findUsers) throw new BadRequest("This login is already exist!");
+      const existingUser = await User.findOne({
+        where: { login: newLogin },
+      });
+      if (existingUser) {
+        throw new BadRequest("This login already exists!");
+      }
       const user = await User.findOne({ where: { id } });
       user.login = newLogin;
       user.save();
@@ -80,13 +86,17 @@ const changeUserInfo = async (id, newLogin, newEmail, type) => {
       //   where: { email: newEmail },
       // });
       // if (findUsers) throw new BadRequest("This email is already exist!");
+      const existingUser = await User.findOne({ where: { email: newEmail } });
+      if (existingUser) {
+        throw new BadRequest("This email already exists!");
+      }
       const user = await User.findOne({ where: { id } });
       user.email = newEmail;
       user.save();
       return user.email;
     }
   } catch (error) {
-    throw new Error(error);
+    throw new BadRequest(error);
   }
 };
 
@@ -105,7 +115,7 @@ const getUserById = async (id) => {
     });
     return userInfo;
   } catch (error) {
-    throw new BadRequest(error);
+    throw new Error(error);
   }
 };
 
@@ -141,7 +151,7 @@ const getUserStatistic = async (id) => {
     const WeekPercant = Math.floor((countWeekDone / countWeekAll) * 100);
     return { AllTimePercant, WeekPercant };
   } catch (error) {
-    throw new BadRequest(error);
+    throw new Error(error);
   }
 };
 
