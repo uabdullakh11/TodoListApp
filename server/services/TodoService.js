@@ -141,8 +141,8 @@ const updateTodo = async (id, userId, title, completed, date, type) => {
     } else if (type == "completed") {
       await Todo.update(
         {
-          completed: !completed,
-          date: date,
+          completed,
+          date,
         },
         {
           where: {
@@ -161,9 +161,4 @@ const updateTodo = async (id, userId, title, completed, date, type) => {
     throw new BadRequest(error);
   }
 };
-export {
-  getTodos,
-  addTodo,
-  deleteTodo,
-  updateTodo,
-};
+export { getTodos, addTodo, deleteTodo, updateTodo };

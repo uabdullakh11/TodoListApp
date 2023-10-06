@@ -2,14 +2,13 @@ import { sequelize } from "./index.js";
 import { DataTypes } from "sequelize";
 import getDate from "../helpers/getDate.js";
 import User from "./User.js";
+import { v4 as uuid } from 'uuid';
 
 const { fullDate } = getDate();
 const Todo = sequelize.define("tasks", {
   id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+    type: DataTypes.UUID,
     primaryKey: true,
-    allowNull: false,
   },
   title: {
     type: DataTypes.STRING,
@@ -33,6 +32,10 @@ const Todo = sequelize.define("tasks", {
     type: DataTypes.DATE,
     allowNull: false,
   },
+});
+
+Todo.beforeCreate(async (todo, options) => {
+  todo.id = uuid()
 });
 
 // Todo.prototype.getStatistic = function (id) {

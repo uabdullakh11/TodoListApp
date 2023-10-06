@@ -1,17 +1,13 @@
 import { sequelize } from "./index.js";
 import { DataTypes } from "sequelize";
+import { v4 as uuid } from 'uuid';
+
 const Token = sequelize.define(
   "refreshToken",
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.UUID,
       primaryKey: true,
-      allowNull: false,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
     },
     token: {
       type: DataTypes.STRING,
@@ -20,13 +16,28 @@ const Token = sequelize.define(
     expiryDate: {
       type: DataTypes.DATE,
       defaultValue:  DataTypes.NOW,
+      allowNull: false,
     //   defaultValue: 86400, //1 day
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
   },
   {
     freezeTableName: true,
   }
 );
+
+
+Token.beforeCreate(async (token, options) => {
+  token.id = uuid()
+});
+
 Token.prototype.verifyExpiration = (token) => {
   return token.expiryDate.getTime() < new Date().getTime();
 };

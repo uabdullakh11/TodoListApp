@@ -1,12 +1,12 @@
 import { sequelize } from "./index.js";
 import { DataTypes } from "sequelize";
-import Todo from "./Todo.js";
+import { v4 as uuid } from "uuid";
+import Token from "./Token.js";
+
 const User = sequelize.define("users", {
   id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+    type: DataTypes.UUID,
     primaryKey: true,
-    allowNull: false,
   },
   login: {
     type: DataTypes.STRING,
@@ -36,6 +36,19 @@ const User = sequelize.define("users", {
     allowNull: false,
   },
 });
+
+User.hasOne(Token, {
+  as: "resfreshToken",
+  foreignKey: {
+    name: "userId",
+  },
+});
+Token.belongsTo(User)
+
+User.beforeCreate(async (user, options) => {
+  user.id = uuid();
+});
+
 // User.hasMany(Todo, {
 //   as: "todo",
 //   foreignKey: {

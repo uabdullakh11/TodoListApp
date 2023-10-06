@@ -9,14 +9,18 @@ module.exports = {
         "refreshToken",
         {
           id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
+            type: Sequelize.UUID,
             primaryKey: true,
-            allowNull: false,
           },
           userId: {
-            type: Sequelize.INTEGER,
-            allowNull: false,
+            type: Sequelize.UUID,
+            references: {
+              model: {
+                tableName: "users",
+              },
+              key: "id",
+            },
+            onDelete: 'SET NULL',
           },
           token: {
             type: Sequelize.STRING,
@@ -25,6 +29,15 @@ module.exports = {
           expiryDate: {
             type: Sequelize.DATE,
             defaultValue:  Sequelize.NOW, 
+            allowNull: false,
+          },
+          createdAt: {
+            type: Sequelize.DATE,
+            allowNull: false,
+          },
+          updatedAt: {
+            type: Sequelize.DATE,
+            allowNull: false,
           },
         },
         { transaction }

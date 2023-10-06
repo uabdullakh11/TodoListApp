@@ -9,10 +9,8 @@ module.exports = {
         "users",
         {
           id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
+            type: Sequelize.UUID,
             primaryKey: true,
-            allowNull: false,
           },
           login: {
             type: Sequelize.STRING,
