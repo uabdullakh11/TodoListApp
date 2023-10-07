@@ -1,4 +1,4 @@
-import { AuthForm } from "@/components/AuthForm";
+import { AuthForm } from "@/components/AuthForm/AuthForm";
 import AuthLayout from "@/layouts/AuthLayout";
 import { Form, InputContainer } from "@/styles/containers";
 import { ErrorCaption, FormTitle, LinkTo } from "@/styles/text";
@@ -39,10 +39,12 @@ export default function SignUp() {
         // const token = await axiosInstance.post('api/auth/register', userData)
         // sessionStorage.setItem('ACCESS_TOKEN', token.data.ACCESS_TOKEN)
         // sessionStorage.setItem('REFRESH_TOKEN', token.data.REFRESH_TOKEN)
-        router.push("/");
+        router.push("/tasks");
       }
       catch (err) {
-        setError(err.message)
+        if (err instanceof Error) {
+          setError(err.message)
+        }
         // if (axios.isAxiosError(err) && err.response){
         //   setError(err.response.data.message)
         // }

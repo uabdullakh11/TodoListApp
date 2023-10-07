@@ -13,7 +13,7 @@ export const TasksContext = React.createContext<TasksContextType | null>(null);
 const TasksProvider: React.FC<Props> = ({ children }) => {
 
   const [tasksArray, setTasksArray] = useState<ITask[]>([])
-  const [filter, setFilter] = useState<string>('all')
+  const [filter, setFilter] = useState<string>('today')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [tasksCount, setTasksCount] = useState<number>(10);
 
@@ -31,6 +31,7 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
 
   React.useEffect(() => {
     getTodos(filter)
+    return () => {}
   }, [filter, getTodos])
   // }, [currentPage, filter, getTodos, tasksCount])
 
@@ -50,15 +51,17 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
       return true;
     }
     catch (err) {
-      handleError(err.message)
-      return false;
+      if (err instanceof Error) {
+        handleError(err.message)
+        return false;
+      }
       // if (axios.isAxiosError(err) && err.response) {
       //   handleError(err.response.data)
       //   return false;
       // }
     }
   }
-  const deleteTask = async (id: number) => {
+  const deleteTask = async (id: string) => {
     try {
       // await api.delete(`api/todos/${id}`);
       // setTasksCount(prev=>prev-1)
@@ -77,8 +80,10 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
       return true;
     }
     catch (err) {
-      handleError(err.message)
-      return false;
+      if (err instanceof Error) {
+        handleError(err.message)
+        return false;
+      }
     }
   }
   const updateTask = async (todo: ITask) => {

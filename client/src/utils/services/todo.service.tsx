@@ -25,7 +25,7 @@ const addTodo = async (newTodo: { title: string, completed: boolean, date: strin
     }
 }
 
-const deleteTodo = async (id: number) => {
+const deleteTodo = async (id: string) => {
     try {
         await api.delete(`api/todos/${id}`);
     }

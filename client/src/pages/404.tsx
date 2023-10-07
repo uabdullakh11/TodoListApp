@@ -1,26 +1,17 @@
-import NotFoundPageLayout from "@/layouts/NotFoundPageLayout";
+import ErrorLayout from "@/layouts/ErrorLayout";
 import { Container } from "@/styles/containers";
 import { ErrorTitle, LinkTo } from "@/styles/text";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
-const Error = () => {
-  const router = useRouter();
+function NotFoundPage() {
+    return (
+        <ErrorLayout>
+            <Container>
+                <ErrorTitle $size={45}>404</ErrorTitle>
+                <ErrorTitle $size={30}>This page doesn&apos;t exist</ErrorTitle>
+                <LinkTo href="/">Go back</LinkTo>
+            </Container>
+        </ErrorLayout>
+    )
+}
 
-  useEffect(() => {
-    const interval = setTimeout(() => {
-      router.push("/");
-    }, 5000);
-  }, [router]);
-  return (
-    <NotFoundPageLayout>
-      <Container>
-        <ErrorTitle $size={45}>404</ErrorTitle>
-        <ErrorTitle $size={30}>This page doesn&apos;t exist</ErrorTitle>
-        <LinkTo href="/">Go back</LinkTo>
-      </Container>
-    </NotFoundPageLayout>
-  );
-};
-
-export default Error;
+export default NotFoundPage;

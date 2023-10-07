@@ -1,8 +1,8 @@
-import { ChangePassForm } from "@/components/ChangePassForm";
-import { SettingsNavPanel } from "@/components/SettingsNavPanel";
-import { UserAvatar } from "@/components/UserAvatar";
-import { UserInfo } from "@/components/UserInfo";
-import { UserStatistic } from "@/components/UserStatistic";
+import { ChangePassForm } from "@/components/UserComponents/ChangePassForm/ChangePassForm";
+import { SettingsNavPanel } from "@/components/UserComponents/SettingNavPanel/SettingsNavPanel";
+import { UserAvatar } from "@/components/UserComponents/UserAvatar/UserAvatar";
+import { UserInfo } from "@/components/UserComponents/UserInfo/UserInfo";
+import { UserStatistic } from "@/components/UserComponents/UserStatistic/UserStatistic";
 import AccountLayout from "@/layouts/AccountLayout";
 import { ProfileContainer } from "@/styles/containers";
 import { useState } from "react";

@@ -1,9 +1,13 @@
 import { useEffect, type ReactElement, useState } from 'react'
-import { Header } from "@/components/Header";
-import { AvatarImage, LogoTitle, PageName } from "@/styles/text";
+import { Header } from "@/components/Header/Header";
+import { LogoTitle, PageName } from "@/styles/text";
 import { ProfileLogo } from "@/styles/header";
 import Head from 'next/head';
-import { api } from '@/utils/axios/axios';
+// import Error from 'next/error'
+import Error from "../pages/_error";
+import { getUser } from '@/utils/services/user.service';
+import { AvatarImage } from '@/components/UserComponents/UserAvatar/userAvatarStyles';
+
 
 export default function AccountLayout({
   children,
@@ -12,12 +16,21 @@ export default function AccountLayout({
 }) {
 
   const [linkToAvatar, setLinkToAvatar] = useState<string>("http://localhost:5000/static/avatars/person-logo.svg")
+  const [errorCode, setErrorCode] = useState<number>()
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
+      setErrorCode(403)
+    }
+  }, [])
 
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const res = await api('/api/users/')
-        setLinkToAvatar("http://localhost:5000" + res.data[0].avatar)
+        // const res = await api('/api/users/')
+        // setLinkToAvatar("http://localhost:5000" + res.data[0].avatar)
+        const res = await getUser()
+        setLinkToAvatar("http://localhost:5000" + res.avatar)
       }
       catch (err) {
         console.log(err);
@@ -26,6 +39,11 @@ export default function AccountLayout({
     getUserData()
     // return () => { }
   }, [])
+
+  if (errorCode) {
+    return <Error statusCode={errorCode} />
+  }
+
   return (
     <>
       <Head>
@@ -35,7 +53,7 @@ export default function AccountLayout({
         <>
           <LogoTitle $auth={true}>To-Do</LogoTitle>
           <PageName>Settings</PageName>
-          <ProfileLogo href="/" $profile={true}>
+          <ProfileLogo href="/tasks" $profile={true}>
             <AvatarImage src={linkToAvatar} alt="" height={40} width={40}></AvatarImage>
           </ProfileLogo>
         </>

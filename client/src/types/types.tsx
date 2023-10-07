@@ -1,11 +1,11 @@
 export interface ITask {
   completed: boolean;
   title: string;
-  id: number;
+  id: string;
   date: string;
 }
 export interface IUser {
-  id: number;
+  id: string;
   name: string;
   email: string;
   avatar: string;
@@ -16,7 +16,7 @@ export interface IUser {
 export type TasksContextType = {
   updateTask: (todo:ITask) => void,
   addTask: (todo: {title: string,completed: boolean, date: string}, handleError: (error: string) => void) => Promise<boolean | undefined>,
-  deleteTask: (id: number) => void,
+  deleteTask: (id: string) => void,
   editTask: (todo:ITask, handleError: (error: string) => void) => Promise<boolean | undefined>,
   onPageChange: (page: number) => void,
   handleSetFilter: (value: string) => void,

@@ -1,11 +1,6 @@
 import styled, { css } from "styled-components";
 import Link from "next/link";
-import Image from "next/image";
-export const ModalText = styled.p`
-  color: #9333ea;
-  font-weight: bold;
-  margin: 0;
-`;
+
 export const LogoTitle = styled.div<{ $auth?: boolean }>`
   font-size: 20px;
   font-weight: 700;
@@ -39,32 +34,12 @@ export const Username = styled(Name)`
     display: none;
   }
 `;
-export const TaskName = styled.span`
-  color: #000000;
-  word-break: break-all;
-  max-width: 205px;
-  display: inline-block;
-  @media (max-width: 475px) {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    width: 15vw;
-  }
-`;
-export const DataLine = styled.span`
-  color: #6b7280;
-  word-break: break-all;
-`;
+
 export const ErrorCaption = styled.span`
   color: #f56497;
   background-color: #f564970f;
 `;
-export const PaginationItem = styled.li`
-  cursor: pointer;
-`;
-export const PaginationLink = styled.a<{ $active: boolean }>`
-  ${(props) => (props.$active ? `font-weight: 700;` : ``)}
-`;
+
 // export const PaginationLink = styled.a``;
 export const LinkTo = styled(Link)`
   text-decoration: none;
@@ -77,19 +52,4 @@ export const ErrorTitle = styled.h1<{ $size: number }>`
   text-align: center;
   color: #9333ea;
 `;
-export const UserLogin = styled.div`
-  display:flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-`;
-export const UserEmail = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-`;
 
-export const AvatarImage = styled(Image)`
-  border-radius: 50%;
-`
