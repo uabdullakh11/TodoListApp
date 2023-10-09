@@ -8,6 +8,10 @@ export const Input = styled.input`
   text-indent: 0.5em;
   padding: 5px 0px;
   width: 100%;
+  &:focus{
+    box-shadow: 0 0 0 3px lightskyblue;
+    outline: none;
+  }
 `;
 
 

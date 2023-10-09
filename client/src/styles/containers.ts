@@ -51,16 +51,19 @@ export const NavBlock = styled.div`
   font-size: 16px;
   font-weight: 400;
 `;
-export const NavContainer = styled.div`
+export const NavContainer = styled.div<{$isBurger?:boolean}>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   flex-wrap: wrap;
   gap: 8rem;
-  @media (max-width: 689px) {
-    flex-direction: row;
-    align-items: center;
-    gap: 1em;
+  // @media (max-width: 689px) {
+  //   flex-direction: row;
+  //   align-items: center;
+  //   gap: 1em;
+  // }
+  @media (max-width: 700px) {
+    ${(props)=>(props.$isBurger ? `display: flex;` : `display: none;`) }
   }
 `;

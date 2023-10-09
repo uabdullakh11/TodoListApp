@@ -9,9 +9,14 @@ export const PaginationList = styled.ul`
   align-items: center;
   gap: 1em;
 `;
-export const PaginationItem = styled.li`
+export const PaginationItem = styled.li<{ $active: boolean }>`
   cursor: pointer;
+  ${(props) => (props.$active && `border: 2px solid #9333ea;`)}
 `;
 export const PaginationLink = styled.a<{ $active: boolean }>`
-  ${(props) => (props.$active ? `font-weight: 700;` : ``)}
+  ${(props) => (props.$active &&
+    `font-weight: 700;
+    color:#9333ea;
+    padding: 5px;
+  ` )}
 `;

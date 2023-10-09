@@ -5,6 +5,7 @@ import { NavBlock, NavContainer } from "@/styles/containers";
 
 interface SettingPanelProps {
   handleClick: (value: boolean) => void;
+  isBurger?: boolean;
 }
 const SettingsNavPanel: FC<SettingPanelProps> = (props: SettingPanelProps) => {
   const router = useRouter()
@@ -20,18 +21,18 @@ const SettingsNavPanel: FC<SettingPanelProps> = (props: SettingPanelProps) => {
   }
 
   const handleProfileClick = () => {
-    setProfileClick(!profileClick)
-    props.handleClick(!profileClick)
+    setProfileClick(true)
     setSecurityClick(false)
+    props.handleClick(true)
   }
   const handleSecurityClick = () => {
-    setSecurityClick(!securityClick)
+    setSecurityClick(true)
     setProfileClick(false)
-    props.handleClick(!profileClick)
+    props.handleClick(false)
   }
   return (
     <NavBlock>
-      <NavContainer>
+      <NavContainer $isBurger={props.isBurger}>
         <ButtonsContainer>
           <ProfileBtn $active={profileClick} onClick={handleProfileClick}>Profile</ProfileBtn>
           <SecurtyBtn $active={securityClick} onClick={handleSecurityClick}>Security</SecurtyBtn>

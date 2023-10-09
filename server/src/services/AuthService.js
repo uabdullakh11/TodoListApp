@@ -88,10 +88,12 @@ const refreshToken = async (refreshToken) => {
     const user = verifyToken(refreshToken, config.JWT_REFRESH_SECRET_KEY);
     if (!user) throw new BadRequest("Invalid refresh token");
 
-    if (
-      token.expiryDate.getTime() <=
-      Math.floor(new Date().getTime() / 1000) - 86400
-    ) {
+    console.log(token.verifyExpiration(token));
+    // if (
+    //   token.expiryDate.getTime() <=
+    //   Math.floor(new Date().getTime() / 1000) - 86400
+    // ) {
+    if (token.verifyExpiration(token)) {
       //если истек срок refresh обновить в базе
       const REFRESH_TOKEN = generateRefreshToken(user.id);
       await token.destroy();

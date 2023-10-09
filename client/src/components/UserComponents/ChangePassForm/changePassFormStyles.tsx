@@ -11,4 +11,13 @@ export const ChangePassBtn = styled.button`
   padding: 10px 70px;
   margin-top: 40px;
   cursor: pointer;
+  &:hover, &:active {
+    background-color: #8600ff0f;
+    color: #8203f6;
+    font-weight: bold;
+  }
+  &:focus{
+    box-shadow: 0 0 0 3px #8203f6;
+    outline: none;
+  }
 `;

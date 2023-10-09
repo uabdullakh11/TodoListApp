@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { ITask, TasksContextType } from "@/types/types";
-import { api } from "@/utils/axios/axios";
-import axios from "axios";
 import { addTodo, deleteTodo, getTasks, updateTodo } from "@/utils/services/todo.service";
 
 interface Props {

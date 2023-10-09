@@ -1,5 +1,4 @@
 import axios from "axios";
-import dayjs from "dayjs";
 
 export const api = axios.create({
   baseURL: "http://localhost:5000",
@@ -13,8 +12,6 @@ api.interceptors.request.use(async (request) => {
   const accessTokenExpDate = Number(sessionStorage.getItem("expires_in"));
   const nowTime = Math.floor(new Date().getTime() / 1000) - 1800;
 
-  const isExpired = dayjs.unix(accessTokenExpDate).diff(dayjs()) < 1800;
-  // console.log(isExpired)
 
   if (refresh_token && accessTokenExpDate <= nowTime) {
     const res = await axiosInstance.post("/api/auth/refresh", {

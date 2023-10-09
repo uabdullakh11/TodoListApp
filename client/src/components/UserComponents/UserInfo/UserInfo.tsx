@@ -3,7 +3,7 @@ import { ErrorCaption } from "@/styles/text";
 import { EditButton } from "@/styles/buttons";
 import { useClickOutside } from '../../../utils/hooks/useClickOutside';
 import { changeUserData, getUser } from "@/utils/services/user.service";
-import { CancelBtn, ChangeBtn, InfoContainer, UserLogin, UserLoginContainer, UserNameInput, UserEmail, EmailInput, UserEmailContainer, ButtonsContainer } from "./userInfoStyles";
+import { CancelBtn, ChangeBtn, InfoContainer, UserInnerContainer, UserNameInput, EmailInput, ButtonsContainer, UserContainer } from "./userInfoStyles";
 
 export const UserInfo: FC = () => {
 
@@ -121,8 +121,8 @@ export const UserInfo: FC = () => {
 
     return (
         <InfoContainer>
-            <UserLogin ref={userNameOutside}>
-                <UserLoginContainer>
+            <UserContainer ref={userNameOutside}>
+                <UserInnerContainer>
                     <UserNameInput
                         placeholder={userName}
                         ref={userNameRef}
@@ -134,16 +134,16 @@ export const UserInfo: FC = () => {
                         height={20}
                         onClick={handleOpenToChangeUsername}
                     />
-                </UserLoginContainer>
+                </UserInnerContainer>
                 <ErrorCaption>{errorNameCaption}</ErrorCaption>
                 {isUserNameClicked &&
                     <ButtonsContainer>
                         <ChangeBtn onClick={handleUserNameChange}>Change name</ChangeBtn>
                         <CancelBtn onClick={() => sideEffects(userNameRef.current as HTMLTextAreaElement, 'clear', 'name')}>Cancel change</CancelBtn>
                     </ButtonsContainer>}
-            </UserLogin>
-            <UserEmail ref={emailOutside}>
-                <UserEmailContainer>
+            </UserContainer>
+            <UserContainer ref={emailOutside}>
+                <UserInnerContainer>
                     <EmailInput
                         placeholder={userEmail}
                         ref={emailRef}
@@ -155,14 +155,14 @@ export const UserInfo: FC = () => {
                         height={20}
                         onClick={handleOpenToChangeEmail}
                     />
-                </UserEmailContainer>
+                </ UserInnerContainer>
                 <ErrorCaption>{errorEmailCaption}</ErrorCaption>
                 {isEmailClicked &&
                     <ButtonsContainer>
                         <ChangeBtn onClick={handleEmailChange}>Change email</ChangeBtn>
                         <CancelBtn onClick={() => sideEffects(emailRef.current as HTMLTextAreaElement, 'clear', 'email')}>Cancel change</CancelBtn>
                     </ButtonsContainer>}
-            </UserEmail>
+            </UserContainer>
         </InfoContainer>
     );
 }

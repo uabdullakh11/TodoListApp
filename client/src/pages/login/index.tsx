@@ -59,6 +59,7 @@ export default function SignIn() {
                 name="enter-login-input"
                 id="enter-login-input"
                 autoComplete="true"
+                autoFocus
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLogin(e.target.value)}
               />
               <Input

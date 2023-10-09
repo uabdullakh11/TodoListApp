@@ -39,6 +39,6 @@ Token.beforeCreate(async (token, options) => {
 });
 
 Token.prototype.verifyExpiration = (token) => {
-  return token.expiryDate.getTime() < new Date().getTime();
+  return token.expiryDate.getTime()<= Math.floor(new Date().getTime() / 1000) - 86400
 };
 export default Token;

@@ -1,6 +1,7 @@
 import ErrorLayout from "@/layouts/ErrorLayout";
+import { LinkButton } from "@/styles/buttons";
 import { Container } from "@/styles/containers";
-import { ErrorTitle, LinkTo } from "@/styles/text";
+import { ErrorTitle } from "@/styles/text";
 
 function NotFoundPage() {
     return (
@@ -8,7 +9,7 @@ function NotFoundPage() {
             <Container>
                 <ErrorTitle $size={45}>404</ErrorTitle>
                 <ErrorTitle $size={30}>This page doesn&apos;t exist</ErrorTitle>
-                <LinkTo href="/">Go back</LinkTo>
+                <LinkButton href="/">Go back</LinkButton>
             </Container>
         </ErrorLayout>
     )

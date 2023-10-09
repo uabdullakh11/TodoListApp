@@ -9,7 +9,7 @@ export const ProfileLogo = styled(Link)<{$profile?: boolean}>`
 ${(props) =>
   props.$profile &&
   css`
-    @media (max-width: 545px) {
+    @media (max-width: 700px) {
       display: none;
     }
   `}

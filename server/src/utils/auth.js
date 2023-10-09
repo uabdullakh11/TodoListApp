@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import { config } from "../config/index.js";
 import jwt from "jsonwebtoken";
 import pkg from "http-errors";
-const { Unauthorized  } = pkg;
+const { Unauthorized, BadRequest } = pkg;
 
 const { TokenExpiredError } = jwt;
 
@@ -15,21 +15,12 @@ export function comparePasswords(userPassword, hashedPassword) {
 }
 export function verifyToken(token, secretKey) {
   try {
-    // return jwt.verify(token, secretKey, (err, decoded) => {
-    //   if (err) {
-    //     return catchError(err, res);
-    //   }
-    //   console.log("auth ", decoded.id);
-    //   return decoded.id;
-    //   // req.userId = decoded.id;
-    //   // next();
-    // });
     return jwt.verify(token, secretKey);
   } catch (err) {
     if (err instanceof TokenExpiredError) {
       throw new Unauthorized("Unauthorized! Access Token was expired!");
     }
-    throw new Unauthorized("Unauthorized!");
+    throw new BadRequest("invalid token!");
   }
 }
 export function generateAccessToken(id) {
@@ -40,7 +31,7 @@ export function generateAccessToken(id) {
     },
     config.JWT_SECRET_KEY,
     {
-      expiresIn: "1h",
+      expiresIn: "30m",
     }
   );
 }

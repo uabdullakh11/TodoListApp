@@ -7,6 +7,7 @@ import Head from 'next/head';
 import Error from "../pages/_error";
 import { getUser } from '@/utils/services/user.service';
 import { AvatarImage } from '@/components/UserComponents/UserAvatar/userAvatarStyles';
+import { BurgerMenu } from '@/components/BurgerMenu/BurgerMenu';
 
 
 export default function AccountLayout({
@@ -51,6 +52,7 @@ export default function AccountLayout({
       </Head>
       <Header>
         <>
+          <BurgerMenu type="account"/>
           <LogoTitle $auth={true}>To-Do</LogoTitle>
           <PageName>Settings</PageName>
           <ProfileLogo href="/tasks" $profile={true}>

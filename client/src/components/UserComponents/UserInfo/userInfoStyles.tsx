@@ -12,30 +12,22 @@ export const InfoContainer = styled.div`
   align-items: center;
 `;
 
-export const UserLoginContainer = styled.div`
-  max-width: 220px;
-  display: flex;
+export const UserInnerContainer = styled.div`
+max-width: 220px;
+display: flex;
+gap: 1em;
 `;
-export const UserEmailContainer = styled.div`
-  max-width: 220px;
-  display: flex;
-`;
-export const UserLogin = styled.div`
-  display:flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-`;
-export const UserEmail = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
+export const UserContainer = styled.div`
+display:flex;
+flex-direction: column;
+align-items: center;
+gap: 0.5rem;
 `;
 const ChangeInput = styled.textarea`
   text-align: center;
   height: 20px;
   border: none;
+  border-radius: 10px;
   overflow: hidden;
   outline: none;
   resize: none;
@@ -48,12 +40,20 @@ export const UserNameInput = styled(ChangeInput)`
   color: #404040;
   font-size: 18px;
   font-weight: 700;
- 
+  &:focus{
+    box-shadow: 0 0 0 3px lightskyblue;
+    outline: none;
+  }
 `;
 
 export const EmailInput = styled(ChangeInput)`
   color: #6b7280;
-  width: 20vw;
+  font-size: 16px;
+  width: 25vw;
+  &:focus{
+    box-shadow: 0 0 0 3px lightskyblue;
+    outline: none;
+  }
 `;
 const userDataButton = styled.button`
 padding: 10px 60px;
@@ -64,11 +64,6 @@ padding: 10px 60px;
   width: 100%;
   border: none;
   cursor: pointer;
-  &:hover {
-    background-color: #fff
-    border-color: transparent
-    color: #444
-  }
   @media (max-width: 400px) {
     padding: 10px 40px;
     background-position-x: 10px;
@@ -80,6 +75,19 @@ export const ChangeBtn = styled(userDataButton)`
   padding: 10px 10px;
   background-image: none;
   width: auto;
+  &:hover {
+    background-color: #aaa;
+    color: #fff;
+    font-weight: bold;
+  }
+  &:focus{
+    box-shadow: 0 0 0 3px lightskyblue;
+    outline: none;
+  }
+  &:active{
+    background-color: #fff;
+    color: #000;
+  }
 `;
 export const CancelBtn = styled(userDataButton)`
   background-image: url("../close-btn-icon.svg");
@@ -87,4 +95,17 @@ export const CancelBtn = styled(userDataButton)`
   padding: 10px 10px;
   background-image: none;
   width: auto;
+  &:hover {
+    background-color: #aaa;
+    color: #fff;
+    font-weight: bold;
+  }
+  &:focus{
+    box-shadow: 0 0 0 3px lightskyblue;
+    outline: none;
+  }
+  &:active{
+    background-color: #fff;
+    color: #000;
+  }
 `;

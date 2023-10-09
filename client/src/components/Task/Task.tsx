@@ -18,6 +18,7 @@ import getDate from "@/helpers/getDate";
 import { TasksContext } from "@/context/TasksContext";
 import { TasksContextType } from "@/types/types";
 import { EditButton } from "@/styles/buttons";
+import { useClickOutside } from '../../utils/hooks/useClickOutside';
 
 interface TasksProps {
   id: string;
@@ -25,7 +26,7 @@ interface TasksProps {
   completed: boolean;
   date: string;
 }
-const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
+const  Task: FC<TasksProps> = ({ completed, id, title, date }) => {
   const { updateTask } = React.useContext(TasksContext) as TasksContextType;
 
   const { currentDate } = getDate();
@@ -69,23 +70,26 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
   // }, [completed]);
 
   useEffect(() => {
-    // let day = new Date();
-    // day.setDate(day.getDate() - 1);
-    // console.log(day.toLocaleString("en-US"));
-    // console.log(date.toDateString());
+    
     const yesterdayTime = Math.floor(new Date().getTime() / 1000) - 86400;
     if (date.slice(0, 9) === currentDate) {
       setTaskDate(`Today at ${date.slice(11, 16)}`)
     }
-    else if (yesterdayTime<Math.floor(new Date().getTime() / 1000)) {
-      setTaskDate(`Yesterday at ${date.slice(11, 16)}`)
-    }
+    // else if (yesterdayTime<Math.floor(new Date().getTime() / 1000)) {
+    //   setTaskDate(`Yesterday at ${date.slice(11, 16)}`)
+    // }
     else {
       setTaskDate(`${date.slice(0, 9)} at ${date.slice(11, 16)}`)
     }
   }, [date, currentDate]);
+
+  const ref = useClickOutside(() => {
+    setOptionsBtnClicked(false)
+  });
+
+
   return (
-    <TaskBlock>
+    <TaskBlock ref={ref}>
       <TaskContainer>
         <LeftContainer>
           <DoneButton>
@@ -133,4 +137,5 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
     </TaskBlock>
   );
 };
-export { Task };
+// export {Task};
+export default Task;

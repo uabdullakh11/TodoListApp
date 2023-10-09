@@ -1,5 +1,5 @@
 import { FC } from "react";
-import {PaginationList,PaginationItem, PaginationLink} from "./paginationStyles"
+import { PaginationList, PaginationItem, PaginationLink } from "./paginationStyles"
 
 interface PaginationProps {
   items: number;
@@ -24,10 +24,13 @@ const Pagination: FC<PaginationProps> = ({
     <>
       <PaginationList>
         {pages.map((page) => (
-          <PaginationItem key={page}>
-            <PaginationLink onClick={() => onPageChange(page)} $active={
-              page === currentPage ? true : false
-            }>{page}</PaginationLink>
+          <PaginationItem $active={
+            page === currentPage ? true : false
+          } key={page}>
+            <PaginationLink onClick={() => onPageChange(page)}
+              $active={
+                page === currentPage ? true : false
+              }>{page}</PaginationLink>
           </PaginationItem>
         ))}
       </PaginationList>

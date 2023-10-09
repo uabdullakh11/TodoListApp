@@ -64,6 +64,7 @@ export default function SignUp() {
                 name="enter-login-input"
                 id="enter-login-input"
                 minLength={3}
+                autoFocus
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLogin(e.target.value)}
               />
               <Input

@@ -11,7 +11,7 @@ export const ModalBlock = styled.div`
   z-index: 999;
   width: 100%;
   height: 100vh;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   background: rgba(0, 0, 0, 0.7);
@@ -46,11 +46,6 @@ const ModalButton = styled.button`
   width: 100%;
   border: none;
   cursor: pointer;
-  &:hover {
-    background-color: #fff
-    border-color: transparent
-    color: #444
-  }
   @media (max-width: 400px) {
     padding: 10px 40px;
     background-position-x: 10px;
@@ -63,14 +58,53 @@ export const ModalDeleteButton = styled(ModalButton)`
   background-position-x: 30px;
   background-size: 20px;
   color: #f56497;
+  &:hover {
+    background-color: #aaa;
+    color: #f56497;
+    font-weight: bold;
+  }
+  &:focus{
+    box-shadow: 0 0 0 3px lightskyblue;
+    outline: none;
+  }
+  &:active{
+    background-color: #fff;
+    color: #e41960;
+  }
 `;
 export const ModalSaveButton = styled(ModalButton)`
   background-image: url("../save-btn-icon.svg");
   color: #67b8cb;
+  &:hover {
+    background-color: #aaa;
+    color: #fff;
+    font-weight: bold;
+  }
+  &:focus{
+    box-shadow: 0 0 0 3px lightskyblue;
+    outline: none;
+  }
+  &:active{
+    background-color: #fff;
+    color: #000;
+  }
 `;
 export const ModalCloseButton = styled(ModalButton)`
   background-image: url("../close-btn-icon.svg");
   color: #6b7280;
+  &:hover {
+    background-color: #aaa;
+    color: #fff;
+    font-weight: bold;
+  }
+  &:focus{
+    box-shadow: 0 0 0 3px lightskyblue;
+    outline: none;
+  }
+  &:active{
+    background-color: #fff;
+    color: #000;
+  }
 `;
 export const ModalText = styled.p`
   color: #9333ea;

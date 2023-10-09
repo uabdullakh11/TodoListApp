@@ -58,6 +58,7 @@ const ChangePassForm = () => {
                         name="enter-current-pass"
                         id="enter-current-pass"
                         minLength={6}
+                        autoFocus
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentPassword(e.target.value)}
                     />
                     <Input

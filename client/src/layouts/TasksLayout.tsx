@@ -3,9 +3,10 @@ import { LogoTitle, Username } from "@/styles/text";
 import { ProfileLogo } from "@/styles/header";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-// import Error from 'next/error'
+import TasksProvider from "@/context/TasksContext";
 import Error from "../pages/_error";
 import { AvatarImage } from "@/components/UserComponents/UserAvatar/userAvatarStyles";
+import { BurgerMenu } from "@/components/BurgerMenu/BurgerMenu";
 import { getUser } from "@/utils/services/user.service";
 
 export default function TasksLayout({
@@ -28,7 +29,7 @@ export default function TasksLayout({
       try {
         const res = await getUser()
         setUserName(res.login)
-        setLinkToAvatar("http://localhost:5000"+res.avatar)
+        setLinkToAvatar("http://localhost:5000" + res.avatar)
       }
       catch (err) {
         console.log(err);
@@ -44,12 +45,13 @@ export default function TasksLayout({
 
 
   return (
-    <>
+    <TasksProvider>
       <Head>
         <title>Todo List</title>
       </Head>
       <Header>
         <>
+          <BurgerMenu type="tasks" />
           <LogoTitle>To-Do</LogoTitle>
           <Username>{userName}</Username>
           <ProfileLogo href="account">
@@ -62,7 +64,7 @@ export default function TasksLayout({
           </ProfileLogo>
         </>
       </Header>
-      <main>{children}</main>
-    </>
+        <main>{children}</main>
+    </TasksProvider>
   );
 }
