@@ -1,13 +1,13 @@
 import React, { FC, useState } from "react";
 import { useRouter } from "next/router";
-import { ButtonsContainer, LogOutBtn, ProfileBtn, SecurtyBtn } from "./settingNavPanelStyles";
+import { ButtonsContainer, LogOutBtn, UserProfileButtons } from "./settingNavPanelStyles";
 import { NavBlock, NavContainer } from "@/styles/containers";
 
 interface SettingPanelProps {
   handleClick: (value: boolean) => void;
-  isBurger?: boolean;
+  isBurger?: {isBurger: boolean, handleSideBarClose: ()=> void};
 }
-const SettingsNavPanel: FC<SettingPanelProps> = (props: SettingPanelProps) => {
+const SettingsNavPanel: FC<SettingPanelProps> = ({handleClick,isBurger }) => {
   const router = useRouter()
 
   const [profileClick, setProfileClick] = useState<boolean>(true)
@@ -23,21 +23,23 @@ const SettingsNavPanel: FC<SettingPanelProps> = (props: SettingPanelProps) => {
   const handleProfileClick = () => {
     setProfileClick(true)
     setSecurityClick(false)
-    props.handleClick(true)
+
+    handleClick(true)
   }
   const handleSecurityClick = () => {
     setSecurityClick(true)
     setProfileClick(false)
-    props.handleClick(false)
+
+    handleClick(false)
   }
   return (
     <NavBlock>
-      <NavContainer $isBurger={props.isBurger}>
+      <NavContainer $isBurger={isBurger?.isBurger}>
         <ButtonsContainer>
-          <ProfileBtn $active={profileClick} onClick={handleProfileClick}>Profile</ProfileBtn>
-          <SecurtyBtn $active={securityClick} onClick={handleSecurityClick}>Security</SecurtyBtn>
+          <UserProfileButtons $button="profile" $active={profileClick} onClick={handleProfileClick}>Profile</UserProfileButtons>
+          <UserProfileButtons $button="security" $active={securityClick} onClick={handleSecurityClick}>Security</UserProfileButtons>
         </ButtonsContainer>
-        <LogOutBtn onClick={handleLogout}> Log out</LogOutBtn>
+        <LogOutBtn onClick={handleLogout}>Log out</LogOutBtn>
       </NavContainer>
     </NavBlock>
   );

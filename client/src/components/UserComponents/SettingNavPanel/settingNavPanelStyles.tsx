@@ -42,75 +42,61 @@ export const LogOutBtn = styled.button`
   }
 `;
 
-const UserProfileButtons = styled.div`
-  padding: 10px 30px;
+
+export const UserProfileButtons = styled.div<{ $button: string, $active: boolean }>`
+  padding: 10px 70px 10px 35px;
   color: #6b7280;
   cursor: pointer;
-  padding-right: 70px;
-  padding-left: 35px;
   text-indent: 10px;
+  border-radius: 10px;
   @media (max-width: 700px) {
     padding-right: 35px;
   }
-`;
-export const ProfileBtn = styled(UserProfileButtons) <{ $active: boolean }>`
-&:hover, &:active {
-  background: url("../person-logo.svg"), #9333ea0f;
+  ${(props) => props.$button === 'profile' && css`
+  background: url("../person-logo.svg");
   background-repeat: no-repeat;
   background-position-y: center;
   background-position-x: 10px;
   background-size: 25px;
+  &:hover, &:active {
+    color: #9333ea;
+    font-weight: bold;
+    background: url("../person-logo.svg"), #9333ea0f;
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: 10px;
+  background-size: 25px;
+  }
+  &:focus{
+    box-shadow: 0 0 0 3px #8203f6;
+    outline: none;
+  }
+  ` }
+  ${(props) => props.$button === 'security' && css`
+  background: url("../security-btn-icon.svg");
+  background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 10px;
+    background-size: 25px;
+  &:hover, &:active {
+    color: #9333ea;
+    font-weight: bold;
+    background: url("../security-btn-icon.svg"), #9333ea0f;
+    background-repeat: no-repeat;
+      background-position-y: center;
+      background-position-x: 10px;
+      background-size: 25px;
+  }
+  &:focus{
+    box-shadow: 0 0 0 3px #8203f6;
+    outline: none;
+  }
+  `
+  }
+  
+  ${(props)=> props.$active && css`
+  background-color: #9333ea0f;
   color: #9333ea;
   border-radius: 10px;
-  font-weight: bold;
-}
-&:focus{
-  box-shadow: 0 0 0 3px #8203f6;
-  outline: none;
-}
-  ${(props) =>
-    props.$active
-      ? css`
-          background: url("../person-logo.svg"), #9333ea0f;
-          color: #9333ea;
-          border-radius: 10px;
-        `
-      : css`
-          background: url("../person-logo.svg");
-        `}
-  background-repeat: no-repeat;
-  background-position-y: center;
-  background-position-x: 10px;
-    background-size: 25px;
-  
-`;
-export const SecurtyBtn = styled(UserProfileButtons) <{ $active: boolean }>`
-&:hover, &:active {
-  background: url("../security-btn-icon.svg"), #9333ea0f;
-          color: #9333ea;
-          border-radius: 10px;
-          background-repeat: no-repeat;
-          background-position-y: center;
-          background-position-x: 10px;
-          background-size: 25px;
-  font-weight: bold;
-}
-&:focus{
-  box-shadow: 0 0 0 3px #8203f6;
-  outline: none;
-}
-  ${(props) =>
-    props.$active
-      ? css`
-          background: url("../security-btn-icon.svg"), #9333ea0f;
-          color: #9333ea;
-          border-radius: 10px;
-        `
-      : css`
-          background: url("../security-btn-icon.svg");
-        `}
-  background-repeat: no-repeat;
-  background-position-y: center;
-  background-position-x: 10px;
-  background-size: 25px;
+`}
 `;

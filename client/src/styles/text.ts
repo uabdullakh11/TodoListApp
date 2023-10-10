@@ -11,13 +11,6 @@ export const LogoTitle = styled.div<{ $auth?: boolean }>`
   }
   
 `;
-// ${(props) =>
-//   props.$auth &&
-//   css`
-//     @media (max-width: 545px) {
-//       display: none;
-//     }
-//   `}
 export const FormTitle = styled.div`
   font-size: 20px;
   font-weight: 700;
@@ -30,12 +23,10 @@ const Name = styled.div`
   text-align: center;
   color: #9333ea;
 `;
-export const PageName = styled(Name)`
-  flex-grow: 1;
-`;
-export const Username = styled(Name)`
+export const PageName = styled(Name)<{$auth:boolean}>`
   @media (max-width: 700px) {
     display: none;
+    ${(props)=> props.$auth && `display: inline; flex-basis: 100%;`}
   }
 `;
 

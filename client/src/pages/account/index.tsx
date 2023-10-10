@@ -12,9 +12,7 @@ const CardBlock = styled.div`
   background-color: #f4f4f4;
   border-radius: 10px;
   width: 466px;
-  @media (max-width: 689px) {
-    width: 100%;
-  }
+ 
 `;
 
 export default function Account() {

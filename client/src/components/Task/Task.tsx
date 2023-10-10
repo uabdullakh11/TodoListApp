@@ -11,7 +11,7 @@ import {
   RightContainer,
   TaskBlock,
   TaskContainer,
-  DataLine, 
+  DataLine,
   TaskName
 } from "./taskStyles";
 import getDate from "@/helpers/getDate";
@@ -26,10 +26,10 @@ interface TasksProps {
   completed: boolean;
   date: string;
 }
-const  Task: FC<TasksProps> = ({ completed, id, title, date }) => {
+const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
   const { updateTask } = React.useContext(TasksContext) as TasksContextType;
 
-  const { currentDate } = getDate();
+  const { currentDate, yesterdayTime } = getDate();
   const [isShowingModal, toggleModal] = useModal();
 
   // const [isDone, setIsDone] = useState<boolean>(false);
@@ -39,17 +39,15 @@ const  Task: FC<TasksProps> = ({ completed, id, title, date }) => {
 
   const handleClickDoneBtn = async () => {
     const todo = {
-      completed: !completed, 
-      id, 
-      title, 
+      completed: !completed,
+      id,
+      title,
       date
     }
     updateTask(todo)
   };
   const handleClickEditBtn = () => {
-    isOptionsBtnClicked
-      ? setOptionsBtnClicked(false)
-      : setOptionsBtnClicked(true);
+    setOptionsBtnClicked(!isOptionsBtnClicked)
   };
   const handleEditTask = () => {
     setOptionsBtnClicked(false);
@@ -61,27 +59,23 @@ const  Task: FC<TasksProps> = ({ completed, id, title, date }) => {
     setTypeModal("deleteModal");
     toggleModal(true);
   };
-  // useEffect(() => {
-  //   if (completed) {
-  //     setIsDone(true);
-  //   } else {
-  //     setIsDone(false);
-  //   }
-  // }, [completed]);
+
 
   useEffect(() => {
-    
-    const yesterdayTime = Math.floor(new Date().getTime() / 1000) - 86400;
-    if (date.slice(0, 9) === currentDate) {
-      setTaskDate(`Today at ${date.slice(11, 16)}`)
+    let lastIndexTime = date.split("").lastIndexOf(":");
+    let lastIndexDate = date.split("").indexOf(",");
+
+    if (date.slice(0, lastIndexDate) === currentDate) {
+      setTaskDate(`Today at ${date.slice(11, lastIndexTime)}`)
     }
-    // else if (yesterdayTime<Math.floor(new Date().getTime() / 1000)) {
-    //   setTaskDate(`Yesterday at ${date.slice(11, 16)}`)
-    // }
+    else if (date.slice(0, lastIndexDate) === yesterdayTime) {
+      setTaskDate(`Yesterday at ${date.slice(11, lastIndexTime)}`)
+    }
     else {
-      setTaskDate(`${date.slice(0, 9)} at ${date.slice(11, 16)}`)
+      setTaskDate(`${date.slice(0, lastIndexDate)} at ${date.slice(11, lastIndexTime)}`)
     }
-  }, [date, currentDate]);
+    
+  }, [date, currentDate, yesterdayTime]);
 
   const ref = useClickOutside(() => {
     setOptionsBtnClicked(false)

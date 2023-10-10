@@ -4,7 +4,11 @@ import { TasksContext } from "@/context/TasksContext";
 import { SortingButtonsContainer, DateButton, StatusButton } from "./sortingButtonsStyles";
 import { useClickOutside } from "@/utils/hooks/useClickOutside";
 
-const Dropdown: FC<{ type: string }> = ({ type }: { type: string }) => {
+interface DropdownProps {
+    type: string;
+    isBurger?: {isBurger: boolean, handleSideBarClose: ()=> void};
+}
+const Dropdown: FC<DropdownProps> = ({ type, isBurger}) => {
     const { handleSetFilter, onPageChange } = React.useContext(TasksContext) as TasksContextType;
 
     const [dropdownState, setDropdownState] = useState({ open: true, option: "" });
@@ -13,6 +17,8 @@ const Dropdown: FC<{ type: string }> = ({ type }: { type: string }) => {
         setDropdownState({ open: !dropdownState.open, option: type });
         handleSetFilter(type)
         onPageChange(1)
+
+        isBurger && isBurger.handleSideBarClose();
     }
 
     const ref = useClickOutside(() => {

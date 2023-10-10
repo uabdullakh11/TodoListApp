@@ -8,9 +8,7 @@ const CardBlock = styled.div`
   background-color: #FFFFFF;
   border-radius: 10px;
   width: 466px;
-  @media (max-width: 689px) {
-    width: 100%;
-  }
+  
 `;
 
 export default function AuthLayout({
@@ -26,7 +24,7 @@ export default function AuthLayout({
       <Header>
         <>
           <LogoTitle $auth={true}>To-Do</LogoTitle>
-          <PageName>Authentication</PageName>
+          <PageName $auth={true}>Authentication</PageName>
         </>
       </Header>
       <main>

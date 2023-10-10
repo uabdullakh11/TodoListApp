@@ -1,6 +1,5 @@
 import { Header } from "@/components/Header/Header";
-import { LogoTitle, Username } from "@/styles/text";
-import { ProfileLogo } from "@/styles/header";
+import { LogoTitle, PageName } from "@/styles/text";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import TasksProvider from "@/context/TasksContext";
@@ -8,6 +7,7 @@ import Error from "../pages/_error";
 import { AvatarImage } from "@/components/UserComponents/UserAvatar/userAvatarStyles";
 import { BurgerMenu } from "@/components/BurgerMenu/BurgerMenu";
 import { getUser } from "@/utils/services/user.service";
+import Link from "next/link";
 
 export default function TasksLayout({
   children,
@@ -53,15 +53,15 @@ export default function TasksLayout({
         <>
           <BurgerMenu type="tasks" />
           <LogoTitle>To-Do</LogoTitle>
-          <Username>{userName}</Username>
-          <ProfileLogo href="account">
+          <PageName>{userName}</PageName>
+          <Link href="account">
             <AvatarImage
               src={linkToAvatar}
               alt=""
               height={40}
               width={40}
             ></AvatarImage>
-          </ProfileLogo>
+          </Link>
         </>
       </Header>
         <main>{children}</main>

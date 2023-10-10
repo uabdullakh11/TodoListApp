@@ -9,9 +9,11 @@ import { NavBlock, NavContainer } from "@/styles/containers";
 import { Dropdown } from "../SortingButtons/Dropdown";
 
 interface NavPanelProps {
-  isBurger?: boolean;
+  // isBurger?: boolean;
+  // handleSideBarClose?: ()=> void;
+  isBurger?: {isBurger: boolean, handleSideBarClose: ()=> void};
 }
-const NavPanel: FC<NavPanelProps> = ({ isBurger }) => {
+const NavPanel: FC<NavPanelProps> = ({ isBurger}) => {
   const { handleSetFilter, onPageChange } = React.useContext(TasksContext) as TasksContextType;
 
   const [isShowingModal, toggleModal] = useModal();
@@ -27,21 +29,21 @@ const NavPanel: FC<NavPanelProps> = ({ isBurger }) => {
     if (type === 'today') {
       handleSetFilter(type)
       onPageChange(1)
+      isBurger && isBurger.handleSideBarClose();
     }
   }
 
   return (
     <NavBlock>
-      <NavContainer $isBurger={isBurger}>
+      <NavContainer $isBurger={isBurger?.isBurger}>
         <SortingContainer>
           <SortButton $button={'today'} onClick={() => handleBtnClick("today")}>Today</SortButton>
           {isBtnClicked === 'all' ?
-            <Dropdown type="status" />
+            <Dropdown type="status" isBurger={isBurger}/>
             : <SortButton $button={'all'} onClick={() => handleBtnClick("all")}>All</SortButton>
           }
-
           {isBtnClicked === "date" ?
-            <Dropdown type="date" />
+            <Dropdown type="date" isBurger={isBurger} />
             :
             <SortButton $button={'date'} onClick={() => handleBtnClick("date")}>
               Date

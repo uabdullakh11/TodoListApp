@@ -15,6 +15,8 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [tasksCount, setTasksCount] = useState<number>(10);
 
+  const fetched = React.useRef(false)
+
   const getTodos = React.useCallback(async (type: string) => {
     try {
       const all = await getTasks(type, currentPage);
@@ -27,25 +29,26 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
     }
   }, [currentPage, tasksCount]);
 
+  
   React.useEffect(() => {
+    if (fetched.current) return;
+    fetched.current = true
     getTodos(filter)
-    return () => {}
   }, [filter, getTodos])
-  // }, [currentPage, filter, getTodos, tasksCount])
 
   const handleSetFilter = (value: string) => {
     setFilter(value)
+    fetched.current = false
   }
   const onPageChange = (page: number) => {
     setCurrentPage(page);
+    fetched.current = false
   };
 
   const editTask = async (todo: ITask, handleError: (error: string) => void): Promise<boolean | undefined> => {
     try {
-      // await api.put("api/todos?update=title", {id, title, date});
-      // await api.put("api/todos?update=title", todo)
       await updateTodo("title", todo)
-      getTodos("today")
+      getTodos(filter)
       return true;
     }
     catch (err) {
@@ -53,28 +56,23 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
         handleError(err.message)
         return false;
       }
-      // if (axios.isAxiosError(err) && err.response) {
-      //   handleError(err.response.data)
-      //   return false;
-      // }
     }
   }
   const deleteTask = async (id: string) => {
     try {
-      // await api.delete(`api/todos/${id}`);
-      // setTasksCount(prev=>prev-1)
       await deleteTodo(id)
-      getTodos("today")
+      getTodos(filter)
     }
     catch (err) {
       console.log(err)
     }
-
   }
   const addTask = async (todo: { title: string, completed: boolean, date: string }, handleError: (error: string) => void): Promise<boolean | undefined> => {
     try {
       await addTodo(todo)
-      getTodos("today")
+      getTodos(filter)
+      // handleSetFilter("today")
+      // setCurrentPage(1)
       return true;
     }
     catch (err) {
@@ -86,9 +84,8 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
   }
   const updateTask = async (todo: ITask) => {
     try {
-      // await api.put("api/todos?update=completed", todo);
       await updateTodo("completed", todo);
-      getTodos("today")
+      getTodos(filter)
     }
     catch (err) {
       console.log(err)

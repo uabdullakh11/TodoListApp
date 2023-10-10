@@ -8,24 +8,28 @@ import { useClickOutside } from "@/utils/hooks/useClickOutside";
 export const BurgerMenu = (props: { type: string }) => {
 
     const [click, setClick] = useState(false);
-    const handleClick = () => setClick(!click);
+    const handleMenuClick = () => setClick(!click);
 
     const ref = useClickOutside(() => {
         setClick(false)
     })
 
+    const handleSideBarClose = () =>{
+        setClick(false)
+    }
+
     return (
         <BurgerMenuContainer ref={ref}>
-            <MenuLabel onClick={handleClick}>
+            <MenuLabel onClick={handleMenuClick}>
                 <Icon $clicked={click}></Icon>
             </MenuLabel>
             {click &&
                 <SideBar>
-                    {props.type == "tasks" && <NavPanel isBurger={true} />}
+                    {props.type == "tasks" && <NavPanel isBurger={{isBurger: true, handleSideBarClose}} />}
                     {props.type == "account" &&
                         <>
                             <BackToHome href="tasks">&#129044; Back</BackToHome>
-                            <SettingsNavPanel handleClick={handleClick} isBurger={true}></SettingsNavPanel>
+                            <SettingsNavPanel handleClick={handleMenuClick} isBurger={{isBurger: true, handleSideBarClose}}></SettingsNavPanel>
                         </>}
                 </SideBar>
             }

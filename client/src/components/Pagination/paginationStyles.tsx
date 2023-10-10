@@ -20,3 +20,11 @@ export const PaginationLink = styled.a<{ $active: boolean }>`
     padding: 5px;
   ` )}
 `;
+
+export const NavButton = styled.span<{ $disabled: boolean }>`
+cursor: pointer;
+font-size:18px;
+color:#9333ea;
+font-weight: 700;
+${(props) => (props.$disabled && `color:#b5b5b5;cursor: not-allowed;`)}
+`

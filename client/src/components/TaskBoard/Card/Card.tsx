@@ -55,7 +55,7 @@ const Card: FC = () => {
                   />)
               })}
               <Pagination
-                items={tasksCount} // 100
+                totalCount={tasksCount} // 100
                 currentPage={currentPage} // 1
                 pageSize={pageSize} // 10
                 onPageChange={onPageChange}
