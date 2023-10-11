@@ -11,9 +11,9 @@ import { Dropdown } from "../SortingButtons/Dropdown";
 interface NavPanelProps {
   // isBurger?: boolean;
   // handleSideBarClose?: ()=> void;
-  isBurger?: {isBurger: boolean, handleSideBarClose: ()=> void};
+  isBurger?: { isBurger: boolean, handleSideBarClose: () => void };
 }
-const NavPanel: FC<NavPanelProps> = ({ isBurger}) => {
+const NavPanel: FC<NavPanelProps> = ({ isBurger }) => {
   const { handleSetFilter, onPageChange } = React.useContext(TasksContext) as TasksContextType;
 
   const [isShowingModal, toggleModal] = useModal();
@@ -39,15 +39,14 @@ const NavPanel: FC<NavPanelProps> = ({ isBurger}) => {
         <SortingContainer>
           <SortButton $button={'today'} onClick={() => handleBtnClick("today")}>Today</SortButton>
           {isBtnClicked === 'all' ?
-            <Dropdown type="status" isBurger={isBurger}/>
-            : <SortButton $button={'all'} onClick={() => handleBtnClick("all")}>All</SortButton>
+            <Dropdown type="status" isBurger={isBurger} />
+            :
+            <SortButton $button={'all'} onClick={() => handleBtnClick("all")}>All</SortButton>
           }
           {isBtnClicked === "date" ?
             <Dropdown type="date" isBurger={isBurger} />
             :
-            <SortButton $button={'date'} onClick={() => handleBtnClick("date")}>
-              Date
-            </SortButton>
+            <SortButton $button={'date'} onClick={() => handleBtnClick("date")}>Date</SortButton>
           }
         </SortingContainer>
         <AddTaskBtn onClick={handleAddTask}>
@@ -55,7 +54,11 @@ const NavPanel: FC<NavPanelProps> = ({ isBurger}) => {
           <span>Add task</span>
         </AddTaskBtn>
       </NavContainer>
-      <Modal show={isShowingModal} onCloseButtonClick={toggleModal} type="createModal" taskObj={{ completed: false, id: "1", title: "title", date: "date" }}></Modal>
+      <Modal
+        show={isShowingModal}
+        onCloseButtonClick={toggleModal}
+        type="createModal"
+        taskObj={{ completed: false, id: "1", title: "title", date: "date" }}></Modal>
     </NavBlock>
   );
 };

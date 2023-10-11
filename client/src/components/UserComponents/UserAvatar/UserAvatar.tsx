@@ -1,51 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ErrorCaption } from "@/styles/text";
-import { changeAvatar, getUser } from "@/utils/services/user.service";
+import { changeAvatar } from "@/utils/services/user.service";
 import { AvatarContainer, AvatarImage, FileInput, Label, AvatarForm } from "./userAvatarStyles";
 import { EditButton } from "@/styles/buttons";
+import { AccountContext } from "@/context/AccountContext";
+import { AccountContextType } from "@/types/types";
 
 export const UserAvatar = () => {
-    const [linkToAvatar, setLinkToAvatar] = useState<string>("http://localhost:5000/static/avatars/person-logo.svg")
-    const [errorCaption, setErrorCaption] = useState("");
+    const { userAvatar, handleChangeAvatar, error} = useContext(AccountContext) as AccountContextType;
 
-
-    const handleSendFile = async (e: React.ChangeEvent) => {
+    const handleSendFile= async (e: React.ChangeEvent) => {
         const elem = e.target as HTMLInputElement;
         if (elem.files) {
             const avatarIcon = new FormData()
             avatarIcon.append('avatar', elem.files[0])
-            // if (avatar.type!=='image/png' || avatar.type!=='image/jpeg' ||  avatar.type!=='image/svg'){
-            // }
             try {
-                setErrorCaption("")
-                const res = await changeAvatar(avatarIcon)
-                setLinkToAvatar("http://localhost:5000" + res)
-                // await api.put(`api/users/avatar`, avatarIcon, {
-                //     headers: { 'content-type': 'multipart/form-data' }
-                // })
-            }
-            catch (err) {
-                setErrorCaption((err as Error).message);
-                // if (axios.isAxiosError(err) && err.response) {
-                //     // setError(err.response.data)
-                //     // setErrorCaption(err.response.data.message)
-                // }
-            }
-        }
-    }
-
-    useEffect(() => {
-        const getUserAvatar = async () => {
-            try {
-                const res = await getUser()
-                setLinkToAvatar("http://localhost:5000" + res.avatar)
+                handleChangeAvatar(avatarIcon)
             }
             catch (err) {
                 console.log(err)
             }
         }
-        getUserAvatar()
-    })
+    }
+
     return (
         <AvatarContainer>
             <AvatarForm encType="multipart/form-data">
@@ -57,10 +34,11 @@ export const UserAvatar = () => {
                         accept="image/png, image/jpeg, image/svg"
                         onChange={handleSendFile}
                     />
-                    <AvatarImage src={linkToAvatar}
+                    <AvatarImage src={'http://localhost:5000'+userAvatar}
                         alt=""
                         height={100}
                         width={100}
+                        priority
                     />
                     <EditButton src="../edit-icon.svg"
                         alt=""
@@ -68,7 +46,7 @@ export const UserAvatar = () => {
                         height={20}
                     />
                 </Label>
-                <ErrorCaption>{errorCaption}</ErrorCaption>
+                <ErrorCaption>{error.avatarError}</ErrorCaption>
             </AvatarForm>
         </AvatarContainer>
     );

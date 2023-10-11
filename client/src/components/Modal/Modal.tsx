@@ -71,6 +71,7 @@ const Modal: FC<ModalProps> = (props: ModalProps) => {
       setErrorCaption("Please enter name of task!");
     }
   };
+  
   const handleDeleteClick = async () => {
     deleteTask(props.taskObj.id)
     props.onCloseButtonClick(false);

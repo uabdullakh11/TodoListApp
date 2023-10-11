@@ -51,11 +51,13 @@ export const TaskName = styled.span`
   @media (max-width: 475px) {
     text-overflow: ellipsis;
     overflow: hidden;
-    white-space: nowrap;
-    width: 15vw;
+    white-space: nowrap
   }
 `;
 export const DataLine = styled.span`
   color: #6b7280;
   word-break: break-all;
+  @media (max-width:500px){
+    display: none;
+  }
 `;

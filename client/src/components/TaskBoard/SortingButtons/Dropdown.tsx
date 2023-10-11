@@ -22,7 +22,7 @@ const Dropdown: FC<DropdownProps> = ({ type, isBurger}) => {
     }
 
     const ref = useClickOutside(() => {
-        setDropdownState({ open: false, option: dropdownState.option });
+        // setDropdownState({ open: false, option: dropdownState.option });
     })
 
     return (

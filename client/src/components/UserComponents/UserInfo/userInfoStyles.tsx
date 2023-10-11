@@ -44,15 +44,21 @@ export const UserNameInput = styled(ChangeInput)`
     box-shadow: 0 0 0 3px lightskyblue;
     outline: none;
   }
+  @media (max-width:700px){
+  font-size: 16px;
+  }
 `;
 
 export const EmailInput = styled(ChangeInput)`
   color: #6b7280;
   font-size: 16px;
-  width: 25vw;
+  width: 30vmax;
   &:focus{
     box-shadow: 0 0 0 3px lightskyblue;
     outline: none;
+  }
+  @media (max-width:700px){
+  font-size: 14px;
   }
 `;
 const userDataButton = styled.button`

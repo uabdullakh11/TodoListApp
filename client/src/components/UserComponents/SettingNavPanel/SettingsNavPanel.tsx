@@ -2,41 +2,43 @@ import React, { FC, useState } from "react";
 import { useRouter } from "next/router";
 import { ButtonsContainer, LogOutBtn, UserProfileButtons } from "./settingNavPanelStyles";
 import { NavBlock, NavContainer } from "@/styles/containers";
+import { AccountContextType } from "@/types/types";
+import { useContext} from "react";
+import { AccountContext } from "@/context/AccountContext";
+import { removeToken } from "@/helpers/token";
 
 interface SettingPanelProps {
-  handleClick: (value: boolean) => void;
   isBurger?: {isBurger: boolean, handleSideBarClose: ()=> void};
 }
-const SettingsNavPanel: FC<SettingPanelProps> = ({handleClick,isBurger }) => {
+const SettingsNavPanel: FC<SettingPanelProps> = ({isBurger }) => {
   const router = useRouter()
 
-  const [profileClick, setProfileClick] = useState<boolean>(true)
+  const { isProfile, handleProfileClick } = useContext(AccountContext) as AccountContextType;
+
   const [securityClick, setSecurityClick] = useState<boolean>(false)
 
   const handleLogout = async () => {
-    sessionStorage.removeItem('ACCESS_TOKEN')
-    sessionStorage.removeItem('REFRESH_TOKEN')
-    sessionStorage.removeItem('expires_in')
+    removeToken()
     router.push('/login')
   }
 
-  const handleProfileClick = () => {
-    setProfileClick(true)
+  const handleProfileClicked = () => {
     setSecurityClick(false)
+    handleProfileClick(true)
 
-    handleClick(true)
+    isBurger && isBurger.handleSideBarClose();
   }
   const handleSecurityClick = () => {
     setSecurityClick(true)
-    setProfileClick(false)
+    handleProfileClick(false)
 
-    handleClick(false)
+    isBurger && isBurger.handleSideBarClose();
   }
   return (
     <NavBlock>
       <NavContainer $isBurger={isBurger?.isBurger}>
         <ButtonsContainer>
-          <UserProfileButtons $button="profile" $active={profileClick} onClick={handleProfileClick}>Profile</UserProfileButtons>
+          <UserProfileButtons $button="profile" $active={isProfile} onClick={handleProfileClicked}>Profile</UserProfileButtons>
           <UserProfileButtons $button="security" $active={securityClick} onClick={handleSecurityClick}>Security</UserProfileButtons>
         </ButtonsContainer>
         <LogOutBtn onClick={handleLogout}>Log out</LogOutBtn>

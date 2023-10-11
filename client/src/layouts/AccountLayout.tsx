@@ -7,6 +7,8 @@ import { getUser } from '@/utils/services/user.service';
 import { AvatarImage } from '@/components/UserComponents/UserAvatar/userAvatarStyles';
 import { BurgerMenu } from '@/components/BurgerMenu/BurgerMenu';
 import Link from 'next/link';
+import AccountProvider from '@/context/AccountContext';
+import { isToken } from '@/helpers/token';
 
 
 export default function AccountLayout({
@@ -19,13 +21,11 @@ export default function AccountLayout({
   const [errorCode, setErrorCode] = useState<number>()
 
   useEffect(() => {
-    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
-      setErrorCode(403)
-    }
+    !isToken() && setErrorCode(403)
   }, [])
 
   useEffect(() => {
-    const getUserData = async () => {
+    const getUserAvatar = async () => {
       try {
         const res = await getUser()
         setLinkToAvatar("http://localhost:5000" + res.avatar)
@@ -34,8 +34,7 @@ export default function AccountLayout({
         console.log(err);
       }
     }
-    getUserData()
-    // return () => { }
+    getUserAvatar()
   }, [])
 
   if (errorCode) {
@@ -43,7 +42,7 @@ export default function AccountLayout({
   }
 
   return (
-    <>
+    <AccountProvider>
       <Head>
         <title>Profile</title>
       </Head>
@@ -58,6 +57,6 @@ export default function AccountLayout({
         </>
       </Header>
       <main>{children}</main>
-    </>
+    </AccountProvider>
   );
 }

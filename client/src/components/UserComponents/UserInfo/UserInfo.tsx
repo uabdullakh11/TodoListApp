@@ -1,19 +1,17 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useRef, useState, useContext } from "react";
 import { ErrorCaption } from "@/styles/text";
 import { EditButton } from "@/styles/buttons";
 import { useClickOutside } from '../../../utils/hooks/useClickOutside';
-import { changeUserData, getUser } from "@/utils/services/user.service";
+import { changeUserData } from "@/utils/services/user.service";
 import { CancelBtn, ChangeBtn, InfoContainer, UserInnerContainer, UserNameInput, EmailInput, ButtonsContainer, UserContainer } from "./userInfoStyles";
+import { AccountContext } from "@/context/AccountContext";
+import { AccountContextType } from "@/types/types";
 
 export const UserInfo: FC = () => {
+    const { userName, userEmail, handleChangeUserEmail, handleChangeUserName, error } = useContext(AccountContext) as AccountContextType;
 
     const userNameRef = useRef<HTMLTextAreaElement>(null);
     const emailRef = useRef<HTMLTextAreaElement>(null);
-
-    const [userName, setUserName] = useState<string>("username")
-    const [userEmail, setEmail] = useState<string>("userEmail")
-    const [errorNameCaption, setErrorNameCaption] = useState("");
-    const [errorEmailCaption, setErrorEmailCaption] = useState("");
 
     const [isUserNameClicked, setUserNameClick] = useState<boolean>(false)
     const [isEmailClicked, setEmailClicked] = useState<boolean>(false)
@@ -29,8 +27,6 @@ export const UserInfo: FC = () => {
             elem.disabled = true;
             elem.value = ""
             elemType === 'name' ? setUserNameClick(false) : setEmailClicked(false);
-            setErrorEmailCaption("")
-            setErrorNameCaption("")
         }
     }
 
@@ -65,17 +61,11 @@ export const UserInfo: FC = () => {
                     newLogin: userNameRef.current.value,
                     newEmail: userEmail
                 }
-                const res = await changeUserData(userData, 'username')
-                // const res = await changeUserData(userNameRef.current.value, 'username')
-                setUserName(res)
-                // userNameRef.current.value = res.data
+                handleChangeUserName(userData)
                 sideEffects(userNameRef.current, 'clear', 'name')
             }
             catch (err) {
-                setErrorNameCaption((err as Error).message)
-                // if (axios.isAxiosError(err) && err.response) {
-                //     setErrorNameCaption(err.response.data)
-                // }
+                console.log(err)
             }
         }
     }
@@ -87,37 +77,14 @@ export const UserInfo: FC = () => {
                     newLogin: userName,
                     newEmail: emailRef.current.value
                 }
-                const res = await changeUserData(userData, 'email')
-                // const res = await changeUserData(emailRef.current.value, 'email')
-                setEmail(res)
-                // emailRef.current.value = res.data;
+                handleChangeUserEmail(userData)
                 sideEffects(emailRef.current, 'clear', 'email')
             }
             catch (err) {
-                setErrorEmailCaption((err as Error).message)
-                // if (axios.isAxiosError(err) && err.response) {
-                //     setErrorEmailCaption(err.response.data)
-                // }
+                console.log(err)
             }
         }
     }
-
-    useEffect(() => {
-        const getUserData = async () => {
-            try {
-
-                const res = await getUser()
-                setUserName(res.login)
-                setEmail(res.email)
-                // userNameRef.current.value = res.data[0].login
-                // emailRef.current.value= res.data[0].email
-            }
-            catch (error) {
-                console.log(error)
-            }
-        }
-        getUserData()
-    }, []);
 
     return (
         <InfoContainer>
@@ -135,7 +102,7 @@ export const UserInfo: FC = () => {
                         onClick={handleOpenToChangeUsername}
                     />
                 </UserInnerContainer>
-                <ErrorCaption>{errorNameCaption}</ErrorCaption>
+                <ErrorCaption>{error.userNameError}</ErrorCaption>
                 {isUserNameClicked &&
                     <ButtonsContainer>
                         <ChangeBtn onClick={handleUserNameChange}>Change name</ChangeBtn>
@@ -156,7 +123,7 @@ export const UserInfo: FC = () => {
                         onClick={handleOpenToChangeEmail}
                     />
                 </ UserInnerContainer>
-                <ErrorCaption>{errorEmailCaption}</ErrorCaption>
+                <ErrorCaption>{error.userEmailError}</ErrorCaption>
                 {isEmailClicked &&
                     <ButtonsContainer>
                         <ChangeBtn onClick={handleEmailChange}>Change email</ChangeBtn>

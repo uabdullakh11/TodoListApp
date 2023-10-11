@@ -67,3 +67,9 @@ export const NavContainer = styled.div<{$isBurger?:boolean}>`
     ${(props)=>(props.$isBurger ? `display: flex;` : `display: none;`) }
   }
 `;
+
+export const CardBlock = styled.div<{$accountCard?:boolean}>`
+  background-color: ${(props)=>(props.$accountCard ? `#f4f4f4`: `#ffffff`)};
+  border-radius: 10px;
+  width: 466px;
+`;

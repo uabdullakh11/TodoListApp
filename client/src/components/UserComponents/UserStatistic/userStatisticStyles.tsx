@@ -10,6 +10,13 @@ gap: 3rem;
 width: 50%;
 justify-content: center;
 align-items: flex-start;
+@media (max-width: 720px){
+  font-size: 2vmax;
+  gap: 1rem;
+}
+@media (max-width: 440px){
+  width: 80%;
+}
 `;
 export const StatisticCircles = styled.div`
 display: flex;

@@ -1,23 +1,11 @@
-import { getUserStatistic } from "@/utils/services/user.service"
-import { useEffect, useState } from "react"
+import { useContext  } from "react"
 import { StatisticCircles, Circle, CircleBg, CircularChart, Percantage, SingleChart, StatisticContainer } from "./userStatisticStyles"
+import { AccountContext } from "@/context/AccountContext";
+import { AccountContextType } from "@/types/types";
 
 export const UserStatistic = () => {
-    const [weekStatistic, setWeekStatistic] = useState<string>("")
-    const [allTimeStatistic, setAllTimeStatistic] = useState<string>("")
-    useEffect(() => {
-        const getStatistics = async () => {
-            try {
-                const { WeekPercant, AllTimePercant } = await getUserStatistic();
-                setWeekStatistic(WeekPercant)
-                setAllTimeStatistic(AllTimePercant)
-            }
-            catch (err) {
-                console.log(err)
-            }
-        }
-        getStatistics()
-    })
+  const { userStatisctic } = useContext(AccountContext) as AccountContextType;
+
     return (
         <StatisticContainer>
             <StatisticCircles>
@@ -30,12 +18,12 @@ export const UserStatistic = () => {
           a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
                         <Circle
-                            strokeDasharray={`${weekStatistic}, 100`}
+                            strokeDasharray={`${userStatisctic.WeekPercant}, 100`}
                             d="M18 2.0845
           a 15.9155 15.9155 0 0 1 0 31.831
           a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
-                        <Percantage x="18" y="20.35">{weekStatistic}%</Percantage>
+                        <Percantage x="18" y="20.35">{userStatisctic.WeekPercant}%</Percantage>
                     </CircularChart>
                 </SingleChart>
             </StatisticCircles>
@@ -49,12 +37,12 @@ export const UserStatistic = () => {
           a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
                         <Circle
-                            strokeDasharray={`${allTimeStatistic}, 100`}
+                            strokeDasharray={`${userStatisctic.AllTimePercant}, 100`}
                             d="M18 2.0845
           a 15.9155 15.9155 0 0 1 0 31.831
           a 15.9155 15.9155 0 0 1 0 -31.831"
                         />
-                        <Percantage x="18" y="20.35">{allTimeStatistic}%</Percantage>
+                        <Percantage x="18" y="20.35">{userStatisctic.AllTimePercant}%</Percantage>
                     </CircularChart>
                 </SingleChart>
             </StatisticCircles>

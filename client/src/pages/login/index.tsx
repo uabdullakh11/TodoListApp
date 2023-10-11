@@ -29,19 +29,12 @@ export default function SignIn() {
           password,
         }
         await login(userData);
-        // const token = await axiosInstance.post('api/auth/login',userData)
-        // sessionStorage.setItem('ACCESS_TOKEN', token.data.ACCESS_TOKEN)
-        // sessionStorage.setItem('expires_in', token.data.expires_in)
-        // sessionStorage.setItem('REFRESH_TOKEN', token.data.REFRESH_TOKEN)
         router.push("/tasks");
       }
       catch (err) {
         if (err instanceof Error) {
           setError(err.message)
         }
-        // if (axios.isAxiosError(err) && err.response){
-        //   setError(err.response.data.message)
-        // }
       }
     }
   }

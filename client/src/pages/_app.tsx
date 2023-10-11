@@ -4,6 +4,7 @@ import '@/styles/global.css';
 import { useRouter } from "next/router";
 import React from "react";
 import Loader from "@/components/Loading/loading";
+import Head from "next/head";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
@@ -25,6 +26,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   }, [router.asPath, router.events])
   return (
     <Layout>
+      <Head>
+        <title>Todo List</title>
+      </Head>
       {loading ? <Loader /> : <Component {...pageProps} />}
     </Layout>
   );

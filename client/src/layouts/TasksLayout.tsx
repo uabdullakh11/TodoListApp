@@ -8,6 +8,7 @@ import { AvatarImage } from "@/components/UserComponents/UserAvatar/userAvatarSt
 import { BurgerMenu } from "@/components/BurgerMenu/BurgerMenu";
 import { getUser } from "@/utils/services/user.service";
 import Link from "next/link";
+import { isToken } from "@/helpers/token";
 
 export default function TasksLayout({
   children,
@@ -19,9 +20,7 @@ export default function TasksLayout({
   const [errorCode, setErrorCode] = useState<number>()
 
   useEffect(() => {
-    if (!sessionStorage.getItem('ACCESS_TOKEN')) {
-      setErrorCode(401)
-    }
+    !isToken() && setErrorCode(401)
   }, [])
 
   useEffect(() => {

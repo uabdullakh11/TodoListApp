@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import {useState, createContext, useCallback, useEffect, FC, useRef} from "react";
 import { ITask, TasksContextType } from "@/types/types";
 import { addTodo, deleteTodo, getTasks, updateTodo } from "@/utils/services/todo.service";
 
@@ -6,18 +6,18 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const TasksContext = React.createContext<TasksContextType | null>(null);
+export const TasksContext = createContext<TasksContextType | null>(null);
 
-const TasksProvider: React.FC<Props> = ({ children }) => {
+const TasksProvider: FC<Props> = ({ children }) => {
 
   const [tasksArray, setTasksArray] = useState<ITask[]>([])
   const [filter, setFilter] = useState<string>('today')
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [tasksCount, setTasksCount] = useState<number>(10);
 
-  const fetched = React.useRef(false)
+  const fetched = useRef(false)
 
-  const getTodos = React.useCallback(async (type: string) => {
+  const getTodos = useCallback(async (type: string) => {
     try {
       const all = await getTasks(type, currentPage);
       setTasksArray(all.currentTodos)
@@ -30,7 +30,7 @@ const TasksProvider: React.FC<Props> = ({ children }) => {
   }, [currentPage, tasksCount]);
 
   
-  React.useEffect(() => {
+  useEffect(() => {
     if (fetched.current) return;
     fetched.current = true
     getTodos(filter)

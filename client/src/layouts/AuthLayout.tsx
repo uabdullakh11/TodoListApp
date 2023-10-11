@@ -1,15 +1,8 @@
 import type { ReactElement } from 'react'
-import styled from "styled-components";
 import { Header } from "@/components/Header/Header";
 import { LogoTitle, PageName } from "@/styles/text";
 import Head from 'next/head';
-
-const CardBlock = styled.div`
-  background-color: #FFFFFF;
-  border-radius: 10px;
-  width: 466px;
-  
-`;
+import { CardBlock } from '@/styles/containers';
 
 export default function AuthLayout({
   children,

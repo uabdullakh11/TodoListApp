@@ -1,32 +1,26 @@
+import { isExpired, isToken, saveToken } from "@/helpers/token";
 import axios from "axios";
+import { refreshToken } from "../services/auth.service";
 
 export const api = axios.create({
   baseURL: "http://localhost:5000",
 });
+
 export const axiosInstance = axios.create({
   baseURL: "http://localhost:5000",
 });
 
 api.interceptors.request.use(async (request) => {
-  const refresh_token = sessionStorage.getItem("REFRESH_TOKEN");
-  const accessTokenExpDate = Number(sessionStorage.getItem("expires_in"));
-  const nowTime = Math.floor(new Date().getTime() / 1000) - 1800;
-
-
-  if (refresh_token && accessTokenExpDate <= nowTime) {
-    const res = await axiosInstance.post("/api/auth/refresh", {
-      refreshToken: refresh_token,
-    });
-    request.headers["Authorization"] = `Bearer ${res.data.ACCESS_TOKEN}`;
-    sessionStorage.setItem("ACCESS_TOKEN", res.data.ACCESS_TOKEN);
-    sessionStorage.setItem("expires_in", res.data.expires_in);
-    sessionStorage.setItem("REFRESH_TOKEN", res.data.REFRESH_TOKEN);
+  if (isExpired()) {
+    const res = await refreshToken();
+    request.headers["Authorization"] = `Bearer ${res.ACCESS_TOKEN}`;
     return request;
   } else {
-    const token = sessionStorage.getItem("ACCESS_TOKEN");
-    if (token) {
-      request.headers["Authorization"] = `Bearer ${token}`;
-    }
+    isToken()
+      ? (request.headers["Authorization"] = `Bearer ${sessionStorage.getItem(
+          "ACCESS_TOKEN"
+        )}`)
+      : false;
     return request;
   }
 });
@@ -35,13 +29,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response.status === 401) {
-      const refresh_token = sessionStorage.getItem("REFRESH_TOKEN");
-      const res = await axiosInstance.post("/api/auth/refresh", {
-        refreshToken: refresh_token,
-      });
-      sessionStorage.setItem("ACCESS_TOKEN", res.data.ACCESS_TOKEN);
-      sessionStorage.setItem("expires_in", res.data.expires_in);
-      sessionStorage.setItem("REFRESH_TOKEN", res.data.REFRESH_TOKEN);
+      const res = await refreshToken();
       return res;
     } else {
       return Promise.reject(error);

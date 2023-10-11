@@ -14,7 +14,7 @@ export const BurgerMenu = (props: { type: string }) => {
         setClick(false)
     })
 
-    const handleSideBarClose = () =>{
+    const handleSideBarClose = () => {
         setClick(false)
     }
 
@@ -25,12 +25,13 @@ export const BurgerMenu = (props: { type: string }) => {
             </MenuLabel>
             {click &&
                 <SideBar>
-                    {props.type == "tasks" && <NavPanel isBurger={{isBurger: true, handleSideBarClose}} />}
+                    {props.type == "tasks" && <NavPanel isBurger={{ isBurger: true, handleSideBarClose }} />}
                     {props.type == "account" &&
                         <>
                             <BackToHome href="tasks">&#129044; Back</BackToHome>
-                            <SettingsNavPanel handleClick={handleMenuClick} isBurger={{isBurger: true, handleSideBarClose}}></SettingsNavPanel>
-                        </>}
+                            <SettingsNavPanel isBurger={{ isBurger: true, handleSideBarClose }}></SettingsNavPanel>
+                        </>
+                    }
                 </SideBar>
             }
         </BurgerMenuContainer>

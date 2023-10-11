@@ -35,22 +35,16 @@ export default function SignUp() {
           login: login.trim(),
         }
         await register(userData)
-        // const token = await api.post('api/auth/register', userData)
-        // const token = await axiosInstance.post('api/auth/register', userData)
-        // sessionStorage.setItem('ACCESS_TOKEN', token.data.ACCESS_TOKEN)
-        // sessionStorage.setItem('REFRESH_TOKEN', token.data.REFRESH_TOKEN)
         router.push("/tasks");
       }
       catch (err) {
         if (err instanceof Error) {
           setError(err.message)
         }
-        // if (axios.isAxiosError(err) && err.response){
-        //   setError(err.response.data.message)
-        // }
       }
     }
   }
+  
   return (
     <AuthLayout>
       <AuthForm>
