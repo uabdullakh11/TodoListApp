@@ -1,5 +1,4 @@
 import multer from "multer";
-import path from 'path';
 
 const imgAllowed = /image\/jpeg|image\/jpg|image\/png|image\/svg/i;
 
@@ -15,16 +14,7 @@ const imgStorage = multer.diskStorage({
     cb(null, "./src/static/avatars");
   },
   filename: (req, file, cb) => {
-    const extension = path.extname(file.originalname).toLowerCase();
     const fileName = `${req.userId}__${file.originalname}`;
-    const fullpath = `./src/static/avatars/${fileName}`;
-    // try {
-    //   if (fs.existsSync(fullpath)) {
-    //     cb("File already exists");
-    //   }
-    // } catch (err) {
-    //   console.error(err);
-    // }
     cb(null, fileName);
   },
 });

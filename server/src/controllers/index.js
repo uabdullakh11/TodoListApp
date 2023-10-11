@@ -1,3 +1,3 @@
-export * as userController from './userController.js';
-export * as authController from './authController.js';
-export * as todoController from './todoController.js';
+export * as AuthController from './AuthController/index.js';
+export * as TodoController from "./TodoControlller/index.js";
+export * as UserController from "./UserController/index.js";

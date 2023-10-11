@@ -5,8 +5,7 @@ const getDate = () => {
   let today = new Date();
   let fullDate = today.toLocaleString("en-US", options);
   let currentDate = today.toLocaleDateString("en-US", options);
-  let time = today.toLocaleTimeString("en-US", options);
-  return { fullDate, currentDate, time };
+  return { fullDate, currentDate};
 };
 
 export default getDate;

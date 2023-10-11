@@ -13,6 +13,7 @@ export function hashPassword(password) {
 export function comparePasswords(userPassword, hashedPassword) {
   return bcrypt.compare(userPassword, hashedPassword);
 }
+
 export function verifyToken(token, secretKey) {
   try {
     return jwt.verify(token, secretKey);
