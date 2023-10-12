@@ -8,7 +8,7 @@ const StatusButton = styled.div`
   background-position-y: center;
   background-position-x: 10px;
   @media (max-width: 700px) {
-    padding-right: 35px;
+    padding: 10px 90px;
   }
 `;
 
@@ -46,11 +46,22 @@ export const AddTaskBtn = styled.button`
     background-color: #8600ff0f;
     color: #8203f6;
   }
+  @media (max-width: 700px) {
+    padding: 10px 65px;
+    border-radius: 30px;
+  }
 `;
 
 export const SortButton = styled(StatusButton) <{ $button: string }>`
   ${(props) => props.$button === 'all' && css`
   background-image: url("../not-clicked-done-circle.svg");
+  @media (max-width: 700px) {
+    background: url("../not-clicked-done-circle.svg"), #dfdede;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 65px;
+    border-radius: 30px;
+  }
   &:hover{
     background: url("../clicked-done-circle.svg"), #9333ea0f;
     background-repeat: no-repeat;
@@ -62,6 +73,13 @@ export const SortButton = styled(StatusButton) <{ $button: string }>`
   ` }
   ${(props) => props.$button === 'date' && css`  
   background-image: url("../arrows 1.svg");
+  @media (max-width: 700px) {
+    background: url("../arrows 1.svg"), #dfdede;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 65px;
+    border-radius: 30px;
+  }
   &:hover{
     background: url("../clicked-arrows.svg"), #9333ea0f;
     background-repeat: no-repeat;
@@ -69,7 +87,9 @@ export const SortButton = styled(StatusButton) <{ $button: string }>`
     background-position-x: 10px;
     color: #9333ea;
     border-radius: 10px;
-  }` }
+  }`
+
+  }
   ${(props) => props.$button === 'today' && css`
   &:hover {
     background: url("../today-clicked-icon.svg"), #9333ea0f;
@@ -80,5 +100,12 @@ export const SortButton = styled(StatusButton) <{ $button: string }>`
     border-radius: 10px;
   }
   background-image: url("../today-logo.svg");
+  @media (max-width: 700px) {
+    background: url("../today-logo.svg"), #dfdede;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 65px;
+    border-radius: 30px;
+  }
   `}
 `

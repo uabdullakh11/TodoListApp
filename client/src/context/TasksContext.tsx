@@ -1,4 +1,4 @@
-import {useState, createContext, useCallback, useEffect, FC, useRef} from "react";
+import { useState, createContext, useCallback, useEffect, FC, useRef } from "react";
 import { ITask, TasksContextType } from "@/types/types";
 import { addTodo, deleteTodo, getTasks, updateTodo } from "@/utils/services/todo.service";
 
@@ -10,26 +10,39 @@ export const TasksContext = createContext<TasksContextType | null>(null);
 
 const TasksProvider: FC<Props> = ({ children }) => {
 
-  const [tasksArray, setTasksArray] = useState<ITask[]>([])
+  const [tasks, setTasks] = useState<{todos: ITask[], todosCount: number}>({todos: [], todosCount: 10})
   const [filter, setFilter] = useState<string>('today')
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [tasksCount, setTasksCount] = useState<number>(10);
 
   const fetched = useRef(false)
 
-  const getTodos = useCallback(async (type: string) => {
+  const getTodos = useCallback(async (type?: string) => {
     try {
-      const all = await getTasks(type, currentPage);
-      setTasksArray(all.currentTodos)
-      setTasksCount(all.allTodosCount)
-      tasksCount < 11 ? setCurrentPage(1) : null;
+      let res;
+      if (type == "done") {
+        res = await getTasks(currentPage,"true", "DESC");
+      }
+      else if (type == "undone") {
+        res = await getTasks(currentPage,"false","DESC");
+      }
+      else if (type == "past") {
+        res = await getTasks(currentPage, "", "ASC");
+      }
+      else if (type=="today") {
+        res = await getTasks(currentPage, type,"DESC");
+      }
+      else {
+        res = await getTasks(currentPage, "","DESC");
+      }
+      setTasks({todos:res.rows, todosCount: res.count})
+      tasks.todosCount < 11 ? setCurrentPage(1) : null;
     }
     catch (err) {
       console.log(err)
     }
-  }, [currentPage, tasksCount]);
+  }, [currentPage, tasks.todosCount]);
 
-  
+
   useEffect(() => {
     if (fetched.current) return;
     fetched.current = true
@@ -90,7 +103,6 @@ const TasksProvider: FC<Props> = ({ children }) => {
     catch (err) {
       console.log(err)
     }
-
   }
 
   return (
@@ -102,9 +114,8 @@ const TasksProvider: FC<Props> = ({ children }) => {
         editTask,
         onPageChange,
         handleSetFilter,
-        tasksArray,
+        tasks,
         currentPage,
-        tasksCount,
         filter
       }}
     >

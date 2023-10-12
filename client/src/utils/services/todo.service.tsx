@@ -2,9 +2,9 @@ import axios from "axios";
 import { api } from "../axios/axios";
 import { ITask } from "@/types/types";
 
-const getTasks = async (type: string, currentPage: number) => {
+const getTasks = async (currentPage: number, type?: string, order?:string) => {
     try {
-        const todos = await api(`/api/todos?page=${currentPage}&filter=${type}`);
+        const todos = await api(`/api/todos?page=${currentPage}&filter=${type}&order=${order}`);
         return todos.data;
     }
     catch (error) {

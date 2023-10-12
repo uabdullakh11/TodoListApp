@@ -9,8 +9,6 @@ import { NavBlock, NavContainer } from "@/styles/containers";
 import { Dropdown } from "../SortingButtons/Dropdown";
 
 interface NavPanelProps {
-  // isBurger?: boolean;
-  // handleSideBarClose?: ()=> void;
   isBurger?: { isBurger: boolean, handleSideBarClose: () => void };
 }
 const NavPanel: FC<NavPanelProps> = ({ isBurger }) => {

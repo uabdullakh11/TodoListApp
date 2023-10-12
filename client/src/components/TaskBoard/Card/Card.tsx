@@ -1,4 +1,3 @@
-// import { Task } from "@/components/Task/Task";
 import React, { FC, Suspense, useEffect, useState } from "react";
 import { ITask, TasksContextType } from "@/types/types";
 import Pagination from "../../Pagination/Pagination";
@@ -16,35 +15,19 @@ const Task = React.lazy(
     })
 );
 
-import dynamic from "next/dynamic";
-// const Task = dynamic(
-//   () => import("@/components/Task/Task").then((mod) => mod.Task)
-//   ,
-//   {
-//     suspense: true, ssr: false, loading: () => <Loader></Loader>,
-//   }
-// );
-
 
 const Card: FC = () => {
-  const { tasksArray, onPageChange, currentPage, tasksCount, filter } = React.useContext(TasksContext) as TasksContextType;
-
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  const { tasks, onPageChange, currentPage, filter } = React.useContext(TasksContext) as TasksContextType;
   const pageSize = 10;
-
-  useEffect(() => {
-    setTasks(tasksArray)
-  }, [tasksArray, currentPage]);
-
 
   return (
     <CardBlock>
       <Container>
         <Suspense fallback={<Loader />}>
-          {filter[0].toUpperCase() + filter.slice(1)} tasks quantity: {tasksCount}
-          {tasksCount ? (
+          {filter[0].toUpperCase() + filter.slice(1)} tasks quantity: {tasks.todosCount}
+          {tasks.todosCount ? (
             <>
-              {tasks.map((item: ITask) => {
+              {tasks.todos.map((item: ITask) => {
                 return (
                   <Task
                     key={item.id}
@@ -55,7 +38,7 @@ const Card: FC = () => {
                   />)
               })}
               <Pagination
-                totalCount={tasksCount} // 100
+                totalCount={tasks.todosCount} // 100
                 currentPage={currentPage} // 1
                 pageSize={pageSize} // 10
                 onPageChange={onPageChange}

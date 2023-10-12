@@ -9,9 +9,6 @@ export const ButtonsContainer = styled.div`
   @media (max-width: 700px) {
     align-items: center;
   }
-  @media (max-width: 360px) {
-    gap: 0;
-  }
 `;
 
 
@@ -39,6 +36,13 @@ export const LogOutBtn = styled.button`
   }
   @media (max-width: 700px) {
     margin-top: 0px;
+    padding: 10px 90px;
+    background: url("../logout-btn.svg"), #9333ea0f;
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: 60px;
+  background-size: 25px;
+  border-radius: 30px;
   }
 `;
 
@@ -49,23 +53,29 @@ export const UserProfileButtons = styled.div<{ $button: string, $active: boolean
   cursor: pointer;
   text-indent: 10px;
   border-radius: 10px;
-  @media (max-width: 700px) {
-    padding-right: 35px;
-  }
   ${(props) => props.$button === 'profile' && css`
   background: url("../person-logo.svg");
   background-repeat: no-repeat;
   background-position-y: center;
   background-position-x: 10px;
   background-size: 25px;
+  @media (max-width: 700px) {
+    background: url("../person-logo.svg"), #dfdede;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 65px;
+    border-radius: 30px;
+    background-size: 25px;
+    padding: 10px 90px;
+  }
   &:hover, &:active {
     color: #9333ea;
     font-weight: bold;
     background: url("../person-logo.svg"), #9333ea0f;
-  background-repeat: no-repeat;
-  background-position-y: center;
-  background-position-x: 10px;
-  background-size: 25px;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 10px;
+    background-size: 25px;
   }
   &:focus{
     box-shadow: 0 0 0 3px #8203f6;
@@ -73,19 +83,28 @@ export const UserProfileButtons = styled.div<{ $button: string, $active: boolean
   }
   ` }
   ${(props) => props.$button === 'security' && css`
-  background: url("../security-btn-icon.svg");
-  background-repeat: no-repeat;
+    background: url("../security-btn-icon.svg");
+    background-repeat: no-repeat;
     background-position-y: center;
     background-position-x: 10px;
     background-size: 25px;
+    @media (max-width: 700px) {
+      background: url("../security-btn-icon.svg"), #dfdede;
+      background-repeat: no-repeat;
+      background-position-y: center;
+      background-position-x: 65px;
+    border-radius: 30px;
+      background-size: 25px;
+      padding: 10px 85px;
+  }
   &:hover, &:active {
     color: #9333ea;
     font-weight: bold;
     background: url("../security-btn-icon.svg"), #9333ea0f;
     background-repeat: no-repeat;
-      background-position-y: center;
-      background-position-x: 10px;
-      background-size: 25px;
+    background-position-y: center;
+    background-position-x: 10px;
+    background-size: 25px;
   }
   &:focus{
     box-shadow: 0 0 0 3px #8203f6;
@@ -94,7 +113,7 @@ export const UserProfileButtons = styled.div<{ $button: string, $active: boolean
   `
   }
   
-  ${(props)=> props.$active && css`
+  ${(props) => props.$active && css`
   background-color: #9333ea0f;
   color: #9333ea;
   border-radius: 10px;

@@ -2,6 +2,9 @@ import styled, { css } from "styled-components";
 export const SortingButtonsContainer = styled.div`
   background-color: #9333ea0f;
   border-radius: 10px;
+  @media (max-width: 700px) {
+    background-color: inherit;
+  }
 `;
 
 export const StatusButton = styled.div`
@@ -13,8 +16,14 @@ export const StatusButton = styled.div`
   background-position-x: 10px;
   border-radius: 10px;
   padding: 10px 70px 10px 35px;
-  @media (max-width: 689px) {
-    padding: 10px 35px;
+  @media (max-width: 700px) {
+    padding: 10px 90px;
+    background: url("../clicked-done-circle.svg"), #9333ea0f;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 60px;
+    border-radius: 30px;
+    margin-bottom: 5px;
   }
 `;
 export const DateButton = styled.div`
@@ -27,6 +36,15 @@ export const DateButton = styled.div`
   background-position-x: 10px;
   border-radius: 10px;
   padding-left: 35px;
+  @media (max-width: 700px) {
+    padding: 10px 90px;
+    background: url("../clicked-arrows.svg"), #9333ea0f;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 60px;
+    border-radius: 30px;
+    margin-bottom: 5px;
+  }
 `;
 
 const SortingButtons = styled.div`
@@ -38,7 +56,7 @@ const SortingButtons = styled.div`
   background-position-x: 10px;
   padding-right: 70px;
   padding-left: 35px;
-  @media (max-width: 689px) {
+  @media (max-width: 700px) {
     padding-right: 35px;
   }
 `;

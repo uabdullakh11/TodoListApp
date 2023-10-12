@@ -12,9 +12,8 @@ export type TasksContextType = {
   editTask: (todo:ITask, handleError: (error: string) => void) => Promise<boolean | undefined>,
   onPageChange: (page: number) => void,
   handleSetFilter: (value: string) => void,
-  tasksArray: ITask[],
+  tasks: {todos: ITask[], todosCount: number},
   currentPage: number,
-  tasksCount: number,
   filter: string,
 };
 

@@ -51,7 +51,7 @@ export const NavBlock = styled.div`
   font-size: 16px;
   font-weight: 400;
 `;
-export const NavContainer = styled.div<{$isBurger?:boolean}>`
+export const NavContainer = styled.div<{ $isBurger?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -64,12 +64,20 @@ export const NavContainer = styled.div<{$isBurger?:boolean}>`
   //   gap: 1em;
   // }
   @media (max-width: 700px) {
-    ${(props)=>(props.$isBurger ? `display: flex;` : `display: none;`) }
+    ${(props) =>
+      props.$isBurger
+        ? `display: flex;flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-content: center;
+    justify-content: center; `
+        : `display: none;`}
   }
 `;
 
-export const CardBlock = styled.div<{$accountCard?:boolean}>`
-  background-color: ${(props)=>(props.$accountCard ? `#f4f4f4`: `#ffffff`)};
+export const CardBlock = styled.div<{ $accountCard?: boolean }>`
+  background-color: ${(props) => (props.$accountCard ? `#f4f4f4` : `#ffffff`)};
   border-radius: 10px;
   width: 466px;
 `;
