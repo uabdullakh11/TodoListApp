@@ -3,16 +3,17 @@ import Todo from "../../models/Todo.js";
 
 const getUserById = async (id) => {
   try {
-    const userInfo = await User.findAll({
+    const userInfo = await User.findAll({ 
+      attributes: ['login', 'email','avatar'],
       where: {
         id: id,
       },
-      include: [
-        {
-          model: Todo,
-          as: "todo",
-        },
-      ],
+      // include: [
+      //   {
+      //     model: Todo,
+      //     as: "todo",
+      //   },
+      // ],
     });
     return userInfo;
   } catch (error) {

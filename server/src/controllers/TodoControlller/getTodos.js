@@ -5,7 +5,8 @@ const getTodos = async (req, res, next) => {
     const todos = await TodoService.getTodos(
       id,
       req.query.page,
-      req.query.filter
+      req.query.filter,
+      req.query.order
     );
     res.json(todos);
   } catch (error) {

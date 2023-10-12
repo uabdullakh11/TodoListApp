@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "dev": "nodemon ..",
-    "start":"yarn run migrate:run && yarn run start:server",
+    "start": "yarn run migrate:run && yarn run start:server",
     "start:server": "nodemon app.js",
     "migration:create": "sequelize migration:create --name ",
     "migrate:run": "sequelize db:migrate",
@@ -30,6 +30,7 @@
     "multer": "^1.4.5-lts.1",
     "pg": "^8.11.3",
     "pg-hstore": "^2.3.4",
+    "recursive-readdir-sync": "^1.0.6",
     "sequelize": "^6.33.0",
     "serve-index": "^1.9.1",
     "uuid": "^9.0.1"

@@ -1,85 +1,34 @@
 import getDate from "../../helpers/getDate.js";
-import { paginate } from "../../helpers/paginate.js";
 import Todo from "../../models/Todo.js";
 import { Op } from "sequelize";
 
 const { currentDate } = getDate();
 const pageSize = 10;
-const todos = {
-  allTodosCount: 0,
-  currentTodos: [],
-};
 
-const getTodos = async (id, page, filter) => {
+const getTodos = async (id, page, filter, order) => {
   try {
-    let tasks = [];
-    switch (filter) {
-      case "all":
-        tasks = await Todo.findAll({
+    let recievedTodos;
+    filter == "today"
+      ? (recievedTodos = await Todo.findAndCountAll({
           where: {
-            userId: {
-              [Op.eq]: id,
-            },
-          },
-          order:[["createdAt", "DESC"]],
-        });
-        break;
-      case "today":
-        tasks = await Todo.findAll({
-          order:[["createdAt", "DESC"]],
-          where: {
-            userId: {
-              [Op.eq]: id,
-            },
+            userId: id,
             date: {
               [Op.startsWith]: `%${currentDate}`,
             },
           },
-        });
-        break;
-      case "new":
-        tasks = await Todo.findAll({
-          order:[["createdAt", "DESC"]],
-          where: {
-            userId: {
-              [Op.eq]: id,
-            },
-          },
-        });
-        break;
-      case "past":
-        tasks = await Todo.findAll({
-          order:[["createdAt", "ASC"]],
-          where: {
-            userId: {
-              [Op.eq]: id,
-            },
-          },
-        });
-        break;
-      case "done":
-        tasks = await Todo.findAll({
-          order:[["createdAt", "DESC"]],
-          where: {
-            [Op.and]: [{ userId: id }, { completed: true }],
-          },
-        });
-        break;
-      case "undone":
-        tasks = await Todo.findAll({
-          order:[["createdAt", "DESC"]],
-          where: {
-            [Op.and]: [{ userId: id }, { completed: false }],
-          },
-        });
-        break;
-      default:
-    }
-    todos.allTodosCount = tasks.length;
-    todos.currentTodos = paginate(tasks, page, pageSize);
-    return todos;
+          order: [["createdAt", "DESC"]],
+          offset: pageSize * (page - 1),
+          limit: pageSize,
+        }))
+      : (recievedTodos = await Todo.findAndCountAll({
+          where: !filter ? { userId: id } : { userId: id, completed: filter },
+          order: [["createdAt", order]],
+          offset: pageSize * (page - 1),
+          limit: pageSize,
+        }));
+    return recievedTodos;
   } catch (error) {
     throw new Error(error);
   }
 };
-export {getTodos}
+export { getTodos };
