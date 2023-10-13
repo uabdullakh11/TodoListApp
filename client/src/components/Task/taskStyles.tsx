@@ -11,6 +11,7 @@ export const LeftContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 1em;
+  flex-shrink: 10000;
 `;
 export const DoneButton = styled.span`
   cursor: pointer;
@@ -42,21 +43,27 @@ export const TaskContainer = styled.div`
   background-color: #9333ea0f;
   flex-direction: row;
   justify-content: space-between;
+  gap: 0.5em;
 `;
 export const TaskName = styled.span`
   color: #000000;
-  word-break: break-all;
-  max-width: 205px;
+  word-break: break-word;
   display: inline-block;
-  @media (max-width: 475px) {
+  @media (max-width: 600px){
+    font-size: 14px;
+  }
+  /* @media (max-width: 475px) {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap
-  }
+  } */
 `;
 export const DataLine = styled.span`
   color: #6b7280;
-  word-break: break-all;
+  word-break: break-word;
+  @media (max-width: 600px){
+    font-size: 14px;
+  }
   @media (max-width:500px){
     display: none;
   }

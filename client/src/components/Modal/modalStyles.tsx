@@ -1,6 +1,6 @@
 import styled from "styled-components";
 export const ModalContainer = styled.div`
-  padding-botttom: 10px;
+  padding-bottom: 10px;
   border-radius: 10px;
   background: #fff;
   @media (max-width: 400px) {

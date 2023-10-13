@@ -72,13 +72,16 @@ export const SortButton = styled(StatusButton) <{ $button: string }>`
   }
   ` }
   ${(props) => props.$button === 'date' && css`  
-  background-image: url("../arrows 1.svg");
-  @media (max-width: 700px) {
-    background: url("../arrows 1.svg"), #dfdede;
+    background: url("../arrows 1.svg"), transparent;
     background-repeat: no-repeat;
     background-position-y: center;
-    background-position-x: 65px;
-    border-radius: 30px;
+    background-position-x: 10px;
+    @media (max-width: 700px) {
+      background: url("../arrows 1.svg"), #dfdede;
+      background-repeat: no-repeat;
+      background-position-y: center;
+      background-position-x: 65px;
+      border-radius: 30px;
   }
   &:hover{
     background: url("../clicked-arrows.svg"), #9333ea0f;
@@ -88,7 +91,6 @@ export const SortButton = styled(StatusButton) <{ $button: string }>`
     color: #9333ea;
     border-radius: 10px;
   }`
-
   }
   ${(props) => props.$button === 'today' && css`
   &:hover {

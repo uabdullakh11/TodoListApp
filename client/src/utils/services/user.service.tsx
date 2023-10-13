@@ -12,7 +12,7 @@ const changePassword = async (userNewPassword: { currentPassword: string, newPas
     }
 }
 
-const changeUserData = async (userData: {newLogin: string, newEmail: string}, type: string) => {
+const changeUserData = async (userData: { newLogin: string, newEmail: string }, type: string) => {
     try {
         if (type === 'email') {
             const res = await api.patch(`api/users?change=${type}`, userData);
@@ -67,4 +67,14 @@ const getUserStatistic = async () => {
     }
 }
 
-export { changeAvatar, changePassword, changeUserData, getUserStatistic, getUser }
+const deleteUser = async () => {
+    try {
+        await api.delete('api/users/')
+    }
+    catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.message);
+        }
+    }
+}
+export { changeAvatar, changePassword, changeUserData, getUserStatistic, getUser, deleteUser }

@@ -1,4 +1,4 @@
-import React, { useState, FC, useEffect } from "react";
+import React, { useState, FC, useEffect, useRef } from "react";
 import useModal from "@/utils/hooks/useModal";
 import Image from "next/image";
 import { Modal } from "../Modal/Modal";
@@ -19,6 +19,9 @@ import { TasksContext } from "@/context/TasksContext";
 import { TasksContextType } from "@/types/types";
 import { EditButton } from "@/styles/buttons";
 import { useClickOutside } from '../../utils/hooks/useClickOutside';
+import { ModalBody, ModalButtons, ModalCloseButton, ModalDeleteButton, ModalHeader, ModalSaveButton, ModalText } from "../Modal/modalStyles";
+import { ErrorCaption } from "@/styles/text";
+import { Input } from "@/styles/inputs";
 
 interface TasksProps {
   id: string;
@@ -27,14 +30,15 @@ interface TasksProps {
   date: string;
 }
 const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
-  const { updateTask } = React.useContext(TasksContext) as TasksContextType;
+  const { updateTask, deleteTask, editTask } = React.useContext(TasksContext) as TasksContextType;
 
   const { currentDate, yesterdayTime } = getDate();
   const [isShowingModal, toggleModal] = useModal();
 
-  // const [isDone, setIsDone] = useState<boolean>(false);
   const [taskdate, setTaskDate] = useState<string>("");
   const [isOptionsBtnClicked, setOptionsBtnClicked] = useState<boolean>(false);
+  const [errorCaption, setErrorCaption] = useState("");
+  const [changeTitle, setChangeTitle] = useState("")
   const [typeModal, setTypeModal] = useState<string>("");
 
   const handleClickDoneBtn = async () => {
@@ -60,6 +64,51 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
     toggleModal(true);
   };
 
+  const ref = useClickOutside(() => {
+    setOptionsBtnClicked(false)
+  });
+
+  const handleCloseButton = () => {
+    toggleModal(false)
+    setErrorCaption("");
+  }
+
+  const handleError = (error: string) => {
+    setErrorCaption(error)
+  }
+
+  const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      const target = e.target as HTMLInputElement
+      target.id === "change-name-input" && handleChangeClick();
+    }
+  }
+
+  const handleDeleteClick = async () => {
+    deleteTask(id)
+    toggleModal(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const element = e.target as HTMLInputElement;
+    setChangeTitle(element.value)
+  }
+
+  const handleChangeClick = async () => {
+    if (changeTitle.trim()) {
+      const todo = {
+        id: id,
+        title: changeTitle.trim(),
+        completed: completed,
+        date: date,
+      };
+      const isSuccess = await editTask(todo, handleError)
+      isSuccess ? handleCloseButton() : false;
+      // error.editError=="" ? handleCloseButton() : setErrorCaption(error.editError);
+    } else {
+      setErrorCaption("Please enter name of task!");
+    }
+  };
 
   useEffect(() => {
     let lastIndexTime = date.split("").lastIndexOf(":");
@@ -74,13 +123,8 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
     else {
       setTaskDate(`${date.slice(0, lastIndexDate)} at ${date.slice(11, lastIndexTime)}`)
     }
-    
+
   }, [date, currentDate, yesterdayTime]);
-
-  const ref = useClickOutside(() => {
-    setOptionsBtnClicked(false)
-  });
-
 
   return (
     <TaskBlock ref={ref}>
@@ -125,9 +169,49 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
       <Modal
         show={isShowingModal}
         onCloseButtonClick={toggleModal}
-        type={typeModal}
-        taskObj={{ completed, id, title, date }}
-      />
+      >
+        {typeModal === "editModal" ? (
+          <>
+            <ModalHeader>Edit Task</ModalHeader>
+            <ModalBody>
+              <Input
+                placeholder="Change name of task..."
+                name="change-name-input"
+                id="change-name-input"
+                autoFocus={true}
+                onChange={handleInputChange}
+                onKeyDown={handleEnterPress}
+              />
+              <ErrorCaption>{errorCaption}</ErrorCaption>
+              <ModalButtons>
+                <ModalSaveButton onClick={handleChangeClick}>
+                  Change
+                </ModalSaveButton>
+                <ModalCloseButton onClick={handleCloseButton}>
+                  Close
+                </ModalCloseButton>
+              </ModalButtons>
+            </ModalBody>
+          </>)
+          :
+          (
+            <>
+              <ModalHeader>Delete Task</ModalHeader>
+              <ModalBody>
+                <ModalText>Are you sure about deleting this task?</ModalText>
+                <ModalButtons>
+                  <ModalDeleteButton onClick={handleDeleteClick}>
+                    Delete
+                  </ModalDeleteButton>
+                  <ModalCloseButton onClick={handleCloseButton}>
+                    Close
+                  </ModalCloseButton>
+                </ModalButtons>
+              </ModalBody>
+            </>
+          )
+        }
+      </Modal>
     </TaskBlock>
   );
 };

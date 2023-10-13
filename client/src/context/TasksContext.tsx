@@ -10,31 +10,36 @@ export const TasksContext = createContext<TasksContextType | null>(null);
 
 const TasksProvider: FC<Props> = ({ children }) => {
 
-  const [tasks, setTasks] = useState<{todos: ITask[], todosCount: number}>({todos: [], todosCount: 10})
+  const [tasks, setTasks] = useState<{ todos: ITask[], todosCount: number }>({ todos: [], todosCount: 10 })
   const [filter, setFilter] = useState<string>('today')
   const [currentPage, setCurrentPage] = useState<number>(1)
+  // const [error, setError] = useState<{ createError: string, editError: string }>({ createError: "", editError: "" })
 
   const fetched = useRef(false)
 
-  const getTodos = useCallback(async (type?: string) => {
+  const getTodos = useCallback(async (type?: string, search?:string) => {
     try {
       let res;
-      if (type == "done") {
-        res = await getTasks(currentPage,"true", "DESC");
+      switch (type) {
+        case "done":
+          res = await getTasks(currentPage, "true", "DESC");
+          break;
+        case "undone":
+          res = await getTasks(currentPage, "false", "DESC");
+          break;
+        case "past":
+          res = await getTasks(currentPage, "", "ASC");
+          break;
+        case "today":
+          res = await getTasks(currentPage, type, "DESC");
+          break;
+        case "search":
+          res = await getTasks(currentPage, type, "DESC", search);
+          break;
+        default:
+          res = await getTasks(currentPage, "", "DESC");
       }
-      else if (type == "undone") {
-        res = await getTasks(currentPage,"false","DESC");
-      }
-      else if (type == "past") {
-        res = await getTasks(currentPage, "", "ASC");
-      }
-      else if (type=="today") {
-        res = await getTasks(currentPage, type,"DESC");
-      }
-      else {
-        res = await getTasks(currentPage, "","DESC");
-      }
-      setTasks({todos:res.rows, todosCount: res.count})
+      setTasks({ todos: res.rows, todosCount: res.count })
       tasks.todosCount < 11 ? setCurrentPage(1) : null;
     }
     catch (err) {
@@ -46,6 +51,7 @@ const TasksProvider: FC<Props> = ({ children }) => {
   useEffect(() => {
     if (fetched.current) return;
     fetched.current = true
+    console.log(filter)
     getTodos(filter)
   }, [filter, getTodos])
 
@@ -68,6 +74,7 @@ const TasksProvider: FC<Props> = ({ children }) => {
       if (err instanceof Error) {
         handleError(err.message)
         return false;
+        // setError({ createError: "", editError: err.message })
       }
     }
   }
@@ -84,14 +91,13 @@ const TasksProvider: FC<Props> = ({ children }) => {
     try {
       await addTodo(todo)
       getTodos(filter)
-      // handleSetFilter("today")
-      // setCurrentPage(1)
-      return true;
+      return true
     }
     catch (err) {
       if (err instanceof Error) {
         handleError(err.message)
         return false;
+        // setError({ createError: err.message, editError: "" })
       }
     }
   }
@@ -105,6 +111,11 @@ const TasksProvider: FC<Props> = ({ children }) => {
     }
   }
 
+  const searchTask =async (value: string) => {
+    getTodos("search", value)
+    setFilter("search")
+  }
+
   return (
     <TasksContext.Provider
       value={{
@@ -114,9 +125,10 @@ const TasksProvider: FC<Props> = ({ children }) => {
         editTask,
         onPageChange,
         handleSetFilter,
+        searchTask,
         tasks,
         currentPage,
-        filter
+        filter,
       }}
     >
       {children}

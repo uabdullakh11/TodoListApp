@@ -6,15 +6,17 @@ export interface ITask {
 }
 
 export type TasksContextType = {
-  updateTask: (todo:ITask) => void,
-  addTask: (todo: {title: string,completed: boolean, date: string}, handleError: (error: string) => void) => Promise<boolean | undefined>,
+  updateTask: (todo: ITask) => void,
+  addTask: (todo: { title: string, completed: boolean, date: string }, handleError: (error: string) => void) => Promise<boolean | undefined>,
   deleteTask: (id: string) => void,
-  editTask: (todo:ITask, handleError: (error: string) => void) => Promise<boolean | undefined>,
+  editTask: (todo: ITask, handleError: (error: string) => void) => Promise<boolean | undefined>,
   onPageChange: (page: number) => void,
   handleSetFilter: (value: string) => void,
-  tasks: {todos: ITask[], todosCount: number},
+  searchTask: (value: string) => void,
+  tasks: { todos: ITask[], todosCount: number },
   currentPage: number,
   filter: string,
+  // error: { createError: string, editError: string },
 };
 
 export type AccountContextType = {
@@ -22,10 +24,10 @@ export type AccountContextType = {
   userName: string;
   userEmail: string;
   userAvatar: string;
-  userStatisctic: {WeekPercant: number, AllTimePercant:number};
+  userStatisctic: { WeekPercant: number, AllTimePercant: number };
   error: { avatarError: string, userNameError: string, userEmailError: string };
   handleProfileClick: (value: boolean) => void;
   handleChangeAvatar: (avatarIcon: FormData) => void;
-  handleChangeUserName:(userData: { newLogin: string, newEmail: string }) => void;
-  handleChangeUserEmail:(userData: { newLogin: string, newEmail: string }) => void;
+  handleChangeUserName: (userData: { newLogin: string, newEmail: string }) => void;
+  handleChangeUserEmail: (userData: { newLogin: string, newEmail: string }) => void;
 }

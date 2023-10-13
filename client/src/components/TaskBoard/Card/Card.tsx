@@ -3,8 +3,9 @@ import { ITask, TasksContextType } from "@/types/types";
 import Pagination from "../../Pagination/Pagination";
 import { Container } from "@/styles/containers";
 import { TasksContext } from "@/context/TasksContext";
-import { CardBlock, EmptyContainer } from "./cardStyles";
+import { CardBlock, CardHeader, EmptyContainer } from "./cardStyles";
 import Loader from "../../Loading/loading"
+import { SearchTask } from "../SearchTask/SearchTask";
 
 const Task = React.lazy(
   () =>
@@ -24,7 +25,10 @@ const Card: FC = () => {
     <CardBlock>
       <Container>
         <Suspense fallback={<Loader />}>
-          {filter[0].toUpperCase() + filter.slice(1)} tasks quantity: {tasks.todosCount}
+          <CardHeader>
+            {filter[0].toUpperCase() + filter.slice(1)} tasks quantity: {tasks.todosCount}
+            <SearchTask></SearchTask>
+          </CardHeader>
           {tasks.todosCount ? (
             <>
               {tasks.todos.map((item: ITask) => {
