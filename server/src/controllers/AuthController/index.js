@@ -1,3 +1,3 @@
-export { login } from "./login.js";
-export { register } from "./register.js";
-export { refreshToken } from "./refreshToken.js";
+export { login } from "./auth.login.js";
+export { register } from "./auth.register.js";
+export { refreshToken } from "./auth.refresh.js";

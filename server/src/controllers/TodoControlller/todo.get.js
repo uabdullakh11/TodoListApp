@@ -6,7 +6,8 @@ const getTodos = async (req, res, next) => {
       id,
       req.query.page,
       req.query.filter,
-      req.query.order
+      req.query.order,
+      req.query.search
     );
     res.json(todos);
   } catch (error) {

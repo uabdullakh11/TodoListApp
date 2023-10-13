@@ -1,5 +1,4 @@
-export { addTodo } from "./addTodo.js";
-export { deleteTodo } from "./deleteTodo.js";
-export { getTodos } from "./getTodos.js";
-export { searchTask } from "./searchTask.js";
-export { updateTodo } from "./updateTodo.js";
+export { addTodo } from "./todo.add.js";
+export { deleteTodo } from "./todo.delete.js";
+export { getTodos } from "./todo.get.js";
+export { updateTodo } from "./todo.update.js";

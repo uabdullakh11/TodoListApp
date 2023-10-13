@@ -45,27 +45,8 @@ User.hasOne(Token, {
 });
 Token.belongsTo(User)
 
-User.beforeCreate(async (user, options) => {
+User.beforeCreate(async (user) => {
   user.id = uuid();
 });
-
-// User.hasMany(Todo, {
-//   as: "todo",
-//   foreignKey: {
-//     name: "userId",
-//   },
-// });
-// sequelize
-//   .sync({ force: false })
-//   .then(() =>{
-//     User.hasMany(Todo, {
-//       as: 'todo',
-//       foreignKey: {
-//         name: 'userId',
-//       },
-//     });
-//     console.log("Synchronized tables");
-//   })
-//   .catch((err) => console.log(err));
 
 export default User;

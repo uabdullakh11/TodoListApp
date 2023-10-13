@@ -1,10 +1,10 @@
 import { Router } from "express";
-import getUserById from "./getUserById.js";
-import getUserStatistic  from "./getUserStatistic.js";
-import changeUserInfo from "./changeUserInfo.js";
-import changeUserPassword from "./changeUserPassword.js";
-import createUserAvatar from "./createUserAvatar.js";
-import deleteUser  from "./deleteUser.js";
+import getUserById from "./user.get.js";
+import getUserStatistic  from "./user.get.statistic.js";
+import changeUserInfo from "./user.change.info.js";
+import changeUserPassword from "./user.change.password.js";
+import createUserAvatar from "./user.create.avatar.js";
+import deleteUser  from "./user.delete.js";
 
 const UserRouter = Router();
 

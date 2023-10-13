@@ -34,7 +34,7 @@ const Token = sequelize.define(
 );
 
 
-Token.beforeCreate(async (token, options) => {
+Token.beforeCreate(async (token) => {
   token.id = uuid()
 });
 

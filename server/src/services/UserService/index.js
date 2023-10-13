@@ -1,7 +1,7 @@
-export { getUserById } from "./getUserById.js";
-export { getUserStatistic } from "./getUserStatistic.js";
-export { changeUserInfo } from "./changeUserInfo.js";
-export { changeUserPassword } from "./changeUserPassword.js";
-export { createUserAvatar } from "./createUserAvatar.js";
-export { deleteUser } from "./deleteUser.js";
-export { createUser } from "./createUser.js";
+export { getUserById } from "./user.get.js";
+export { getUserStatistic } from "./user.get.statistic.js"
+export { changeUserInfo } from "./user.change.info.js";
+export { changeUserPassword } from "./user.change.password.js";
+export { createUserAvatar } from "./user.create.avatar.js";
+export { deleteUser } from "./user.delete.js";
+export { createUser } from "./user.create.js";
