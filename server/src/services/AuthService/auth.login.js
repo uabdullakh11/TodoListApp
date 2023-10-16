@@ -7,6 +7,7 @@ import {
   generateRefreshToken,
 } from "../../utils/auth.js";
 import pkg from "http-errors";
+// import { AppError } from "../../utils/appError.js";
 const { BadRequest } = pkg;
 
 const login = async (login, password) => {
@@ -39,6 +40,7 @@ const login = async (login, password) => {
       REFRESH_TOKEN,
     };
   } catch (error) {
+    // throw new AppError(error);
     throw new BadRequest(error);
   }
 };

@@ -33,8 +33,8 @@ module.exports = {
               },
               key: "id",
             },
-            onDelete: 'SET NULL',
-            // onDelete: 'CASCADE',
+            // onDelete: 'SET NULL',
+            onDelete: 'CASCADE',
           },
           createdAt: {
             type: Sequelize.DATE,
