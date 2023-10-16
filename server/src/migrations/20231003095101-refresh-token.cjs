@@ -20,7 +20,8 @@ module.exports = {
               },
               key: "id",
             },
-            onDelete: 'SET NULL',
+            // onDelete: 'SET NULL',
+            onDelete: 'CASCADE'
           },
           token: {
             type: Sequelize.STRING,

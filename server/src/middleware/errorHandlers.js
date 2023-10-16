@@ -7,7 +7,6 @@ export function errorHandler(err, req, res, next) {
       console.error(err);
       message = 'Internal Server Error';
     }
-    console.log(statusCode)
     res.status(statusCode).json({message: err.message, errors: err.errors});
   }
   

@@ -30,8 +30,12 @@ const login = async (login, password) => {
 
     const REFRESH_TOKEN = generateRefreshToken(user.id);
 
+    // const userToken = await Token.findOne({ where: { userId: user.id } });
+    // if (userToken) await userToken.destroy();
+    // await new Token({ userId: user.id, token: REFRESH_TOKEN }).save();
+
     const userToken = await Token.findOne({ where: { userId: user.id } });
-    if (userToken) await userToken.destroy();
+    
     await new Token({ userId: user.id, token: REFRESH_TOKEN }).save();
 
     return {

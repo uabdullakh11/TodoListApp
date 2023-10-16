@@ -37,13 +37,18 @@ const User = sequelize.define("users", {
   },
 });
 
-User.hasOne(Token, {
+User.hasMany(Token, {
   as: "resfreshToken",
   foreignKey: {
     name: "userId",
   },
 });
-Token.belongsTo(User)
+Token.belongsTo(User, {
+  as: "user",
+  foreignKey: {
+    name: "userId",
+  },
+});
 
 User.beforeCreate(async (user) => {
   user.id = uuid();
