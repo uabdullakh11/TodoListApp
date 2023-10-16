@@ -1,5 +1,6 @@
 import axios from "axios";
 import { api } from "../axios/axios";
+import { removeToken } from "@/helpers/token";
 
 const changePassword = async (userNewPassword: { currentPassword: string, newPassword: string }) => {
     try {
@@ -70,6 +71,7 @@ const getUserStatistic = async () => {
 const deleteUser = async () => {
     try {
         await api.delete('api/users/')
+        removeToken()
     }
     catch (error) {
         if (axios.isAxiosError(error) && error.response) {

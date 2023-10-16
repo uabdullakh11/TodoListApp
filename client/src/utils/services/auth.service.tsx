@@ -28,8 +28,8 @@ const register = async (userData: { email: string, login: string, password: stri
 
 const refreshToken = async () => {
     try {
-        const refresh_token = sessionStorage.getItem("REFRESH_TOKEN")
-        const res = await axiosInstance.post("/api/auth/refresh", { refreshToken:refresh_token });
+        const refresh_token = localStorage.getItem("REFRESH_TOKEN")
+        const res = await axiosInstance.post("/api/auth/refresh", { refreshToken: refresh_token });
         saveToken(res.data.ACCESS_TOKEN, res.data.expires_in, res.data.REFRESH_TOKEN);
         return res.data
     }
@@ -41,4 +41,16 @@ const refreshToken = async () => {
 
 }
 
-export { login, register, refreshToken }
+const logout = async () => {
+    try {
+        const refresh_token = localStorage.getItem("REFRESH_TOKEN");
+        await axiosInstance.post("/api/auth/logout", { refreshToken: refresh_token });
+    }
+    catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.message);
+        }
+    }
+}
+
+export { login, register, refreshToken, logout }

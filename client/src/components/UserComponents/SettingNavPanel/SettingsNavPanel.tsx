@@ -10,6 +10,7 @@ import useModal from "@/utils/hooks/useModal";
 import { Modal } from "../../Modal/Modal";
 import { ModalBody, ModalButtons, ModalCloseButton, ModalDeleteButton, ModalHeader, ModalSaveButton, ModalText } from "../../Modal/modalStyles";
 import { deleteUser } from "@/utils/services/user.service";
+import { logout } from "@/utils/services/auth.service";
 
 
 interface SettingPanelProps {
@@ -58,8 +59,9 @@ const SettingsNavPanel: FC<SettingPanelProps> = ({ isBurger }) => {
   };
 
   const handleLogoutClick = () => {
-    removeToken()
+    logout()
     router.push('/login')
+    removeToken()
   }
 
   return (
@@ -99,7 +101,7 @@ const SettingsNavPanel: FC<SettingPanelProps> = ({ isBurger }) => {
               <ModalHeader>Delete Account</ModalHeader>
               <ModalBody>
                 <ModalText>Are you sure about deleting your account? <br></br>
-                All your data will be removed...</ModalText>
+                  All your data will be removed...</ModalText>
                 <ModalButtons>
                   <ModalDeleteButton onClick={handleDeleteClick}>
                     Delete

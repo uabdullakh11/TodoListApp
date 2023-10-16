@@ -51,7 +51,6 @@ const TasksProvider: FC<Props> = ({ children }) => {
   useEffect(() => {
     if (fetched.current) return;
     fetched.current = true
-    console.log(filter)
     getTodos(filter)
   }, [filter, getTodos])
 

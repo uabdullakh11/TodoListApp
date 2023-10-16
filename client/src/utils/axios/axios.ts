@@ -17,7 +17,7 @@ api.interceptors.request.use(async (request) => {
     return request;
   } else {
     isToken()
-      ? (request.headers["Authorization"] = `Bearer ${sessionStorage.getItem(
+      ? (request.headers["Authorization"] = `Bearer ${localStorage.getItem(
           "ACCESS_TOKEN"
         )}`)
       : false;
