@@ -1,4 +1,4 @@
-import React, { FC, Suspense, useEffect, useState } from "react";
+import React, { FC, Suspense } from "react";
 import { ITask, TasksContextType } from "@/types/types";
 import Pagination from "../../Pagination/Pagination";
 import { Container } from "@/styles/containers";
@@ -7,15 +7,7 @@ import { CardBlock, CardHeader, EmptyContainer } from "./cardStyles";
 import Loader from "../../Loading/loading"
 import { SearchTask } from "../SearchTask/SearchTask";
 
-const Task = React.lazy(
-  () =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(import("@/components/Task/Task") as any);
-      }, 2000);
-    })
-);
-
+const Task = React.lazy(()=> import("@/components/Task/Task") as any);
 
 const Card: FC = () => {
   const { tasks, onPageChange, currentPage, filter } = React.useContext(TasksContext) as TasksContextType;

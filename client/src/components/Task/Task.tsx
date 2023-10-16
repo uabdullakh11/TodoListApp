@@ -1,4 +1,4 @@
-import React, { useState, FC, useEffect, useRef } from "react";
+import React, { useState, FC, useEffect } from "react";
 import useModal from "@/utils/hooks/useModal";
 import Image from "next/image";
 import { Modal } from "../Modal/Modal";

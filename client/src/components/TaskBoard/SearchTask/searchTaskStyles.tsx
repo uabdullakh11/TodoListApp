@@ -8,9 +8,16 @@ color: #6b7280;
   outline: none;
   border-radius: 30px;
   background-color: #9333ea0f;
-  width: 50%;
+  
 `
 
 export const SearchIcon = styled(Image)`
   cursor: pointer;
+`
+
+export const SearchContainer = styled.div`
+display: flex;
+flex-direction: row;
+    align-items: center;
+gap: 1em;
 `
