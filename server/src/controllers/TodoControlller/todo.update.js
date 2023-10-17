@@ -16,7 +16,6 @@ const updateTodo = async (req, res, next) => {
       title,
       completed,
       date,
-      req.query.update
     );
     res.json(result);
   } catch (error) {

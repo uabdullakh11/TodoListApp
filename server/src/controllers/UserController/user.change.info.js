@@ -10,7 +10,6 @@ const changeUserInfo = async (req, res, next) => {
       id,
       req.body.newLogin,
       req.body.newEmail,
-      req.query.change
     );
     res.json(result);
   } catch (error) {

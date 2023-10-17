@@ -1,5 +1,5 @@
 import pkg from "express-validator";
-const { body, query, params } = pkg;
+const { body, query} = pkg;
 import User from "../models/User.js";
 import { Op } from "sequelize";
 
@@ -76,6 +76,13 @@ export const loginValidate = [
 export const tokenValidate = [
   body("refreshToken").exists().withMessage("Refresh Token is required"),
 ];
+
+export const getTasksValidate = [
+  query("page").isInt(),
+  query("filter").isString(),
+  query("search").isString()
+]
+
 export const AddTaskValidate = [
   body("title")
     .exists()
