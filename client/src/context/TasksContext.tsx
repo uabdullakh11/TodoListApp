@@ -11,41 +11,20 @@ export const TasksContext = createContext<TasksContextType | null>(null);
 const TasksProvider: FC<Props> = ({ children }) => {
 
   const [tasks, setTasks] = useState<{ todos: ITask[], todosCount: number }>({ todos: [], todosCount: 10 })
-  const [filter, setFilter] = useState<string>('today')
-  const [currentPage, setCurrentPage] = useState<number>(1)
-  // const [error, setError] = useState<{ createError: string, editError: string }>({ createError: "", editError: "" })
+  const [filter, setFilter] = useState<{ filter: string, currentPage: number, search: string }>({ filter: "today", currentPage: 1, search: "" })
 
   const fetched = useRef(false)
 
-  const getTodos = useCallback(async (type?: string, search?:string) => {
+  const getTodos = useCallback(async (filter:{ filter: string, currentPage: number, search: string }) => {
     try {
-      let res;
-      switch (type) {
-        case "done":
-          res = await getTasks(currentPage, "true", "DESC");
-          break;
-        case "undone":
-          res = await getTasks(currentPage, "false", "DESC");
-          break;
-        case "past":
-          res = await getTasks(currentPage, "", "ASC");
-          break;
-        case "today":
-          res = await getTasks(currentPage, type, "DESC");
-          break;
-        case "search":
-          res = await getTasks(currentPage, type, "DESC", search);
-          break;
-        default:
-          res = await getTasks(currentPage, "", "DESC");
-      }
+      const res = await getTasks(filter)
       setTasks({ todos: res.rows, todosCount: res.count })
-      tasks.todosCount < 11 ? setCurrentPage(1) : null;
+      tasks.todosCount < 11 ? setFilter({filter: filter.filter, currentPage: 1,search: filter.search}) : null;
     }
     catch (err) {
       console.log(err)
     }
-  }, [currentPage, tasks.todosCount]);
+  }, [tasks.todosCount]);
 
 
   useEffect(() => {
@@ -54,18 +33,18 @@ const TasksProvider: FC<Props> = ({ children }) => {
     getTodos(filter)
   }, [filter, getTodos])
 
-  const handleSetFilter = (value: string) => {
-    setFilter(value)
+  const handleSetFilter = (filter:{ filter: string, currentPage: number, search: string }) => {
+    setFilter(filter)
     fetched.current = false
   }
   const onPageChange = (page: number) => {
-    setCurrentPage(page);
+    handleSetFilter({filter: filter.filter, currentPage: page,search: filter.search})
     fetched.current = false
   };
 
   const editTask = async (todo: ITask, handleError: (error: string) => void): Promise<boolean | undefined> => {
     try {
-      await updateTodo("title", todo)
+      await updateTodo(todo)
       getTodos(filter)
       return true;
     }
@@ -80,7 +59,7 @@ const TasksProvider: FC<Props> = ({ children }) => {
   const deleteTask = async (id: string) => {
     try {
       await deleteTodo(id)
-      getTodos(filter)
+      getTodos({filter:filter.filter, currentPage: 1, search:filter.search})
     }
     catch (err) {
       console.log(err)
@@ -89,7 +68,7 @@ const TasksProvider: FC<Props> = ({ children }) => {
   const addTask = async (todo: { title: string, completed: boolean, date: string }, handleError: (error: string) => void): Promise<boolean | undefined> => {
     try {
       await addTodo(todo)
-      getTodos(filter)
+      getTodos({filter:filter.filter, currentPage: 1, search:filter.search})
       return true
     }
     catch (err) {
@@ -102,7 +81,7 @@ const TasksProvider: FC<Props> = ({ children }) => {
   }
   const updateTask = async (todo: ITask) => {
     try {
-      await updateTodo("completed", todo);
+      await updateTodo(todo);
       getTodos(filter)
     }
     catch (err) {
@@ -110,9 +89,9 @@ const TasksProvider: FC<Props> = ({ children }) => {
     }
   }
 
-  const searchTask =async (value: string) => {
-    getTodos("search", value)
-    setFilter("search")
+  const searchTask = async (value: string) => {
+    setFilter({filter:"search", currentPage: 1, search:value})
+    getTodos({filter:"search", currentPage: 1, search:value})
   }
 
   return (
@@ -126,7 +105,6 @@ const TasksProvider: FC<Props> = ({ children }) => {
         handleSetFilter,
         searchTask,
         tasks,
-        currentPage,
         filter,
       }}
     >

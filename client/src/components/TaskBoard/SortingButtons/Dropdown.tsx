@@ -15,8 +15,8 @@ const Dropdown: FC<DropdownProps> = ({ type, isBurger}) => {
 
     const handleBtnClick = (type: string) => {
         setDropdownState({ open: !dropdownState.open, option: type });
-        handleSetFilter(type)
-        onPageChange(1)
+        handleSetFilter({ filter: type, currentPage: 1, search: "" })
+        // onPageChange(1)
 
         isBurger && isBurger.handleSideBarClose();
     }

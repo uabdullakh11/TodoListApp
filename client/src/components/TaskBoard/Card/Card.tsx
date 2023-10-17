@@ -10,7 +10,7 @@ import { SearchTask } from "../SearchTask/SearchTask";
 const Task = React.lazy(()=> import("@/components/Task/Task") as any);
 
 const Card: FC = () => {
-  const { tasks, onPageChange, currentPage, filter } = React.useContext(TasksContext) as TasksContextType;
+  const { tasks, onPageChange, filter } = React.useContext(TasksContext) as TasksContextType;
   const pageSize = 10;
 
   return (
@@ -18,7 +18,7 @@ const Card: FC = () => {
       <Container>
         <Suspense fallback={<Loader />}>
           <CardHeader>
-            {filter[0].toUpperCase() + filter.slice(1)} tasks quantity: {tasks.todosCount}
+            {filter.filter[0]?.toUpperCase() + filter.filter?.slice(1)} tasks quantity: {tasks.todosCount}
             <SearchTask></SearchTask>
           </CardHeader>
           {tasks.todosCount ? (
@@ -35,7 +35,7 @@ const Card: FC = () => {
               })}
               <Pagination
                 totalCount={tasks.todosCount} // 100
-                currentPage={currentPage} // 1
+                currentPage={filter.currentPage} // 1
                 pageSize={pageSize} // 10
                 onPageChange={onPageChange}
               />

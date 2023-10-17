@@ -28,8 +28,8 @@ const NavPanel: FC<NavPanelProps> = ({ isBurger }) => {
   const handleBtnClick = (type: string) => {
     setIsBtnClicked(type)
     if (type === 'today') {
-      handleSetFilter(type)
-      onPageChange(1)
+      handleSetFilter({ filter: type, currentPage: 1, search: "" })
+      // onPageChange(1)
       isBurger && isBurger.handleSideBarClose();
     }
   }
@@ -80,16 +80,16 @@ const NavPanel: FC<NavPanelProps> = ({ isBurger }) => {
     <NavBlock>
       <NavContainer $isBurger={isBurger?.isBurger}>
         <SortingContainer>
-          <SortButton $button={'today'} onClick={() => handleBtnClick("today")}>Today</SortButton>
+          <SortButton $button={{type:'today',isBurger:isBurger?.isBurger}} onClick={() => handleBtnClick("today")}>Today</SortButton>
           {isBtnClicked === 'all' ?
             <Dropdown type="status" isBurger={isBurger} />
             :
-            <SortButton $button={'all'} onClick={() => handleBtnClick("all")}>All</SortButton>
+            <SortButton $button={{type:'all',isBurger:isBurger?.isBurger}} onClick={() => handleBtnClick("all")}>All</SortButton>
           }
           {isBtnClicked === "date" ?
             <Dropdown type="date" isBurger={isBurger} />
             :
-            <SortButton $button={'date'} onClick={() => handleBtnClick("date")}>Date</SortButton>
+            <SortButton $button={{type:'date',isBurger:isBurger?.isBurger}} onClick={() => handleBtnClick("date")}>Date</SortButton>
           }
         </SortingContainer>
         <AddTaskBtn onClick={() => toggleModal(true)}>

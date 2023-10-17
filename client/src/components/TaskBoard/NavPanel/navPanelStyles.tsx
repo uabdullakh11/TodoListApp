@@ -52,9 +52,17 @@ export const AddTaskBtn = styled.button`
   }
 `;
 
-export const SortButton = styled(StatusButton) <{ $button: string }>`
-  ${(props) => props.$button === 'all' && css`
+export const SortButton = styled(StatusButton) <{ $button: { type: string, isBurger: boolean | undefined } }>`
+  ${(props) => props.$button.type === 'all' && css`
   background-image: url("../not-clicked-done-circle.svg");
+  ${!props.$button.isBurger && `&:hover{
+    background: url("../clicked-done-circle.svg"), #9333ea0f;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    background-position-x: 10px;
+    color: #9333ea;
+    border-radius: 10px;
+  }`}
   @media (max-width: 700px) {
     background: url("../not-clicked-done-circle.svg"), #dfdede;
     background-repeat: no-repeat;
@@ -62,16 +70,9 @@ export const SortButton = styled(StatusButton) <{ $button: string }>`
     background-position-x: 65px;
     border-radius: 30px;
   }
-  &:hover{
-    background: url("../clicked-done-circle.svg"), #9333ea0f;
-    background-repeat: no-repeat;
-    background-position-y: center;
-    background-position-x: 10px;
-    color: #9333ea;
-    border-radius: 10px;
-  }
+  
   ` }
-  ${(props) => props.$button === 'date' && css`  
+  ${(props) => props.$button.type === 'date' && css`  
     background: url("../arrows 1.svg"), transparent;
     background-repeat: no-repeat;
     background-position-y: center;
@@ -83,24 +84,25 @@ export const SortButton = styled(StatusButton) <{ $button: string }>`
       background-position-x: 65px;
       border-radius: 30px;
   }
-  &:hover{
+  ${!props.$button.isBurger && `&:hover{
     background: url("../clicked-arrows.svg"), #9333ea0f;
     background-repeat: no-repeat;
     background-position-y: center;
     background-position-x: 10px;
     color: #9333ea;
     border-radius: 10px;
-  }`
+  }`}
+  `
   }
-  ${(props) => props.$button === 'today' && css`
-  &:hover {
+  ${(props) => props.$button.type === 'today' && css`
+  ${!props.$button.isBurger && `&:hover {
     background: url("../today-clicked-icon.svg"), #9333ea0f;
     background-repeat: no-repeat;
     background-position-y: center;
     background-position-x: 10px;
     color: #9333ea;
     border-radius: 10px;
-  }
+  }`}
   background-image: url("../today-logo.svg");
   @media (max-width: 700px) {
     background: url("../today-logo.svg"), #dfdede;

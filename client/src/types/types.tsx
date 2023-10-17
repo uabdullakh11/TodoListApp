@@ -11,12 +11,10 @@ export type TasksContextType = {
   deleteTask: (id: string) => void,
   editTask: (todo: ITask, handleError: (error: string) => void) => Promise<boolean | undefined>,
   onPageChange: (page: number) => void,
-  handleSetFilter: (value: string) => void,
+  handleSetFilter: (filter: { filter: string, currentPage: number, search: string }) => void,
   searchTask: (value: string) => void,
   tasks: { todos: ITask[], todosCount: number },
-  currentPage: number,
-  filter: string,
-  // error: { createError: string, editError: string },
+  filter: { filter: string, currentPage: number, search: string },
 };
 
 export type AccountContextType = {

@@ -55,7 +55,8 @@ const AccountProvider: React.FC<Props> = ({ children }) => {
         try {
             setError({ avatarError: "", userNameError: "", userEmailError: "" })
             const res = await changeUserData(userData, 'username')
-            setUserName(res)
+            console.log(res)
+            setUserName(res.login)
         }
         catch (err) {
             if (err instanceof Error) {
@@ -68,7 +69,7 @@ const AccountProvider: React.FC<Props> = ({ children }) => {
         try {
             setError({ avatarError: "", userNameError: "", userEmailError: "" })
             const res = await changeUserData(userData, 'email')
-            setUserEmail(res)
+            setUserEmail(res.email)
         }
         catch (err) {
             if (err instanceof Error) {

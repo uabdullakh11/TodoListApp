@@ -2,9 +2,9 @@ import axios from "axios";
 import { api } from "../axios/axios";
 import { ITask } from "@/types/types";
 
-const getTasks = async (currentPage: number, type: string="", order:string="", search:string="") => {
+const getTasks = async (filter: { filter: string, currentPage: number, search: string }) => {
     try {
-        const todos = await api(`/api/todos?page=${currentPage}&filter=${type}&order=${order}&search=${search}`);
+        const todos = await api(`/api/todos?page=${filter.currentPage}&filter=${filter.filter}&search=${filter.search}`);
         return todos.data;
     }
     catch (error) {
@@ -36,9 +36,9 @@ const deleteTodo = async (id: string) => {
     }
 }
 
-const updateTodo = async (type: string, todo: ITask) => {
+const updateTodo = async (todo: ITask) => {
     try {
-        await api.put(`api/todos?update=${type}`, todo)
+        await api.put(`api/todos`, todo)
     }
     catch (error) {
         if (axios.isAxiosError(error) && error.response) {
