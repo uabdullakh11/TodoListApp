@@ -88,13 +88,13 @@ export const UserProfileButtons = styled.div<{ $button: string, $active: boolean
       background-repeat: no-repeat;
       background-position-y: center;
       background-position-x: 65px;
-    border-radius: 30px;
+      border-radius: 30px;
       background-size: 25px;
       padding: 10px 85px;
   }
   &:hover, &:active {
     color: #9333ea;
-    font-weight: bold;
+    
     background: url("../security-btn-icon.svg"), #9333ea0f;
     background-repeat: no-repeat;
     background-position-y: center;
@@ -107,7 +107,6 @@ export const UserProfileButtons = styled.div<{ $button: string, $active: boolean
   }
   `
   }
-  
   ${(props) => props.$active && css`
   background-color: #9333ea0f;
   color: #9333ea;

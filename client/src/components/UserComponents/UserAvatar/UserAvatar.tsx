@@ -5,6 +5,7 @@ import { AvatarContainer, AvatarImage, FileInput, Label, AvatarForm } from "./us
 import { EditButton } from "@/styles/buttons";
 import { AccountContext } from "@/context/AccountContext";
 import { AccountContextType } from "@/types/types";
+import { toast } from "react-toastify";
 
 export const UserAvatar = () => {
     const { userAvatar, handleChangeAvatar, error} = useContext(AccountContext) as AccountContextType;
@@ -16,6 +17,16 @@ export const UserAvatar = () => {
             avatarIcon.append('avatar', elem.files[0])
             try {
                 handleChangeAvatar(avatarIcon)
+                toast.info(`Avatar was changed!`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  });
             }
             catch (err) {
                 console.log(err)

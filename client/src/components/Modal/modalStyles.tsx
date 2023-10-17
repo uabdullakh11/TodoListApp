@@ -48,7 +48,7 @@ const ModalButton = styled.button`
   cursor: pointer;
   @media (max-width: 400px) {
     padding: 10px 40px;
-    background-position-x: 10px;
+    background-position-x: 10px !important;
   }
 `;
 export const ModalDeleteButton = styled(ModalButton)`

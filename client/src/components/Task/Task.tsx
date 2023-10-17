@@ -22,6 +22,7 @@ import { useClickOutside } from '../../utils/hooks/useClickOutside';
 import { ModalBody, ModalButtons, ModalCloseButton, ModalDeleteButton, ModalHeader, ModalSaveButton, ModalText } from "../Modal/modalStyles";
 import { ErrorCaption } from "@/styles/text";
 import { Input } from "@/styles/inputs";
+import { toast } from 'react-toastify';
 
 interface TasksProps {
   id: string;
@@ -86,6 +87,16 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
 
   const handleDeleteClick = async () => {
     deleteTask(id)
+    toast.info(`Task ${title} was delete!`, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
     toggleModal(false);
   };
 
@@ -103,8 +114,20 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
         date: date,
       };
       const isSuccess = await editTask(todo, handleError)
-      isSuccess ? handleCloseButton() : false;
-      // error.editError=="" ? handleCloseButton() : setErrorCaption(error.editError);
+      if (isSuccess) {
+        toast.info(`Task ${title} was changed to ${changeTitle.trim()}!`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        handleCloseButton()
+      };
+
     } else {
       setErrorCaption("Please enter name of task!");
     }

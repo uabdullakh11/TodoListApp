@@ -6,6 +6,7 @@ import { changeUserData } from "@/utils/services/user.service";
 import { CancelBtn, ChangeBtn, InfoContainer, UserInnerContainer, UserNameInput, EmailInput, ButtonsContainer, UserContainer } from "./userInfoStyles";
 import { AccountContext } from "@/context/AccountContext";
 import { AccountContextType } from "@/types/types";
+import { toast } from "react-toastify";
 
 export const UserInfo: FC = () => {
     const { userName, userEmail, handleChangeUserEmail, handleChangeUserName, error } = useContext(AccountContext) as AccountContextType;
@@ -27,6 +28,7 @@ export const UserInfo: FC = () => {
             elem.disabled = true;
             elem.value = ""
             elemType === 'name' ? setUserNameClick(false) : setEmailClicked(false);
+
         }
     }
 
@@ -62,6 +64,16 @@ export const UserInfo: FC = () => {
                     newEmail: userEmail
                 }
                 handleChangeUserName(userData)
+                toast.info(`Login was changed!`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  });
                 sideEffects(userNameRef.current, 'clear', 'name')
             }
             catch (err) {
@@ -78,6 +90,16 @@ export const UserInfo: FC = () => {
                     newEmail: emailRef.current.value
                 }
                 handleChangeUserEmail(userData)
+                toast.info(`Email was changed!`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  });
                 sideEffects(emailRef.current, 'clear', 'email')
             }
             catch (err) {

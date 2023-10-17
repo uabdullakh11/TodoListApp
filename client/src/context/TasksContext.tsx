@@ -60,6 +60,7 @@ const TasksProvider: FC<Props> = ({ children }) => {
     try {
       await deleteTodo(id)
       getTodos({filter:filter.filter, currentPage: 1, search:filter.search})
+      
     }
     catch (err) {
       console.log(err)

@@ -16,6 +16,7 @@ import { logout } from "@/utils/services/auth.service";
 interface SettingPanelProps {
   isBurger?: { isBurger: boolean, handleSideBarClose: () => void };
 }
+
 const SettingsNavPanel: FC<SettingPanelProps> = ({ isBurger }) => {
   const router = useRouter()
 
