@@ -6,13 +6,6 @@ import { Op } from "sequelize";
 const changeUserInfo = async (id, newLogin, newEmail) => {
   try {
     const userCheck = await User.findOne({
-      // where: {
-      //   login: newLogin,
-      //   email: newEmail,
-      //   id: {
-      //     [Op.not]: id,
-      //   },
-      // },
       where: {
         [Op.or]: [{ login: newLogin }, { email: newEmail }],
         id: {
@@ -28,19 +21,6 @@ const changeUserInfo = async (id, newLogin, newEmail) => {
     user.login = newLogin;
     user.email = newEmail;
     user.save();
-    // const user = await User.update(
-    //   {
-    //     login: newLogin,
-    //     email: newEmail,
-    //   },
-    //   {
-    //     where: {
-    //       id: {
-    //         [Op.eq]: id,
-    //       },
-    //     },
-    //   }
-    // );
 
     return { login: user.login, email: user.email };
   } catch (error) {
