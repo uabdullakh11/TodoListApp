@@ -59,7 +59,8 @@ const TasksProvider: FC<Props> = ({ children }) => {
   const deleteTask = async (id: string) => {
     try {
       await deleteTodo(id)
-      getTodos({filter:filter.filter, currentPage: 1, search:filter.search})
+      getTodos(filter)
+      // getTodos({filter:filter.filter, currentPage: 1, search:filter.search})
       
     }
     catch (err) {
@@ -69,7 +70,8 @@ const TasksProvider: FC<Props> = ({ children }) => {
   const addTask = async (todo: { title: string, completed: boolean, date: string }, handleError: (error: string) => void): Promise<boolean | undefined> => {
     try {
       await addTodo(todo)
-      getTodos({filter:filter.filter, currentPage: 1, search:filter.search})
+      // getTodos({filter:filter.filter, currentPage: 1, search:filter.search})
+      getTodos(filter)
       return true
     }
     catch (err) {

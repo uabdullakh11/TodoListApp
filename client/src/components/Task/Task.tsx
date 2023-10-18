@@ -12,7 +12,8 @@ import {
   TaskBlock,
   TaskContainer,
   DataLine,
-  TaskName
+  TaskName,
+  Tooltip
 } from "./taskStyles";
 import getDate from "@/helpers/getDate";
 import { TasksContext } from "@/context/TasksContext";
@@ -36,11 +37,12 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
   const { currentDate, yesterdayTime } = getDate();
   const [isShowingModal, toggleModal] = useModal();
 
-  const [taskdate, setTaskDate] = useState<string>("");
-  const [isOptionsBtnClicked, setOptionsBtnClicked] = useState<boolean>(false);
+  const [taskdate, setTaskDate] = useState("");
+  const [isOptionsBtnClicked, setOptionsBtnClicked] = useState(false);
   const [errorCaption, setErrorCaption] = useState("");
   const [changeTitle, setChangeTitle] = useState("")
-  const [typeModal, setTypeModal] = useState<string>("");
+  const [typeModal, setTypeModal] = useState("");
+  const [toolTipShow, setToolTipShow] = useState(false)
 
   const handleClickDoneBtn = async () => {
     const todo = {
@@ -115,7 +117,7 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
       };
       const isSuccess = await editTask(todo, handleError)
       if (isSuccess) {
-        toast.info(`Task ${title} was changed to ${changeTitle.trim()}!`, {
+        toast.info(`${title} was changed to ${changeTitle.trim()}!`, {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,
@@ -149,6 +151,7 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
 
   }, [date, currentDate, yesterdayTime]);
 
+
   return (
     <TaskBlock ref={ref}>
       <TaskContainer>
@@ -162,7 +165,8 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
               onClick={handleClickDoneBtn}
             />
           </DoneButton>
-          <TaskName>{title}</TaskName>
+          <TaskName onMouseEnter={() =>  setToolTipShow(true)}
+            onMouseLeave={() => setToolTipShow(false)}>{title}</TaskName>
         </LeftContainer>
         <RightContainer>
           <DataLine>{taskdate}</DataLine>
@@ -189,6 +193,7 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
           />
         </Options>
       ) : null}
+      {toolTipShow && <Tooltip>{title}</Tooltip>}
       <Modal
         show={isShowingModal}
         onCloseButtonClick={toggleModal}

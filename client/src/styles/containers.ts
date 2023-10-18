@@ -8,10 +8,10 @@ export const HeaderContainer = styled.div`
 `;
 
 export const Container = styled.div`
-  padding: 30px 20px;
+  padding: 0px 20px;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
 `;
 
 export const FormContainer = styled.div`

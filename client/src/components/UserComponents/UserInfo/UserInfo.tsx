@@ -2,7 +2,6 @@ import { FC, useRef, useState, useContext } from "react";
 import { ErrorCaption } from "@/styles/text";
 import { EditButton } from "@/styles/buttons";
 import { useClickOutside } from '../../../utils/hooks/useClickOutside';
-import { changeUserData } from "@/utils/services/user.service";
 import { CancelBtn, ChangeBtn, InfoContainer, UserInnerContainer, UserNameInput, EmailInput, ButtonsContainer, UserContainer } from "./userInfoStyles";
 import { AccountContext } from "@/context/AccountContext";
 import { AccountContextType } from "@/types/types";
@@ -11,14 +10,14 @@ import { toast } from "react-toastify";
 export const UserInfo: FC = () => {
     const { userName, userEmail, handleChangeUserEmail, handleChangeUserName, error } = useContext(AccountContext) as AccountContextType;
 
-    const userNameRef = useRef<HTMLTextAreaElement>(null);
-    const emailRef = useRef<HTMLTextAreaElement>(null);
+    const userNameRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
 
     const [isUserNameClicked, setUserNameClick] = useState<boolean>(false)
     const [isEmailClicked, setEmailClicked] = useState<boolean>(false)
 
 
-    const sideEffects = (elem: HTMLTextAreaElement, type: string, elemType: string) => {
+    const sideEffects = (elem: HTMLInputElement, type: string, elemType: string) => {
         if (type === 'open') {
             elem.disabled = false;
             elem.focus();
@@ -73,7 +72,7 @@ export const UserInfo: FC = () => {
                     draggable: true,
                     progress: undefined,
                     theme: "light",
-                  });
+                });
                 sideEffects(userNameRef.current, 'clear', 'name')
             }
             catch (err) {
@@ -99,7 +98,7 @@ export const UserInfo: FC = () => {
                     draggable: true,
                     progress: undefined,
                     theme: "light",
-                  });
+                });
                 sideEffects(emailRef.current, 'clear', 'email')
             }
             catch (err) {
@@ -108,6 +107,14 @@ export const UserInfo: FC = () => {
         }
     }
 
+    const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+          const target = e.target as HTMLInputElement
+          target.id === "change-user-name" && handleUserNameChange();
+          target.id === "change-email"  && handleEmailChange();
+        }
+      }
+
     return (
         <InfoContainer>
             <UserContainer ref={userNameOutside}>
@@ -115,6 +122,8 @@ export const UserInfo: FC = () => {
                     <UserNameInput
                         placeholder={userName}
                         ref={userNameRef}
+                        onKeyDown={handleEnterPress}
+                        id="change-user-name"
                         disabled
                     />
                     <EditButton src="../edit-icon.svg"
@@ -128,7 +137,7 @@ export const UserInfo: FC = () => {
                 {isUserNameClicked &&
                     <ButtonsContainer>
                         <ChangeBtn onClick={handleUserNameChange}>Change name</ChangeBtn>
-                        <CancelBtn onClick={() => sideEffects(userNameRef.current as HTMLTextAreaElement, 'clear', 'name')}>Cancel change</CancelBtn>
+                        <CancelBtn onClick={() => sideEffects(userNameRef.current as HTMLInputElement, 'clear', 'name')}>Cancel change</CancelBtn>
                     </ButtonsContainer>}
             </UserContainer>
             <UserContainer ref={emailOutside}>
@@ -136,6 +145,8 @@ export const UserInfo: FC = () => {
                     <EmailInput
                         placeholder={userEmail}
                         ref={emailRef}
+                        onKeyDown={handleEnterPress}
+                        id="change-email"
                         disabled
                     />
                     <EditButton src="../edit-icon.svg"
@@ -149,7 +160,7 @@ export const UserInfo: FC = () => {
                 {isEmailClicked &&
                     <ButtonsContainer>
                         <ChangeBtn onClick={handleEmailChange}>Change email</ChangeBtn>
-                        <CancelBtn onClick={() => sideEffects(emailRef.current as HTMLTextAreaElement, 'clear', 'email')}>Cancel change</CancelBtn>
+                        <CancelBtn onClick={() => sideEffects(emailRef.current as HTMLInputElement, 'clear', 'email')}>Cancel change</CancelBtn>
                     </ButtonsContainer>}
             </UserContainer>
         </InfoContainer>

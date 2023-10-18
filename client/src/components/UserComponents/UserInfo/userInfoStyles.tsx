@@ -23,7 +23,7 @@ flex-direction: column;
 align-items: center;
 gap: 0.5rem;
 `;
-const ChangeInput = styled.textarea`
+const ChangeInput = styled.input`
   text-align: center;
   height: 20px;
   border: none;

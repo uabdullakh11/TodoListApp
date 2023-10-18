@@ -5,7 +5,7 @@ export const PaginationList = styled.ul`
   justify-content: center;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 0 20px;
   align-items: center;
   gap: 1em;
 `;

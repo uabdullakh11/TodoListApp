@@ -24,6 +24,7 @@ const SearchTask: FC = () => {
             {searchClick &&
                 <SearchInput
                     onInput={(e) => handleInput(e)}
+                    autoFocus
                 >
                 </SearchInput>
             }

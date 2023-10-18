@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Image from "next/image";
 export const TaskBlock = styled.div`
+position: relative;
 `;
 export const RightContainer = styled.div`
   display: flex;
@@ -11,7 +12,7 @@ export const LeftContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 1em;
-  flex-shrink: 10000;
+  /* flex-shrink: 10000; */
 `;
 export const DoneButton = styled.span`
   cursor: pointer;
@@ -31,6 +32,10 @@ export const Options = styled.div`
   justify-content: space-evenly;
   float: right;
   margin-top: 5px;
+  position: absolute;
+  right: 0;
+  z-index: 22;
+  background-color: #FFFFFF;
 `;
 export const DeleteTask = styled(Image)`
   cursor: pointer;
@@ -49,8 +54,18 @@ export const TaskName = styled.span`
   color: #000000;
   word-break: break-word;
   display: inline-block;
+  width: 20vmax;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  @media (max-width: 900px){
+      /* width: 150px; */
+  }
   @media (max-width: 600px){
     font-size: 14px;
+  }
+  @media (max-width:500px){
+    /* width: 200px; */
   }
   /* @media (max-width: 475px) {
     text-overflow: ellipsis;
@@ -68,3 +83,24 @@ export const DataLine = styled.span`
     display: none;
   }
 `;
+export const Tooltip = styled.div`
+    width: 100%;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    z-index: 25;
+    transition: opacity 0.3s;
+    position: absolute;
+    left: 0;
+    &::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 10%;
+  transform: rotate(45deg);
+  background-color: #555;
+  padding: 5px;
+}
+`
