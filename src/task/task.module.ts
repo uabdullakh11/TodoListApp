@@ -2,14 +2,16 @@ import { Module, forwardRef } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { TaskController } from './task.controller';
 import { Task } from './entity/task.entity';
-import { SequelizeModule } from '@nestjs/sequelize';
-import { AuthModule } from 'src/auth/auth.module';
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { JwtModule } from '@nestjs/jwt';
+import { UserModule } from 'user/user.module';
 
 @Module({
   controllers: [TaskController],
   providers: [TaskService],
   imports: [
-    forwardRef(()=>AuthModule),
-    SequelizeModule.forFeature([Task])],
+    forwardRef(()=>JwtModule),
+    forwardRef(()=>UserModule),
+    TypeOrmModule.forFeature([Task])],
 })
 export class TaskModule {}

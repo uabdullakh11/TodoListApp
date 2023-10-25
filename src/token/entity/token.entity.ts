@@ -1,22 +1,18 @@
 import { User } from "../../user/entity/user.entity";
-
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class Task {
+export class Token {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
   @Column({ unique: true, nullable: false })
-  title: string;
+  token: string;
 
-  @Column({ nullable: false })
-  date: string;
+  @Column({ unique: true, nullable: false, default: Date.now })
+  expiryDate: Date;
 
-  @Column({ nullable: false, default: false })
-  completed: string;
-
-  @ManyToOne(() => User, (user) => user.tasks, {
+  @ManyToOne(() => User, (user) => user.tokens, {
     cascade: true,
     onDelete: "CASCADE",
   })

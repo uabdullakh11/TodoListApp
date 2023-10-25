@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, Patch, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { User } from './user.decorator';
+import { UserId } from './decorator/user.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from '../jwt/guards/jwt-auth.guard';
+import { ChangePassDto } from './dto/change-pass.decorator';
 
 @Controller('api/users')
 export class UserController {
@@ -15,31 +17,32 @@ export class UserController {
   }
   @Get()
   @UseGuards(JwtAuthGuard)
-  getUser(@User() id: string){
+  getUser(@UserId() id: string){
     return this.userService.getUser(id)
   }
   @Get('/statistic')
   @UseGuards(JwtAuthGuard)
-  getUserStatisctic(@User() id: string){
+  getUserStatisctic(@UserId() id: string){
     return this.userService.getStatistic(id)
   }
   @Delete()
   @UseGuards(JwtAuthGuard)
-  deleteUser(@User() id: string){
+  deleteUser(@UserId() id: string){
     return this.userService.delete(id)
   }
   @Patch('/password')
   @UseGuards(JwtAuthGuard)
-  changePass(@User() id: string){
-    return this.userService.changePass(id)
+  changePass(@UserId() id: string,@Body() dto: ChangePassDto){
+    return this.userService.changePass(id, dto)
   }
   @Patch()
   @UseGuards(JwtAuthGuard)
-  changeData(@Body() dto: UpdateUserDto, @User() id: string){
+  changeData(@Body() dto: UpdateUserDto, @UserId() id: string){
     return this.userService.changeData(dto, id)
   }
   @Put("/avatar")
-  createAvatar(@User() id: string){
-    return this.userService.createAvatar(id)
+  @UseInterceptors(FileInterceptor('avatar'))
+  createAvatar(@UserId() id: string, @UploadedFile() avatar){
+    return this.userService.createAvatar(id, avatar)
   }
 }

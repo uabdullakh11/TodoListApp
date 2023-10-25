@@ -1,16 +1,16 @@
 import { IsNotEmpty, IsString, Length } from "class-validator";
 
 export class LoginDto {
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({message: "Логин или email не должен быть пустым"})
+  @IsString({message: "Логин или email должны быть строкой"})
   @Length(3, 20, {
-    message: "Login must be more than 3 and less than 20 characters",
+    message: "Логин должен быть больше трех или меньше 20 символов",
   })
   readonly login: string;
-  @IsNotEmpty()
-  @IsString()
+  @IsNotEmpty({message: "Пароль не должен быть пустым"})
+  @IsString({message: "Пароль должен быть строкой"})
   @Length(6, 22, {
-    message: "Password must be more than 6 and less than 22 characters",
+    message: "Пароль должен быть больше 6 или меньше 22 символов",
   })
   readonly password: string;
 }
