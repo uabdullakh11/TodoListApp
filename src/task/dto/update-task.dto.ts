@@ -8,5 +8,5 @@ export class UpdateTaskDto {
   @IsString({message: "Дата должна быть строкой"})
   date: string;
   @IsNotEmpty({message: "Выполнено не должна быть пустым"})
-  completed: string;
+  completed: boolean;
 }

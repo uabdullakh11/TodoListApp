@@ -1,19 +1,13 @@
-// import { UUID } from 'crypto';
-// import { BeforeCreate, Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
-import { Task } from "../../task/entity/task.entity";
+
+// import { Task } from "../../task/entity/task.entity";
+// import { Token } from "../../token/entity/token.entity";
+
+import  {Task}  from "../../task/entity/task.entity";
 import { Token } from "../../token/entity/token.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-// import { v4 as uuidv4 } from 'uuid';
 
-// interface UserCreationAttrs {
-//   email: string;
-//   login: string;
-//   password: string;
-// }
 
-// @Table({ tableName: "users" })
-
-@Entity()
+@Entity("users")
 export class User {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -27,7 +21,7 @@ export class User {
   @Column({ nullable: false })
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
   avatar: string;
 
   // @HasMany(() => Task)

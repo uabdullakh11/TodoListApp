@@ -3,12 +3,15 @@ import { JwtTokenService } from "../jwt/jwt.service";
 import { Token } from "./entity/token.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { User } from "user/entity/user.entity";
 
 @Injectable()
 export class TokenService {
   constructor(
     private jwtService: JwtTokenService,
-    @InjectRepository(Token) private tokenRepository: Repository<Token>
+    @InjectRepository(Token) private tokenRepository: Repository<Token>,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>
   ) {}
   async deleteToken(token: string) {
     const findToken = await this.tokenRepository.findOneBy({ token });
@@ -24,32 +27,58 @@ export class TokenService {
     return "Logout succesfully!";
   }
 
-  async updateToken(token: string) {
+  async refreshToken(token: string) {
     const findToken = await this.tokenRepository.findOneBy({ token });
     if (!findToken) throw new BadRequestException("Invalid refresh token");
-    const user = await this.jwtService.verifyToken(
+    const userId = await this.jwtService.verifyToken(
       token,
       process.env.PRIVATE_KEY_REFRESH
     );
-    if (!user) throw new BadRequestException("Invalid refresh token");
+    if (!userId) throw new BadRequestException("Invalid refresh token");
 
-    if (this.jwtService.verifyTokenExpiration(findToken)) {
+    if (await this.jwtService.verifyTokenExpiration(findToken)) {
       //если истек срок refresh обновить в базе
-      // const REFRESH_TOKEN = this.jwtService.generateRefreshToken(user);
       await this.tokenRepository.remove(findToken);
-      // await this.tokenRepository.save({
-      //   userId: user.id,
-      //   token: REFRESH_TOKEN,
-      // });
     }
 
     //создать refsresh_token и заменить в базе
-    const REFRESH_TOKEN = await this.jwtService.generateRefreshToken(user);
-    const ACCESS_TOKEN = await this.jwtService.generateAccessToken(user);
+    const REFRESH_TOKEN = await this.jwtService.generateRefreshToken(userId.id);
+    const ACCESS_TOKEN = await this.jwtService.generateAccessToken(userId.id);
 
     await this.tokenRepository.remove(findToken);
-    await this.tokenRepository.save({ userId: user.id, token: REFRESH_TOKEN });
 
-    return { REFRESH_TOKEN, ACCESS_TOKEN };
+    const user = await this.usersRepository.findOneBy({ id: userId.id });
+    const newToken = this.tokenRepository.create({
+      token: REFRESH_TOKEN,
+      expiryDate: new Date(),
+      user,
+    });
+
+    await this.tokenRepository.save(newToken);
+
+    return {
+      REFRESH_TOKEN,
+      ACCESS_TOKEN,
+      expires_in: Math.floor(new Date().getTime() / 1000),
+    };
+  }
+
+  async createNewToken(id: string) {
+    const REFRESH_TOKEN = await this.jwtService.generateRefreshToken(id);
+    const ACCESS_TOKEN = await this.jwtService.generateAccessToken(id);
+
+    const user = await this.usersRepository.findOneBy({ id });
+    const token = this.tokenRepository.create({
+      token: REFRESH_TOKEN,
+      expiryDate: new Date(),
+      user,
+    });
+    await this.tokenRepository.save(token);
+
+    return {
+      REFRESH_TOKEN,
+      ACCESS_TOKEN,
+      expires_in: Math.floor(new Date().getTime() / 1000),
+    };
   }
 }

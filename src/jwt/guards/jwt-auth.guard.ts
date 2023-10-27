@@ -20,9 +20,9 @@ export class JwtAuthGuard implements CanActivate {
       if (!token) {
         throw new UnauthorizedException({ message: "Некорректный токен" });
       }
-
+      
       const user = this.jwtService.verifyToken(token, process.env.PRIVATE_KEY)
-      req.userId = user;
+      req.user = user;
       return true
     } catch (e) {
       throw new UnauthorizedException({

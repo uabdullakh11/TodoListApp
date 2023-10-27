@@ -5,15 +5,15 @@ export const TaskFilter = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {
     const currentDate = new Date().toLocaleDateString("en-US", {hour12: false});
     const setFilter = {
-      done: { where: { completed: true }, order: { createdAt: "DESC" } },
-      undone: { where: { completed: false }, order: { createdAt: "DESC" } },
-      past: { where: {}, order: { createdAt: "ASC" } },
+      done: { where: { completed: true }, order: { created_at: "DESC" } },
+      undone: { where: { completed: false }, order: { created_at: "DESC" } },
+      past: { where: {}, order: { created_at: "ASC" } },
       today: {
         where: {
           date: Like(`${currentDate}%`)
           // date: { [Op.startsWith]: `%${currentDate}` },
         },
-        order: { createdAt: "DESC" },
+        order: { created_at: "DESC" },
       },
     };
     const request = ctx.switchToHttp().getRequest();
@@ -21,7 +21,7 @@ export const TaskFilter = createParamDecorator(
     return (
       setFilter[request.query.filter] || {
         where: {},
-        order: { createdAt: "DESC" },
+        order: { created_at: "DESC" },
       }
     );
   }

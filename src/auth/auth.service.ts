@@ -5,23 +5,21 @@ import { LogOutDto } from "./dto/logout-dto";
 import { RefreshTokenDto } from "./dto/refreshtoken-dto";
 import { UserService } from "../user/user.service";
 import * as bcrypt from "bcryptjs";
-import { User } from "../user/entity/user.entity";
-import { JwtTokenService } from "..//jwt/jwt.service";
 import { TokenService } from "..//token/token.service";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
+import { User } from "../user/entity/user.entity";
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtTokenService,
     private tokenService: TokenService,
     @InjectRepository(User) private userRepository: Repository<User>
   ) {}
   async login(dto: LoginDto) {
     const user = await this.getUser(dto);
-    return this.jwtService.generateAccessToken(user);
+    return await this.tokenService.createNewToken(user.id);
   }
 
   async register(dto: CreateUserDto) {
@@ -30,7 +28,7 @@ export class AuthService {
       ...dto,
       password: hashPassword,
     });
-    return this.jwtService.generateAccessToken(user);
+    return await this.tokenService.createNewToken(user.id);
   }
 
   async logout(dto: LogOutDto) {
@@ -38,14 +36,7 @@ export class AuthService {
   }
 
   async refreshToken(dto: RefreshTokenDto) {
-    const TOKENS = await this.tokenService.updateToken(dto.token);
-    const ACCESS_TOKEN = TOKENS.ACCESS_TOKEN;
-    const REFRESH_TOKEN = TOKENS.REFRESH_TOKEN;
-    return {
-      ACCESS_TOKEN,
-      REFRESH_TOKEN,
-      expires_in: Math.floor(new Date().getTime() / 1000),
-    };
+    return await this.tokenService.refreshToken(dto.token);
   }
 
   private async getUser(dto: LoginDto) {

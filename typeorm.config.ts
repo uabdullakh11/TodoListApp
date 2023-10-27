@@ -1,9 +1,10 @@
 import { DataSource } from "typeorm";
 import * as process from "process";
 import * as dotenv from "dotenv";
+import { join } from "path";
 
+console.log(join(__dirname, '/src/**/entity/', '*.entity.{ts,js}'))
 dotenv.config();
-
 export default new DataSource({
   type: "postgres",
   host: process.env.POSTGRES_HOST,
@@ -11,7 +12,7 @@ export default new DataSource({
   username: process.env.POSTGRES_USERNAME,
   password: process.env.POSTGRES_PASS,
   database: process.env.POSTGRES_DB,
-  // migrations: ["src/**/**/*.migration{.ts,.js}"],
-  migrations: ['src/migrations/*{.ts, .js}'],
-  entities: ["src/**/**/*.entity{.ts,.js}"],
+  entities: [join(__dirname, 'src/**/entity/', '*.entity.{ts,js}')],
+  migrations: [join(__dirname, 'src/migrations', '*.{ts,js}')],
+  migrationsTableName: "migrations",
 });

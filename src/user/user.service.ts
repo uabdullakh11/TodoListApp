@@ -20,8 +20,8 @@ export class UserService {
       where: [{ login: dto.login, email: dto.email }],
     });
     if (isUser) throw new BadRequestException("User already exist");
-
-    const user = await this.userRepository.create(dto);
+    const user = this.userRepository.create(dto);
+    await this.userRepository.save(user);
     return user;
   }
   async createAvatar(id: string, image: any) {
@@ -30,9 +30,12 @@ export class UserService {
       where: { avatar: filename },
     });
     if (avatarToCheck) throw new BadRequestException(`Avatar already exist!`);
+    await this.userRepository.update(id, {
+      avatar: `static/${filename}`,
+    });
     const user = await this.userRepository.findOneBy({ id });
-    user.avatar = filename;
-    this.userRepository.save(user);
+    // user.avatar = filename;
+    // this.userRepository.save(user);
     return user.avatar;
   }
   async changeData(dto: UpdateUserDto, id: string) {
@@ -48,10 +51,15 @@ export class UserService {
         "User with this login or email already exist!"
       );
 
+    // const user = await this.userRepository.findOneBy({ id });
+    // user.login = dto.login;
+    // user.email = dto.email;
+    // this.userRepository.save(user);
+    await this.userRepository.update(id, {
+      login: dto.login,
+      email: dto.email,
+    });
     const user = await this.userRepository.findOneBy({ id });
-    user.login = dto.login;
-    user.email = dto.email;
-    this.userRepository.save(user);
 
     return { login: user.login, email: user.email };
   }
@@ -63,25 +71,40 @@ export class UserService {
     );
     if (!isPasswordCorrect)
       throw new BadRequestException("Incorrect current password!");
-    user.password = bcrypt.hash(dto.newPassword, 5);
-    this.userRepository.save(user);
+
+    await this.userRepository.update(id, {
+      password: await bcrypt.hash(dto.newPassword, 5),
+    });
+
     return "Password changed successfully!";
   }
-
   async delete(id: string) {
     const findUser = await this.userRepository.findOneBy({ id });
     await this.userRepository.remove(findUser);
   }
   async getStatistic(id: string) {
-    const {countAll, countDone} = await this.userRepository.query(
-      `SELECT COUNT(*) AS AllTodos, (SELECT COUNT(*) AS DoneTodos FROM TASKS WHERE userId=${id}, completed=true) AS DoneTodos FROM TASKS WHERE userId=${id}`
-    );
-    const {countWeekAll, countWeekDone} = await this.userRepository.query(
-      `SELECT COUNT(*) AS AllTodos, (SELECT COUNT(*) AS DoneTodos FROM TASKS WHERE userId=${id}, completed=true) AS DoneTodos FROM TASKS WHERE userId=${id}`
+    const allTodos = await this.userRepository.query(
+      `SELECT COUNT(*) AS AllTodos, (SELECT COUNT(*) AS DoneTodos FROM TASKS WHERE "userId"='${id}' and completed=true) 
+        AS DoneTodos FROM TASKS WHERE "userId"='${id}'`
     );
 
-    const AllTimePercant = Math.floor((countDone / countAll) * 100);
-    const WeekPercant = Math.floor((countWeekDone / countWeekAll) * 100);
+    const currentDate = new Date().toLocaleString("en-US", {
+      hour12: false,
+    });
+    const week = new Date();
+    week.setDate(week.getDate() - 7);
+    const weekAgo = week.toLocaleString("en-US", { hour12: false });
+    const weekTodos = await this.userRepository.query(
+      `SELECT COUNT(*) AS AllTodos, (SELECT COUNT(*) AS DoneTodos FROM TASKS WHERE "userId"='${id}' and completed=true and date between' ${weekAgo}' and '${currentDate}') 
+        AS DoneTodos FROM TASKS WHERE "userId"='${id}' and date between '${weekAgo}' and '${currentDate}'`
+    );
+
+    const AllTimePercant = Math.floor(
+      (allTodos[0].donetodos / allTodos[0].alltodos) * 100
+    );
+    const WeekPercant = Math.floor(
+      (weekTodos[0].donetodos / weekTodos[0].alltodos) * 100
+    );
     return { AllTimePercant, WeekPercant };
   }
   async getUser(id: string) {

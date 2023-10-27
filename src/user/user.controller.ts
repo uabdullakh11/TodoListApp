@@ -42,6 +42,7 @@ export class UserController {
   }
   @Put("/avatar")
   @UseInterceptors(FileInterceptor('avatar'))
+  @UseGuards(JwtAuthGuard)
   createAvatar(@UserId() id: string, @UploadedFile() avatar){
     return this.userService.createAvatar(id, avatar)
   }

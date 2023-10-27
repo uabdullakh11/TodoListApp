@@ -1,17 +1,18 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { TaskController } from './task.controller';
-import { Task } from './entity/task.entity';
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from 'user/user.module';
+import { JwtCustomModule } from 'jwt/jwt.module';
+import { User } from 'user/entity/user.entity';
+import { Task } from './entity/task.entity';
 
 @Module({
   controllers: [TaskController],
   providers: [TaskService],
   imports: [
-    forwardRef(()=>JwtModule),
+    forwardRef(()=>JwtCustomModule),
     forwardRef(()=>UserModule),
-    TypeOrmModule.forFeature([Task])],
+    TypeOrmModule.forFeature([Task, User])],
 })
 export class TaskModule {}

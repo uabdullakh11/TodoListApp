@@ -7,8 +7,11 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { FilesModule } from "./files/files.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { TokenModule } from "./token/token.module";
-import { JwtModule } from "./jwt/jwt.module";
+import { JwtCustomModule } from "./jwt/jwt.module";
 import * as path from "path";
+import { Task } from "task/entity/task.entity";
+import { User } from "user/entity/user.entity";
+import { Token } from "token/entity/token.entity";
 
 @Module({
   imports: [
@@ -19,8 +22,15 @@ import * as path from "path";
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    ServeStaticModule.forRoot({
-      rootPath: path.resolve(__dirname, "static"),
+    ServeStaticModule.forRootAsync({
+      useFactory: () => {
+        return [
+          {
+            rootPath: path.join("src", 'static'),
+            serveRoot: '/static/',
+          },
+        ];
+      },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -31,7 +41,8 @@ import * as path from "path";
         username: configService.get("POSTGRES_USERNAME"),
         password: configService.get("POSTGRES_PASS"),
         database: configService.get("POSTGRES_DB"),
-        entities: [__dirname + "/**/*.entity{.js,.ts}"],
+        // entities: [path.join('src/**/entity/', '*.entity.{ts,js}')],
+        entities: [Task, Token, User],
         autoLoadEntities: true,
         synchronize: false,
       }),
@@ -41,7 +52,7 @@ import * as path from "path";
     AuthModule,
     FilesModule,
     TokenModule,
-    JwtModule,
+    JwtCustomModule,
   ],
 })
 export class AppModule {}

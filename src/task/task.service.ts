@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { CreateTaskDto } from "./dto/create-task.dto";
 import { UpdateTaskDto } from "./dto/update-task.dto";
-import { Task } from "./entity/task.entity";
-import { Like, Not, Repository } from "typeorm";
+import { ILike, Not, Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Task } from "./entity/task.entity";
 import { User } from "user/entity/user.entity";
 
 @Injectable()
@@ -16,13 +16,14 @@ export class TaskService {
 
   async getTasks(userId: string, { filter, page, search }) {
     const pageSize = 10;
-    filter.where.userId = userId;
-    const tasks = await this.taskReposiroty.findAndCount({
+    const user = await this.usersRepository.findOneBy({ id: userId });
+    filter.where.user = user;
+    const tasks = await this.taskReposiroty.find({
       where: !search
         ? filter.where
         : {
-            userId,
-            title: Like(`%${search}%`),
+            user,
+            title: ILike(`%${search}%`),
           },
       order: filter.order,
       skip: pageSize * (page - 1),
@@ -38,10 +39,12 @@ export class TaskService {
     });
     if (IsTask)
       throw new BadRequestException("Task with this title already exist!");
-    const task = await this.taskReposiroty.create({
+    const task = this.taskReposiroty.create({
       ...dto,
+      created_at: new Date(),
       user,
     });
+    await this.taskReposiroty.save(task);
     return task;
   }
 
@@ -75,18 +78,5 @@ export class TaskService {
       { id, user },
       { title: dto.title, date: dto.date, completed: dto.completed }
     );
-    // await this.taskReposiroty.update(
-    //   {
-    //     title: dto.title,
-    //     date: dto.date,
-    //     completed: dto.completed,
-    //   },
-    //   {
-    //     where: {
-    //       id,
-    //       userId,
-    //     },
-    //   }
-    // );
   }
 }

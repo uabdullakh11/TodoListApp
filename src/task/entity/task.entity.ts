@@ -1,8 +1,17 @@
+// import { User } from "../../user/entity/user.entity";
 import { User } from "../../user/entity/user.entity";
 
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+
+@Entity("tasks")
 export class Task {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -13,13 +22,24 @@ export class Task {
   @Column({ nullable: false })
   date: string;
 
-  @Column({ nullable: false, default: false })
-  completed: string;
-
   @ManyToOne(() => User, (user) => user.tasks, {
     cascade: true,
     onDelete: "CASCADE",
   })
-  @JoinColumn({name: 'userId'})
+  @JoinColumn({ name: "userId" })
   user: User;
+
+  @Column({ nullable: false, default: false })
+  completed: boolean;
+
+  @CreateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+  })
+  created_at: Date;
+
+  // @BeforeInsert()
+  // insertCreated(): void {
+  //   this.created_at = new Date();
+  // }
 }
