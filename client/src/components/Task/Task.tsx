@@ -16,14 +16,13 @@ import {
   Tooltip
 } from "./taskStyles";
 import getDate from "@/helpers/getDate";
-import { TasksContext } from "@/context/TasksContext";
-import { TasksContextType } from "@/types/types";
 import { EditButton } from "@/styles/buttons";
 import { useClickOutside } from '../../utils/hooks/useClickOutside';
 import { ModalBody, ModalButtons, ModalCloseButton, ModalDeleteButton, ModalHeader, ModalSaveButton, ModalText } from "../Modal/modalStyles";
 import { ErrorCaption } from "@/styles/text";
 import { Input } from "@/styles/inputs";
 import { toast } from 'react-toastify';
+import { useDeleteTodoMutation, useUpdateTodoMutation } from "@/utils/services/todo.service";
 
 interface TasksProps {
   id: string;
@@ -32,8 +31,6 @@ interface TasksProps {
   date: string;
 }
 const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
-  const { updateTask, deleteTask, editTask } = React.useContext(TasksContext) as TasksContextType;
-
   const { currentDate, yesterdayTime } = getDate();
   const [isShowingModal, toggleModal] = useModal();
 
@@ -44,6 +41,9 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
   const [typeModal, setTypeModal] = useState("");
   const [toolTipShow, setToolTipShow] = useState(false)
 
+  const [deleteTodo] = useDeleteTodoMutation();
+  const [updateTodo] = useUpdateTodoMutation()
+
   const handleClickDoneBtn = async () => {
     const todo = {
       completed: !completed,
@@ -51,7 +51,8 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
       title,
       date
     }
-    updateTask(todo)
+    updateTodo(todo)
+    // updateTask(todo)
   };
   const handleClickEditBtn = () => {
     setOptionsBtnClicked(!isOptionsBtnClicked)
@@ -76,10 +77,6 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
     setErrorCaption("");
   }
 
-  const handleError = (error: string) => {
-    setErrorCaption(error)
-  }
-
   const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       const target = e.target as HTMLInputElement
@@ -87,8 +84,11 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
     }
   }
 
+
   const handleDeleteClick = async () => {
-    deleteTask(id)
+    deleteTodo(id)
+    // deleteTask(id)
+
     toast.info(`Task ${title} was delete!`, {
       position: "top-center",
       autoClose: 5000,
@@ -115,21 +115,22 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
         completed: completed,
         date: date,
       };
-      const isSuccess = await editTask(todo, handleError)
-      if (isSuccess) {
-        toast.info(`${title} was changed to ${changeTitle.trim()}!`, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-        handleCloseButton()
-      };
-
+      updateTodo(todo)
+        .unwrap()
+        .then(() => {
+          toast.info(`${title} was changed to ${changeTitle.trim()}!`, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          handleCloseButton()
+        })
+        .catch((error) => setErrorCaption(error.data.message))
     } else {
       setErrorCaption("Please enter name of task!");
     }
@@ -165,7 +166,7 @@ const Task: FC<TasksProps> = ({ completed, id, title, date }) => {
               onClick={handleClickDoneBtn}
             />
           </DoneButton>
-          <TaskName onMouseEnter={() =>  setToolTipShow(true)}
+          <TaskName onMouseEnter={() => setToolTipShow(true)}
             onMouseLeave={() => setToolTipShow(false)}>{title}</TaskName>
         </LeftContainer>
         <RightContainer>

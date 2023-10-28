@@ -1,4 +1,4 @@
-import { FC, useRef, useState, useContext } from "react";
+import { FC, useRef, useState, useContext, useEffect } from "react";
 import { ErrorCaption } from "@/styles/text";
 import { EditButton } from "@/styles/buttons";
 import { useClickOutside } from '../../../utils/hooks/useClickOutside';
@@ -6,16 +6,20 @@ import { CancelBtn, ChangeBtn, InfoContainer, UserInnerContainer, UserNameInput,
 import { AccountContext } from "@/context/AccountContext";
 import { AccountContextType } from "@/types/types";
 import { toast } from "react-toastify";
+import { useChangeUserDataMutation, useGetUserQuery } from "@/utils/services/user.service";
 
 export const UserInfo: FC = () => {
-    const { userName, userEmail, handleChangeUserEmail, handleChangeUserName, error } = useContext(AccountContext) as AccountContextType;
+    // const { userName, userEmail, handleChangeUserEmail, handleChangeUserName, error } = useContext(AccountContext) as AccountContextType;
 
     const userNameRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
 
     const [isUserNameClicked, setUserNameClick] = useState<boolean>(false)
     const [isEmailClicked, setEmailClicked] = useState<boolean>(false)
+    const [error, setError] = useState<{ userNameError: string, userEmailError: string }>({ userNameError: "", userEmailError: "" })
 
+    const { data } = useGetUserQuery("")
+    const [changeUserData] = useChangeUserDataMutation()
 
     const sideEffects = (elem: HTMLInputElement, type: string, elemType: string) => {
         if (type === 'open') {
@@ -57,70 +61,76 @@ export const UserInfo: FC = () => {
 
     const handleUserNameChange = async () => {
         if (userNameRef.current) {
-            try {
+            
                 const userData = {
                     newLogin: userNameRef.current.value,
-                    newEmail: userEmail
+                    newEmail: data[0].email
                 }
-                handleChangeUserName(userData)
-                toast.info(`Login was changed!`, {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                changeUserData(userData)
+                    .unwrap()
+                    .then(() => {
+                        toast.info(`Login was changed!`, {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                        });
+                    })
+                    .catch((error) => setError({ userNameError: error.data.message, userEmailError: "" }))
                 sideEffects(userNameRef.current, 'clear', 'name')
-            }
-            catch (err) {
-                console.log(err)
-            }
+                // // handleChangeUserName(userData)
+
+            
         }
     }
 
     const handleEmailChange = async () => {
         if (emailRef.current) {
-            try {
+           
                 const userData = {
-                    newLogin: userName,
+                    newLogin: data[0].login,
                     newEmail: emailRef.current.value
                 }
-                handleChangeUserEmail(userData)
-                toast.info(`Email was changed!`, {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                // handleChangeUserEmail(userData)
+                changeUserData(userData)
+                    .unwrap()
+                    .then(() => {
+                        toast.info(`Email was changed!`, {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                        });
+                    })
+                    .catch((error) => setError({ userNameError: "", userEmailError: error.data.message }))
+
                 sideEffects(emailRef.current, 'clear', 'email')
-            }
-            catch (err) {
-                console.log(err)
-            }
+           
         }
     }
 
     const handleEnterPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-          const target = e.target as HTMLInputElement
-          target.id === "change-user-name" && handleUserNameChange();
-          target.id === "change-email"  && handleEmailChange();
+            const target = e.target as HTMLInputElement
+            target.id === "change-user-name" && handleUserNameChange();
+            target.id === "change-email" && handleEmailChange();
         }
-      }
+    }
 
     return (
         <InfoContainer>
             <UserContainer ref={userNameOutside}>
                 <UserInnerContainer>
                     <UserNameInput
-                        placeholder={userName}
+                        placeholder={data && data[0].login}
                         ref={userNameRef}
                         onKeyDown={handleEnterPress}
                         id="change-user-name"
@@ -133,7 +143,7 @@ export const UserInfo: FC = () => {
                         onClick={handleOpenToChangeUsername}
                     />
                 </UserInnerContainer>
-                <ErrorCaption>{error.userNameError}</ErrorCaption>
+                {/* <ErrorCaption>{error.userNameError}</ErrorCaption> */}
                 {isUserNameClicked &&
                     <ButtonsContainer>
                         <ChangeBtn onClick={handleUserNameChange}>Change name</ChangeBtn>
@@ -143,7 +153,7 @@ export const UserInfo: FC = () => {
             <UserContainer ref={emailOutside}>
                 <UserInnerContainer>
                     <EmailInput
-                        placeholder={userEmail}
+                        placeholder={data && data[0].email}
                         ref={emailRef}
                         onKeyDown={handleEnterPress}
                         id="change-email"

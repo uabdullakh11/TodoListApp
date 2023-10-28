@@ -4,9 +4,10 @@ import { Form, InputContainer } from "@/styles/containers";
 import { ErrorCaption, FormTitle } from "@/styles/text";
 import { Input } from "@/styles/inputs";
 import { useRouter } from "next/router";
-import { changePassword } from '@/utils/services/user.service';
+// import { changePassword } from '@/utils/services/user.service';
 import { ChangePassBtn } from './changePassFormStyles';
 import { removeToken } from '@/helpers/token';
+import { useChangePasswordMutation } from '@/utils/services/user.service';
 
 const ChangePassForm = () => {
     const [currentPassword, setCurrentPassword] = useState<string>("")
@@ -16,6 +17,7 @@ const ChangePassForm = () => {
 
     const router = useRouter();
 
+    const [changePassword] = useChangePasswordMutation()
 
     const handleSubmitChange = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -27,18 +29,17 @@ const ChangePassForm = () => {
         }
         else {
             setError("")
-            try {
-                const userNewPassword = {
-                    currentPassword,
-                    newPassword,
-                }
-                await changePassword(userNewPassword)
-                removeToken()
-                router.push("/login");
+            const userNewPassword = {
+                currentPassword,
+                newPassword,
             }
-            catch (err) {
-                setError((err as Error).message)
-            }
+            changePassword(userNewPassword)
+                .unwrap()
+                .then(() => {
+                    removeToken()
+                    router.push("/login");
+                })
+                .catch((error) => setError(error.data.message))
         }
     }
 

@@ -6,15 +6,19 @@ import { Input } from "@/styles/inputs";
 import { AuthButton } from "@/styles/buttons";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { login } from "@/utils/services/auth.service";
+import { useLoginMutation } from "@/utils/services/auth.service";
+// import { login } from "@/utils/services/auth.service";
 
 
 export default function SignIn() {
   const [userLogin, setLogin] = useState<string>("")
   const [password, setPassword] = useState<string>("")
-  const [error, setError] = useState<string>("")
+  const [loginError, setError] = useState<string>("")
 
   const router = useRouter();
+
+  // const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryErrorType => 'status' in error
+  const [login] = useLoginMutation()
 
   const handleSubmitLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,19 +27,20 @@ export default function SignIn() {
     }
     else {
       setError("");
-      try {
-        const userData = {
-          login: userLogin.trim(),
-          password,
-        }
-        await login(userData);
-        router.push("/tasks");
+
+      const userData = {
+        login: userLogin.trim(),
+        password,
       }
-      catch (err) {
-        if (err instanceof Error) {
-          setError(err.message)
-        }
-      }
+
+      // login(userData)
+      login(userData)
+        .unwrap()
+        .then(()=> router.push("/tasks"))
+        .catch((error) => setError(error.data.message))
+
+      // await login(userData);
+      
     }
   }
 
@@ -64,7 +69,7 @@ export default function SignIn() {
                 minLength={6}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
               />
-              {error && <ErrorCaption>{error}</ErrorCaption>}
+              {loginError && <ErrorCaption>{loginError}</ErrorCaption>}
             </InputContainer>
             <LinkTo href="./registration">Sign up</LinkTo>
             <AuthButton type="submit">Sign In</AuthButton>

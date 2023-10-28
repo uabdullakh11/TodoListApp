@@ -6,7 +6,8 @@ import { Input } from "@/styles/inputs";
 import { AuthButton } from "@/styles/buttons";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { register } from "@/utils/services/auth.service";
+import { useRegisterMutation } from "@/utils/services/auth.service";
+// import { register } from "@/utils/services/auth.service";
 
 
 export default function SignUp() {
@@ -18,6 +19,8 @@ export default function SignUp() {
 
   const router = useRouter();
 
+  const [register] = useRegisterMutation()
+
   const handleSubmitSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!login.trim() || !password.trim() || !email.trim() || !rePassword.trim()) {
@@ -28,23 +31,21 @@ export default function SignUp() {
     }
     else {
       setError("");
-      try {
-        const userData = {
-          email: email.trim(),
-          password,
-          login: login.trim(),
-        }
-        await register(userData)
-        router.push("/tasks");
+
+      const userData = {
+        email: email.trim(),
+        password,
+        login: login.trim(),
       }
-      catch (err) {
-        if (err instanceof Error) {
-          setError(err.message)
-        }
-      }
+      // await register(userData)
+      register(userData)
+        .unwrap()
+        .then(() => router.push("/tasks"))
+        .catch((error) => setError(error.data.message))
+
     }
   }
-  
+
   return (
     <AuthLayout>
       <AuthForm>

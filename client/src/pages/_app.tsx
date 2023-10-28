@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import React from "react";
 import Loader from "@/components/Loading/loading";
 import Head from "next/head";
+import { Provider } from "react-redux";
+import { store } from "@/utils/store/store";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
@@ -32,7 +34,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <Head>
         <title>Todo List</title>
       </Head>
-      {loading ? <Loader /> : <Component {...pageProps} />}
+      <Provider store={store}>
+        {loading ? <Loader /> : <Component {...pageProps} />}
+      </Provider>
     </Layout>
   );
 };

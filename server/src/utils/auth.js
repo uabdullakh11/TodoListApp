@@ -32,7 +32,8 @@ export function generateAccessToken(id) {
     },
     config.JWT_SECRET_KEY,
     {
-      expiresIn: "30m",
+      // expiresIn: "30m",
+      expiresIn: "30s",
     }
   );
 }

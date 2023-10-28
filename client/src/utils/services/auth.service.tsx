@@ -1,56 +1,106 @@
-import axios from "axios";
-import { axiosInstance } from "../axios/axios";
-import { saveToken } from "@/helpers/token";
+import { saveToken } from '@/helpers/token';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-const login = async (userData: { login: string, password: string }) => {
-    try {
-        const token = await axiosInstance.post('api/auth/login', userData)
-        saveToken(token.data.ACCESS_TOKEN, token.data.expires_in, token.data.REFRESH_TOKEN)
-    }
-    catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.message);
-        }
-    }
-}
+import api from './http.service'
 
-const register = async (userData: { email: string, login: string, password: string }) => {
-    try {
-        const token = await axiosInstance.post('api/auth/register', userData)
-        saveToken(token.data.ACCESS_TOKEN, token.data.expires_in, token.data.REFRESH_TOKEN)
-    }
-    catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.message);
-        }
-    }
-}
+// export const authApi = createApi({
+//     reducerPath: 'authApi',
+//     baseQuery: fetchBaseQuery({
+//         baseUrl: 'http://localhost:5000/api/auth'
+//     }),
+//     endpoints: (builder) => ({
+//         login: builder.mutation({
+//             query: (userData: { login: string, password: string }) => ({
+//                 url: `/login`,
+//                 method: 'POST',
+//                 body: userData,
+//             }),
+//             transformResponse: (response: { ACCESS_TOKEN: string, expires_in: string, REFRESH_TOKEN: string }) => {
+//                 saveToken(response.ACCESS_TOKEN, response.expires_in, response.REFRESH_TOKEN)
+//                 return response;
+//             },
+//         }),
+//         register: builder.mutation({
+//             query: (userData: { email: string, login: string, password: string }) => ({
+//                 url: `/register`,
+//                 method: 'POST',
+//                 body: userData,
+//             }),
+//             transformResponse: (response: { ACCESS_TOKEN: string, expires_in: string, REFRESH_TOKEN: string }) => {
+//                 saveToken(response.ACCESS_TOKEN, response.expires_in, response.REFRESH_TOKEN)
+//                 return response;
+//             },
+//         }),
+//         refreshToken: builder.mutation({
+//             query: (refresh_token) => ({
+//                 url: `/refresh`,
+//                 method: 'POST',
+//                 body: { refreshToken: refresh_token },
+//             }),
+//             transformResponse: (response: { ACCESS_TOKEN: string, expires_in: string, REFRESH_TOKEN: string }) => {
+//                 saveToken(response.ACCESS_TOKEN, response.expires_in, response.REFRESH_TOKEN)
+//                 return response;
+//             },
+//         }),
+//         logout: builder.mutation({
+//             query: (refresh_token) => ({
+//                 url: `/logout`,
+//                 method: 'POST',
+//                 body: { refreshToken: refresh_token },
+//             }),
+//         }),
+//     }),
+// })
 
-const refreshToken = async () => {
-    try {
-        const refresh_token = localStorage.getItem("REFRESH_TOKEN")
-        const res = await axiosInstance.post("/api/auth/refresh", { refreshToken: refresh_token });
-        saveToken(res.data.ACCESS_TOKEN, res.data.expires_in, res.data.REFRESH_TOKEN);
-        return res.data
-    }
-    catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.message);
-        }
-    }
+export const authApi = api.injectEndpoints({
+    endpoints: (builder) => ({
+        login: builder.mutation({
+            query: (userData: { login: string, password: string }) => ({
+                url: `/auth/login`,
+                method: 'POST',
+                body: userData,
+            }),
+            transformResponse: (response: { ACCESS_TOKEN: string, expires_in: string, REFRESH_TOKEN: string }) => {
+                saveToken(response.ACCESS_TOKEN, response.expires_in, response.REFRESH_TOKEN)
+                return response;
+            },
+        }),
+        register: builder.mutation({
+            query: (userData: { email: string, login: string, password: string }) => ({
+                url: `/auth/register`,
+                method: 'POST',
+                body: userData,
+            }),
+            transformResponse: (response: { ACCESS_TOKEN: string, expires_in: string, REFRESH_TOKEN: string }) => {
+                saveToken(response.ACCESS_TOKEN, response.expires_in, response.REFRESH_TOKEN)
+                return response;
+            },
+        }),
+        // refreshToken: builder.mutation({
+        //     query: (refresh_token) => ({
+        //         url: `/auth/refresh`,
+        //         method: 'POST',
+        //         body: { refreshToken: refresh_token },
+        //     }),
+        //     transformResponse: (response: { ACCESS_TOKEN: string, expires_in: string, REFRESH_TOKEN: string }) => {
+        //         saveToken(response.ACCESS_TOKEN, response.expires_in, response.REFRESH_TOKEN)
+        //         return response;
+        //     },
+        // }),
+        logout: builder.mutation({
+            query: (refresh_token) => ({
+                url: `/auth/logout`,
+                method: 'POST',
+                body: { refreshToken: refresh_token },
+            }),
+        }),
+    }),
+})
 
-}
 
-const logout = async () => {
-    try {
-        const refresh_token = localStorage.getItem("REFRESH_TOKEN");
-        await axiosInstance.post("/api/auth/logout", { refreshToken: refresh_token });
-    }
-    catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.message);
-        }
-    }
-}
-
-export { login, register, refreshToken, logout }
+export const {
+    useLoginMutation,
+    useRegisterMutation,
+    // useRefreshTokenMutation,
+    useLogoutMutation
+} = authApi

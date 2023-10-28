@@ -6,9 +6,11 @@ import TasksProvider from "@/context/TasksContext";
 import Error from "../pages/_error";
 import { AvatarImage } from "@/components/UserComponents/UserAvatar/userAvatarStyles";
 import { BurgerMenu } from "@/components/BurgerMenu/BurgerMenu";
-import { getUser } from "@/utils/services/user.service";
 import Link from "next/link";
 import { isToken } from "@/helpers/token";
+import { useGetUserQuery } from "@/utils/services/user.service";
+
+
 
 export default function TasksLayout({
   children,
@@ -16,26 +18,20 @@ export default function TasksLayout({
   children: React.ReactNode;
 }) {
   const [userName, setUserName] = useState<string>()
-  const [linkToAvatar, setLinkToAvatar] = useState<string>("http://localhost:5000/static/avatars/person-logo.svg")
+  const [linkToAvatar, setLinkToAvatar] = useState<string>("")
   const [errorCode, setErrorCode] = useState<number>()
+
+  const { data } = useGetUserQuery("")
 
   useEffect(() => {
     !isToken() && setErrorCode(401)
   }, [])
 
   useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const res = await getUser()
-        setUserName(res.login)
-        setLinkToAvatar("http://localhost:5000" + res.avatar)
-      }
-      catch (err) {
-        console.log(err);
-      }
-    }
-    getUserData()
-  }, [])
+    data && setLinkToAvatar("http://localhost:5000" + data[0].avatar)
+    data && setUserName(data[0].login)
+
+  }, [data])
 
 
   if (errorCode) {
@@ -63,7 +59,7 @@ export default function TasksLayout({
           </Link>
         </>
       </Header>
-        <main>{children}</main>
+      <main>{children}</main>
     </TasksProvider>
   );
 }

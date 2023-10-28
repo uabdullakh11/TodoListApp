@@ -1,82 +1,122 @@
-import axios from "axios";
-import { api } from "../axios/axios";
-import { removeToken } from "@/helpers/token";
+import { removeToken } from '@/helpers/token'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import api from './http.service'
 
-const changePassword = async (userNewPassword: { currentPassword: string, newPassword: string }) => {
-    try {
-        await api.patch('api/users/password', userNewPassword)
-    }
-    catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.message);
-        }
-    }
-}
+// export const usersApi = createApi({
+//     reducerPath: 'usersApi',
+//     tagTypes: ['User'],
+//     baseQuery: fetchBaseQuery({
+//         baseUrl: 'http://localhost:5000/api/users', prepareHeaders: (headers) => {
+//             const token = localStorage.getItem(
+//                 "ACCESS_TOKEN"
+//             )
+//             if (token) {
+//                 headers.set('Authorization', `Bearer ${token}`)
+//             }
+//             return headers
+//         },
+//     }),
+//     endpoints: (builder) => ({
+//         getUser: builder.query({
+//             query: () => `/`,
+//             providesTags: ['User'],
+//         }),
+//         getUserStatistic: builder.query({
+//             query: () => `/statistic`,
+//             providesTags: ['User'],
+//             keepUnusedDataFor: 0,
+//         }),
+//         changePassword: builder.mutation({
+//             query: (userNewPassword: { currentPassword: string, newPassword: string }) => ({
+//                 url: `/password`,
+//                 method: 'PATCH',
+//                 body: userNewPassword,
+//             }),
+//         }),
+//         deleteUser: builder.mutation({
+//             query: () => ({
+//                 url: `/`,
+//                 method: 'DELETE',
+//             }),
+//             transformResponse: (response) => {
+//                 removeToken()
+//                 return response
+//             },
+//         }),
+//         changeAvatar: builder.mutation({
+//             query: (avatarIcon: FormData) => ({
+//                 url: `/avatar`,
+//                 method: 'PUT',
+//                 body: avatarIcon,
+//             }),
+//             invalidatesTags: ['User'],
+//         }),
+//         changeUserData: builder.mutation({
+//             query: (userData: { newLogin: string, newEmail: string }) => ({
+//                 url: `/`,
+//                 method: 'PATCH',
+//                 body: userData,
+//             }),
+//             invalidatesTags: ['User'],
+//         }),
+//     }),
+// })
+const apiWithTag = api.enhanceEndpoints({addTagTypes: ['User']})
 
-const changeUserData = async (userData: { newLogin: string, newEmail: string }, type: string) => {
-    try {
-        if (type === 'email') {
-            const res = await api.patch(`api/users?change=${type}`, userData);
-            return res.data
-        }
-        else {
-            const res = await api.patch(`api/users?change=${type}`, userData)
-            return res.data
-        }
-    }
-    catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.message);
-        }
-    }
-}
+export const usersApi = apiWithTag.injectEndpoints({
+    // reducerPath: 'usersApi',
+    // tagTypes: ['User'],
+    endpoints: (builder) => ({
+        getUser: builder.query({
+            query: () => `/users`,
+            providesTags: ['User'],
+        }),
+        getUserStatistic: builder.query({
+            query: () => `/users/statistic`,
+            providesTags: ['User'],
+            keepUnusedDataFor: 0,
+        }),
+        changePassword: builder.mutation({
+            query: (userNewPassword: { currentPassword: string, newPassword: string }) => ({
+                url: `/users/password`,
+                method: 'PATCH',
+                body: userNewPassword,
+            }),
+        }),
+        deleteUser: builder.mutation({
+            query: () => ({
+                url: `/users/`,
+                method: 'DELETE',
+            }),
+            transformResponse: (response) => {
+                removeToken()
+                return response
+            },
+        }),
+        changeAvatar: builder.mutation({
+            query: (avatarIcon: FormData) => ({
+                url: `/users/avatar`,
+                method: 'PUT',
+                body: avatarIcon,
+            }),
+            invalidatesTags: ['User'],
+        }),
+        changeUserData: builder.mutation({
+            query: (userData: { newLogin: string, newEmail: string }) => ({
+                url: `/users/`,
+                method: 'PATCH',
+                body: userData,
+            }),
+            invalidatesTags: ['User'],
+        }),
+    }),
+})
 
-
-const changeAvatar = async (avatarIcon: FormData) => {
-    try {
-        const res = await api.put(`api/users/avatar`, avatarIcon)
-        return res.data;
-    }
-    catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.message);
-        }
-    }
-}
-
-const getUser = async () => {
-    try {
-        const res = await api('/api/users/')
-        return res.data[0]
-    }
-    catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.message);
-        }
-    }
-}
-
-const getUserStatistic = async () => {
-    try {
-        const res = await api('api/users/statistic')
-        return res.data
-    }
-    catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.message);
-        }
-    }
-}
-
-const deleteUser = async () => {
-    try {
-        await api.delete('api/users/')
-        removeToken()
-    }
-    catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.message);
-        }
-    }
-}
-export { changeAvatar, changePassword, changeUserData, getUserStatistic, getUser, deleteUser }
+export const {
+    useGetUserQuery,
+    useGetUserStatisticQuery,
+    useDeleteUserMutation,
+    useChangeAvatarMutation,
+    useChangePasswordMutation,
+    useChangeUserDataMutation
+} = usersApi

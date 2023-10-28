@@ -9,8 +9,8 @@ import { removeToken } from "@/helpers/token";
 import useModal from "@/utils/hooks/useModal";
 import { Modal } from "../../Modal/Modal";
 import { ModalBody, ModalButtons, ModalCloseButton, ModalDeleteButton, ModalHeader, ModalSaveButton, ModalText } from "../../Modal/modalStyles";
-import { deleteUser } from "@/utils/services/user.service";
-import { logout } from "@/utils/services/auth.service";
+import { useLogoutMutation } from "@/utils/services/auth.service";
+import { useDeleteUserMutation } from "@/utils/services/user.service";
 
 
 interface SettingPanelProps {
@@ -25,6 +25,9 @@ const SettingsNavPanel: FC<SettingPanelProps> = ({ isBurger }) => {
 
   const [securityClick, setSecurityClick] = useState<boolean>(false)
   const [typeModal, setTypeModal] = useState<string>("");
+
+  const [logout] = useLogoutMutation()
+  const [deleteUser] = useDeleteUserMutation()
 
 
   const handleLogout = () => {
@@ -55,12 +58,14 @@ const SettingsNavPanel: FC<SettingPanelProps> = ({ isBurger }) => {
   }
 
   const handleDeleteClick = () => {
-    deleteUser()
+    deleteUser("")
     router.push('/registration')
   };
 
   const handleLogoutClick = () => {
-    logout()
+    // logout()
+    const refresh_token = localStorage.getItem("REFRESH_TOKEN");
+    logout(refresh_token)
     router.push('/login')
     removeToken()
   }

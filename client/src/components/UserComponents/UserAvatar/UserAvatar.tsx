@@ -1,38 +1,46 @@
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { ErrorCaption } from "@/styles/text";
-import { changeAvatar } from "@/utils/services/user.service";
+import { useChangeAvatarMutation, useGetUserQuery } from "@/utils/services/user.service";
 import { AvatarContainer, AvatarImage, FileInput, Label, AvatarForm } from "./userAvatarStyles";
 import { EditButton } from "@/styles/buttons";
-import { AccountContext } from "@/context/AccountContext";
-import { AccountContextType } from "@/types/types";
+
 import { toast } from "react-toastify";
 
 export const UserAvatar = () => {
-    const { userAvatar, handleChangeAvatar, error} = useContext(AccountContext) as AccountContextType;
+    const [error, setError] = useState("")
+    const [userAvatar, setUserAvatar] = useState("")
 
-    const handleSendFile= async (e: React.ChangeEvent) => {
+    const [changeAvatar] = useChangeAvatarMutation()
+    const { data } = useGetUserQuery("")
+
+    const handleSendFile = async (e: React.ChangeEvent) => {
         const elem = e.target as HTMLInputElement;
         if (elem.files) {
             const avatarIcon = new FormData()
             avatarIcon.append('avatar', elem.files[0])
-            try {
-                handleChangeAvatar(avatarIcon)
-                toast.info(`Avatar was changed!`, {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                  });
-            }
-            catch (err) {
-                console.log(err)
-            }
+            changeAvatar(avatarIcon)
+                .unwrap()
+                .then((avatar) => {
+                    setUserAvatar('http://localhost:5000' + avatar)
+                    toast.info(`Avatar was changed!`, {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                    });
+                })
+                .catch((error) => setError(error.data.message))
+
         }
     }
+
+    useEffect(() => {
+        data && setUserAvatar('http://localhost:5000'+ data[0].avatar)
+    }, [data])
 
     return (
         <AvatarContainer>
@@ -45,7 +53,7 @@ export const UserAvatar = () => {
                         accept="image/png, image/jpeg, image/svg"
                         onChange={handleSendFile}
                     />
-                    <AvatarImage src={'http://localhost:5000'+userAvatar}
+                    <AvatarImage src={userAvatar}
                         alt=""
                         height={100}
                         width={100}
@@ -57,7 +65,7 @@ export const UserAvatar = () => {
                         height={20}
                     />
                 </Label>
-                <ErrorCaption>{error.avatarError}</ErrorCaption>
+                <ErrorCaption>{error}</ErrorCaption>
             </AvatarForm>
         </AvatarContainer>
     );

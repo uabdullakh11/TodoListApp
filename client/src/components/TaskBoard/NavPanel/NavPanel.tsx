@@ -11,12 +11,13 @@ import getDate from "@/helpers/getDate";
 import { ModalBody, ModalButtons, ModalCloseButton, ModalHeader, ModalSaveButton } from "@/components/Modal/modalStyles";
 import { Input } from "@/styles/inputs";
 import { ErrorCaption } from "@/styles/text";
+import { useCreateTodoMutation } from "@/utils/services/todo.service";
 
 interface NavPanelProps {
   isBurger?: { isBurger: boolean, handleSideBarClose: () => void };
 }
 const NavPanel: FC<NavPanelProps> = ({ isBurger }) => {
-  const { handleSetFilter, onPageChange, addTask } = React.useContext(TasksContext) as TasksContextType;
+  const { handleSetFilter } = React.useContext(TasksContext) as TasksContextType;
 
   const { fullDate } = getDate();
 
@@ -25,17 +26,16 @@ const NavPanel: FC<NavPanelProps> = ({ isBurger }) => {
   const [title, setTitle] = useState("")
   const [errorCaption, setErrorCaption] = useState("");
 
+  const [createTodo] = useCreateTodoMutation()
+
   const handleBtnClick = (type: string) => {
     setIsBtnClicked(type)
     if (type === 'today') {
-      handleSetFilter({ filter: type, currentPage: 1, search: "" })
+      handleSetFilter({ filter: "today", currentPage: 1, search: "" })
       // onPageChange(1)
+
       isBurger && isBurger.handleSideBarClose();
     }
-  }
-
-  const handleError = (error: string) => {
-    setErrorCaption(error)
   }
 
   const handleCloseButton = () => {
@@ -62,34 +62,29 @@ const NavPanel: FC<NavPanelProps> = ({ isBurger }) => {
         completed: false,
         date: fullDate,
       };
-      try {
-        const isSuccess = await addTask(todo, handleError)
-        isSuccess ? handleCloseButton() : false;
-        // error.createError=="" ? handleCloseButton() : setErrorCaption(error.createError);
-      }
-      catch (err) {
-        console.log(err)
-      }
+      createTodo(todo)
+        .unwrap()
+        .then(() => handleCloseButton())
+        .catch((error) => setErrorCaption(error.data.message))
     } else {
       setErrorCaption("Please enter name of task!");
     }
   };
 
-
   return (
     <NavBlock>
       <NavContainer $isBurger={isBurger?.isBurger}>
         <SortingContainer>
-          <SortButton $button={{type:'today',isBurger:isBurger?.isBurger}} onClick={() => handleBtnClick("today")}>Today</SortButton>
+          <SortButton $button={{ type: 'today', isBurger: isBurger?.isBurger }} onClick={() => handleBtnClick("today")}>Today</SortButton>
           {isBtnClicked === 'all' ?
             <Dropdown type="status" isBurger={isBurger} />
             :
-            <SortButton $button={{type:'all',isBurger:isBurger?.isBurger}} onClick={() => handleBtnClick("all")}>All</SortButton>
+            <SortButton $button={{ type: 'all', isBurger: isBurger?.isBurger }} onClick={() => handleBtnClick("all")}>All</SortButton>
           }
           {isBtnClicked === "date" ?
             <Dropdown type="date" isBurger={isBurger} />
             :
-            <SortButton $button={{type:'date',isBurger:isBurger?.isBurger}} onClick={() => handleBtnClick("date")}>Date</SortButton>
+            <SortButton $button={{ type: 'date', isBurger: isBurger?.isBurger }} onClick={() => handleBtnClick("date")}>Date</SortButton>
           }
         </SortingContainer>
         <AddTaskBtn onClick={() => toggleModal(true)}>
