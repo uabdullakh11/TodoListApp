@@ -21,7 +21,7 @@ export class User {
   @Column({ nullable: false })
   password: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: "/static/person-logo.jpg" })
   avatar: string;
 
   // @HasMany(() => Task)

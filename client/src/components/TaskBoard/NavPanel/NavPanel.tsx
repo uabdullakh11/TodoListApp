@@ -59,7 +59,6 @@ const NavPanel: FC<NavPanelProps> = ({ isBurger }) => {
     if (title.trim()) {
       const todo = {
         title: title.trim(),
-        completed: false,
         date: fullDate,
       };
       createTodo(todo)

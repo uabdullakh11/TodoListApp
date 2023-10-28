@@ -21,14 +21,14 @@ const Card: FC = () => {
 
   return (
     <CardBlock>
-      {isLoading || isFetching ? <Loader /> : todos.count ? (
+      {isLoading || isFetching ? <Loader /> : todos.length ? (
         <>
           <TasksContainer>
             <CardHeader>
-              {filter.filter[0]?.toUpperCase() + filter.filter?.slice(1)} tasks quantity: {todos.count}
+              {filter.filter[0]?.toUpperCase() + filter.filter?.slice(1)} tasks quantity: {todos.length}
               <SearchTask></SearchTask>
             </CardHeader>
-            {todos.rows?.map((item: ITask) => {
+            {todos.map((item: ITask) => {
               return (
                 <Task
                   key={item.id}
@@ -40,7 +40,7 @@ const Card: FC = () => {
             })}
           </TasksContainer>
           <Pagination
-            totalCount={todos.count} // 100
+            totalCount={todos.length} // 100
             currentPage={filter.currentPage} // 1
             pageSize={pageSize} // 10
             onPageChange={onPageChange}

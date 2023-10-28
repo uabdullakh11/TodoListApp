@@ -41,7 +41,7 @@ export default function SignUp() {
       register(userData)
         .unwrap()
         .then(() => router.push("/tasks"))
-        .catch((error) => setError(error.data.message))
+        .catch((error) => console.log(error))
 
     }
   }

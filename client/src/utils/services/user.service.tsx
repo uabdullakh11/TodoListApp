@@ -61,7 +61,7 @@ import api from './http.service'
 //         }),
 //     }),
 // })
-const apiWithTag = api.enhanceEndpoints({addTagTypes: ['User']})
+const apiWithTag = api.enhanceEndpoints({ addTagTypes: ['User'] })
 
 export const usersApi = apiWithTag.injectEndpoints({
     // reducerPath: 'usersApi',
@@ -102,7 +102,7 @@ export const usersApi = apiWithTag.injectEndpoints({
             invalidatesTags: ['User'],
         }),
         changeUserData: builder.mutation({
-            query: (userData: { newLogin: string, newEmail: string }) => ({
+            query: (userData: { login: string, email: string }) => ({
                 url: `/users/`,
                 method: 'PATCH',
                 body: userData,

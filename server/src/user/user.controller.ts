@@ -32,7 +32,7 @@ export class UserController {
   }
   @Patch('/password')
   @UseGuards(JwtAuthGuard)
-  changePass(@UserId() id: string,@Body() dto: ChangePassDto){
+  changePass(@UserId() id: string, @Body() dto: ChangePassDto){
     return this.userService.changePass(id, dto)
   }
   @Patch()

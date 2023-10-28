@@ -16,9 +16,6 @@ import { Token } from "token/entity/token.entity";
 @Module({
   imports: [
     TaskModule,
-    // ConfigModule.forRoot({
-    //   envFilePath: `.env`,
-    // }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

@@ -20,7 +20,7 @@ export class UserService {
       where: [{ login: dto.login, email: dto.email }],
     });
     if (isUser) throw new BadRequestException("User already exist");
-    const user = this.userRepository.create(dto);
+    const user = this.userRepository.create({...dto, avatar: '/static/person-logo.jpg'});
     await this.userRepository.save(user);
     return user;
   }

@@ -63,8 +63,8 @@ export const UserInfo: FC = () => {
         if (userNameRef.current) {
             
                 const userData = {
-                    newLogin: userNameRef.current.value,
-                    newEmail: data[0].email
+                    login: userNameRef.current.value,
+                    email: data[0].email
                 }
                 changeUserData(userData)
                     .unwrap()
@@ -92,8 +92,8 @@ export const UserInfo: FC = () => {
         if (emailRef.current) {
            
                 const userData = {
-                    newLogin: data[0].login,
-                    newEmail: emailRef.current.value
+                    login: data[0].login,
+                    email: emailRef.current.value
                 }
                 // handleChangeUserEmail(userData)
                 changeUserData(userData)

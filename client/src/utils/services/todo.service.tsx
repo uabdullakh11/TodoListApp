@@ -71,7 +71,7 @@ export const todosApi = apiWithTag.injectEndpoints({
             providesTags: ['Todos'],
         }),
         createTodo: builder.mutation({
-            query: (newTodo: { title: string, completed: boolean, date: string }) => ({
+            query: (newTodo: { title: string, date: string }) => ({
                 url: `/todos`,
                 method: 'POST',
                 body: newTodo,
@@ -87,7 +87,7 @@ export const todosApi = apiWithTag.injectEndpoints({
         }),
         updateTodo: builder.mutation({
             query: (todo: ITask) => ({
-                url: `/todos`,
+                url: `/todos/${todo.id}`,
                 method: 'PUT',
                 body: todo,
             }),

@@ -41,9 +41,11 @@ export class TaskService {
       throw new BadRequestException("Task with this title already exist!");
     const task = this.taskReposiroty.create({
       ...dto,
+      completed: false,
       created_at: new Date(),
       user,
     });
+    console.log(task)
     await this.taskReposiroty.save(task);
     return task;
   }
