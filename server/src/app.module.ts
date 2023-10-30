@@ -38,7 +38,6 @@ import { Token } from "token/entity/token.entity";
         username: configService.get("POSTGRES_USERNAME"),
         password: configService.get("POSTGRES_PASS"),
         database: configService.get("POSTGRES_DB"),
-        // entities: [path.join('src/**/entity/', '*.entity.{ts,js}')],
         entities: [Task, Token, User],
         autoLoadEntities: true,
         synchronize: false,
