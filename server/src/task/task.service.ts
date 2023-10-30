@@ -45,7 +45,6 @@ export class TaskService {
       created_at: new Date(),
       user,
     });
-    console.log(task)
     await this.taskReposiroty.save(task);
     return task;
   }
